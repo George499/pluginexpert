@@ -6,6 +6,7 @@
 //   you can find out more at https://keystonejs.com/docs/apis/config
 
 import { config } from '@keystone-6/core'
+import 'dotenv/config';
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from './schema'
@@ -21,7 +22,7 @@ export default withAuth(
       //   for more information on what database might be appropriate for you
       //   see https://keystonejs.com/docs/guides/choosing-a-database#title
       provider: 'postgresql',
-      url: 'postgresql://gen_user:O~3TiC%5EuoPx%5CN%3E@localhost:5432/pluginexpert_db',
+       url: process.env.DATABASE_URL!,
     },
     server: {
       port: 3010,
