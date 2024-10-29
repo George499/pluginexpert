@@ -1,6 +1,10 @@
-import { motion } from "framer-motion";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import useIntersectionObserver from "../utils/useIntersectionObserver";
 
 function SecondScreen() {
+  const { ref, isVisible } = useIntersectionObserver(0.3);
   return (
     <div
       className={`h-full flex content-center justify-center items-center flex-col`}
@@ -15,15 +19,15 @@ function SecondScreen() {
         <h2
           className={`text-[40px] lg:text-[57px] xl:text-[81px] leading-[3.5rem] lg:leading-[4.5rem] text-[#0e172c] font-bold mb-1 lg:mb-8`}
         >
-          НАЙТИ СПИКЕРА САМИМ
+          НАЙДИТЕ СПИКЕРА САМОСТОЯТЕЛЬНО
         </h2>
         <div
           className={`text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 text-[#0e172c] `}
         >
           <p>
-            Мы, агентство по подбору спикеров Plug-In, заметили, что в компаниях
-            процессы по поиску спикеров делегируется на специалистов из
-            различных департаментов:
+            Мы, агентство по подбору спикеров Plug-In, на постоянной основе
+            обновляем нашу базу спикеров/ Мы обладаем автоматически пополняемой
+            базой спикеров.
           </p>
           <>
             <ul className="list-disc pl-5 list-inside pt-3.5 mb-4">
@@ -37,25 +41,23 @@ function SecondScreen() {
                 <li key={index}>{li}</li>
               ))}
             </ul>
-            <p className="pt-3.5 mb-8">
-              Почему делегирование обязанностей по поиску и работе со спикером
-              на неподготовленного сотрудника негативно влияет на ваш бизнес:
-            </p>
+            <p className="pt-3.5 mb-8">Наши клиенты работают со спикерами:</p>
           </>
         </div>
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+        <div
+          ref={ref}
+          className={`${
+            isVisible ? "animate-fadeIn" : ""
+          } grid grid-cols-2 lg:flex lg:flex-row w-full justify-start text-[#1B1B1E] text-[14px] lg:text-[16px] font-bold`}
         >
           <ul
             className={`grid grid-cols-2 lg:flex lg:flex-row w-full justify-start text-[#1B1B1E] text-[14px] lg:text-[16px] font-bold`}
           >
             {[
-              `УВЕЛИЧЕНИЕ <br /> СТОИМОСТИ <br /> ПРОЕКТА`,
+              `Без комиссий`,
               `НИЗКОЕ КАЧЕСТВО <br /> ПРОЕКТА`,
-              `УВЕЛИЧЕНИЕ <br /> СРОКОВ <br /> ПРОЕКТА`,
-              `ПРОСАДКА <br /> ОСНОВНОЙ <br /> ДЕЯТЕЛЬНОСТИ`,
+              `Без посредников`,
+              `Прямой контакт`,
             ].map((li, id) => (
               <div className="flex lg:w-1/2" key={id}>
                 <li className="w-1/2 lg:w-3/4 mb-8 lg:mb-0">
@@ -68,7 +70,7 @@ function SecondScreen() {
               </div>
             ))}
           </ul>
-        </motion.div> */}
+        </div>
       </div>
     </div>
   );
