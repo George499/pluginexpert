@@ -7,7 +7,7 @@ function ThirdScreen() {
 
   return (
     <div
-      className={`h-full flex content-center justify-center items-center flex-col bg-fixed bg-[url('/images/bkground_1.png')] `}
+      className={`h-full flex content-center justify-center items-center flex-col bg-fixed bg-[#42484d] `}
       id="process"
     >
       <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 items-start justify-center font-semibold">

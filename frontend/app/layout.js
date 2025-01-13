@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body
-        className={`${raleway.className} antialiased text-railway min-h-screen`}
+        className={`${raleway.className} ${play.className} antialiased min-h-screen`}
       >
         <Header />
         <AnimatePresence mode="wait">{children}</AnimatePresence>

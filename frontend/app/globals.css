@@ -13,7 +13,9 @@
     --foreground: #ededed;
   }
 }
-
+.text-play {
+  font-family: "Play", sans-serif;
+}
 body {
   color: var(--foreground);
   background: var(--background);
