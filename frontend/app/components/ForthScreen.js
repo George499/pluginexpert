@@ -62,20 +62,30 @@ function ForthScreen({}) {
   return (
     <div className="bg-hero-image bg-fixed flex content-center justify-center items-center flex-col h-full w-full">
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center font-semibold mt-[120px] mb-10 lg:mt-[200px] lg:mb-[87px] relative">
-        <p className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white">
-          ПОДБОР СПИКЕРОВ
-        </p>
+        <div className="relative mb-[10px] w-full">
+          <p className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
+            ПОДБОР СПИКЕРОВ
+          </p>
+          <div className="w-3/4 h-[1px] ml-[5px] bg-white absolute bottom-1"></div>
+        </div>
 
-        <div className="relative mb-[34px] w-full">
-          <div className="w-full h-[1px] ml-[5px] bg-white absolute top-1"></div>
-          <span className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-black tracking-tighter">
-            ПО КАТЕГОРИЯМ
-          </span>
+        <span className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-black tracking-tighter">
+          ПО КАТЕГОРИЯМ
+        </span>
+
+        <div
+          className={`text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 text-[#0e172c] `}
+        >
+          <p>БАЗА СПИКЕРОВ ОБНОВЛЯЕТСЯ НА ПОСТОЯННОЙ ОСНОВЕ</p>
         </div>
       </div>
+
       <div className="w-full bg-white h-full mb-[87px] flex flex-col items-center justify-center">
-        <div className="w-4/5 lg:w-2/3 container mx-auto h-full">
-          <div className="justify-start font-play font-bold text-[16px] lg:text-[20px] text-[#42484D] tracking-[.25em]">
+        <div className="w-4/5 lg:w-2/3 container mx-auto h-full mb-[57px]">
+          <div className="justify-start font-bold text-[16px] lg:text-[20px] text-[#42484D] tracking-[.25em]">
+            <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px]">
+              <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
+            </div>
             <div className="columns-auto gap-6 pt-2 mb-[57px]" role="group">
               {categories.length === 0 ? (
                 <p>Загрузка...</p>
@@ -86,7 +96,7 @@ function ForthScreen({}) {
                     <button
                       onClick={() => handleClick(category.slug)}
                       key={category._id || index}
-                      className={`text-play p-[10px] lg:p-[15px] lg:m-1 text-[16px] lg:text-[18px] font-semibold uppercase bg-white ${
+                      className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
                         selectedCategory === category.slug
                           ? "text-[#4e5ac3]"
                           : "text-[#42484D]"
@@ -143,7 +153,7 @@ function ForthScreen({}) {
             no-underline
           "
           >
-            "Все спикеры"
+            Все спикеры
           </Link>
         </div>
       </div>

@@ -23,25 +23,23 @@ function SecondScreen() {
         <div
           className={`text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 text-[#0e172c] `}
         >
-          <p>
-            Мы, агентство по подбору спикеров Plug-In, на постоянной основе
-            обновляем нашу базу спикеров/ Мы обладаем автоматически пополняемой
-            базой спикеров.
+          <p className="mb-4">
+            PLUG-IN SPEAKERS ACCELERATOR - ресурс по самостоятельному подбору
+            спикеров.
           </p>
-          <>
-            <ul className="list-disc pl-5 list-inside pt-3.5 mb-4">
-              {[
-                "ассистентов",
-                "секретарей",
-                "hr-специалистов",
-                "маркетологов",
-                "и т.д.",
-              ].map((li, index) => (
+
+          <p>
+            Ресурс на постоянной основе обновляет базу спикеров из различных
+            сфер:
+          </p>
+          <ul className="list-disc pl-5 list-inside pt-3.5 mb-4">
+            {["Продажи", "Маркетинг", "Big Data", "IT", "Digital"].map(
+              (li, index) => (
                 <li key={index}>{li}</li>
-              ))}
-            </ul>
-            <p className="pt-3.5 mb-8">Наши клиенты работают со спикерами:</p>
-          </>
+              )
+            )}
+          </ul>
+          <p className="pt-3.5 mb-8">Наши клиенты работают со спикерами:</p>
         </div>
         <div
           ref={ref}
@@ -52,22 +50,19 @@ function SecondScreen() {
           <ul
             className={`grid grid-cols-2 lg:flex lg:flex-row w-full justify-start text-[#1B1B1E] text-[14px] lg:text-[16px] font-bold`}
           >
-            {[
-              `Без комиссий`,
-              `НИЗКОЕ КАЧЕСТВО <br /> ПРОЕКТА`,
-              `Без посредников`,
-              `Прямой контакт`,
-            ].map((li, id) => (
-              <div className="flex lg:w-1/2" key={id}>
-                <li className="w-1/2 lg:w-3/4 mb-8 lg:mb-0">
-                  <div
-                    className={`h-[8px] w-2/5 lg:w-1/6 mb-[25px]`}
-                    style={{ backgroundColor: "#a786df" }}
-                  ></div>
-                  <p dangerouslySetInnerHTML={{ __html: li }}></p>
-                </li>
-              </div>
-            ))}
+            {[`БЕЗ КОМИССИЙ`, `БЕЗ ПОСРЕДНИКОВ`, `ПРЯМОЙ КОНТАКТ`].map(
+              (li, id) => (
+                <div className="flex lg:w-1/2" key={id}>
+                  <li className="w-1/2 lg:w-3/4 mb-8 lg:mb-0">
+                    <div
+                      className={`h-[8px] w-2/5 lg:w-1/6 mb-[25px]`}
+                      style={{ backgroundColor: "#a786df" }}
+                    ></div>
+                    <p dangerouslySetInnerHTML={{ __html: li }}></p>
+                  </li>
+                </div>
+              )
+            )}
           </ul>
         </div>
       </div>
