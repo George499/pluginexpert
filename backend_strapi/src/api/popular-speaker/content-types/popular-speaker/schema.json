@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "popular_speakers",
+  "info": {
+    "singularName": "popular-speaker",
+    "pluralName": "popular-speakers",
+    "displayName": "Popular Speaker"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    }
+  }
+}

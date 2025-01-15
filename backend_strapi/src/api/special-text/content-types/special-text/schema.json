@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "special_texts",
+  "info": {
+    "singularName": "special-text",
+    "pluralName": "special-texts",
+    "displayName": "Special text"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "body": {
+      "type": "blocks"
+    },
+    "page": {
+      "type": "string"
+    }
+  }
+}
