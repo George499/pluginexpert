@@ -14,6 +14,7 @@ const Contacts = () => {
       id="contacts"
     >
       <div className="flex content-center justify-center items-center flex-col">
+        <div>тест</div>
         <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center py-[81px] font-semibold">
           <div className="w-[51px] h-[12px] mb-[21px] bg-[#fffffe]"></div>
           <h2 className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[3.5rem] lg:leading-[4.5rem] font-bold mb-[57px] text-[#fffffe]">
