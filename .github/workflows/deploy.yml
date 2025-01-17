@@ -75,6 +75,12 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     # 8. Деплой на сервер
+    - name: Debug Secrets
+      run: |
+        echo "HOST: ${{ secrets.HOST }}"
+        echo "USERNAME: ${{ secrets.USERNAME }}"
+        echo "PORT: ${{ secrets.PORT }}"
+    
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
