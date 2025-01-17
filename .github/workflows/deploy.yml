@@ -22,7 +22,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '22.12.0' # Указываем требуемую версию Node.js
+        node-version: '22.12.0'
 
     # 3. Установка зависимостей и сборка frontend
     - name: Install frontend dependencies
@@ -59,20 +59,21 @@ jobs:
     # 7. Передача файлов на сервер
     - name: Debug Secrets
       run: |
-       echo "HOST: ${{ secrets.HOST }}"
-       echo "USERNAME: ${{ secrets.USERNAME }}"
-       echo "PORT: ${{ secrets.PORT }}"
+        echo "HOST: ${{ secrets.HOST }}"
+        echo "USERNAME: ${{ secrets.USERNAME }}"
+        echo "PORT: ${{ secrets.PORT }}"
+    
     - name: Upload frontend build
-      uses: appleboy/scp-action@master
+      uses: appleboy/scp-action@v0.1.0
       with:
         source: ./frontend-build.tar.gz
         target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz"
         port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}        
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Upload backend build
       if: env.no_changes == 'false'
-      uses: appleboy/scp-action@master
+      uses: appleboy/scp-action@v0.1.0
       with:
         source: ./backend-build.tar.gz
         target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/backend-build.tar.gz"
@@ -87,7 +88,7 @@ jobs:
         echo "PORT: ${{ secrets.PORT }}"
     
     - name: Deploy to server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.0
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
