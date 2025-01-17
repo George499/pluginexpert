@@ -47,10 +47,10 @@ jobs:
           git pull origin main
           npm ci
           npm run build
-          pm2 restart frontend # Перезапуск фронтенда (укажите правильное имя процесса PM2)
+          pm2 restart 6 # Перезапуск фронтенда (укажите правильное имя процесса PM2)
 
           cd pluginexpert/backend_strapi # Перейти в папку бэкенда на сервере
           git pull origin main
           npm ci
           npm run build # Если Strapi требует сборки (например, для админки)
-          pm2 restart backend # Перезапуск бэкенда (укажите правильное имя процесса PM2)
+          pm2 restart 5 # Перезапуск бэкенда (укажите правильное имя процесса PM2)
