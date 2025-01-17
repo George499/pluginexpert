@@ -38,7 +38,7 @@ jobs:
 
     # 5. Передача файлов на сервер
     - name: Upload frontend build
-      uses: appleboy/scp-action@0.0.7
+      uses: appleboy/ssh-action@v0.0.7
       with:
         source: ./frontend-build.tar.gz
         target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz"
