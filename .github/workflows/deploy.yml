@@ -43,13 +43,13 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd /path/to/your/frontend # Перейти в папку фронтенда на сервере
+          cd pluginexpert/frontend # Перейти в папку фронтенда на сервере
           git pull origin main
           npm ci
           npm run build
           pm2 restart frontend # Перезапуск фронтенда (укажите правильное имя процесса PM2)
 
-          cd /path/to/your/backend # Перейти в папку бэкенда на сервере
+          cd pluginexpert/backend # Перейти в папку бэкенда на сервере
           git pull origin main
           npm ci
           npm run build # Если Strapi требует сборки (например, для админки)
