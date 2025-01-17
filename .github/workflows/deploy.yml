@@ -6,8 +6,6 @@ on:
       - main
     paths:
       - 'backend_strapi/**'
-
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
