@@ -18,7 +18,7 @@ jobs:
         node-version: 'v22.12.0' # укажите вашу версию Node.js
 
     - name: Install dependencies
-      run: npm ci  # использует package-lock.json для точной установки зависимостей
+      run: npm i  
 
     - name: Run tests
       run: npm test  # если у вас есть тесты
