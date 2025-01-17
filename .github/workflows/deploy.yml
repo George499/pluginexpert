@@ -67,27 +67,29 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          # Переходим в директорию проекта
-          cd pluginexpert
+         script: |
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Загружаем nvm
+  nvm use 22.12.0 # Активируем нужную версию Node.js
+  cd pluginexpert
 
-          # Распаковываем frontend
-          if [ -f ~/frontend-build.tar.gz ]; then
-            rm -rf frontend/build
-            tar -xzf ~/frontend-build.tar.gz -C ./frontend
-            rm ~/frontend-build.tar.gz
-          fi
+  # Распаковываем frontend
+  if [ -f ~/frontend-build.tar.gz ]; then
+    rm -rf frontend/build
+    tar -xzf ~/frontend-build.tar.gz -C ./frontend
+    rm ~/frontend-build.tar.gz
+  fi
 
-          # Обновляем backend (если были изменения)
-          if [ -f ~/backend-build.tar.gz ]; then
-            rm -rf backend_strapi
-            tar -xzf ~/backend-build.tar.gz -C ./backend_strapi
-            rm ~/backend-build.tar.gz
-          fi
+  # Обновляем backend (если были изменения)
+  if [ -f ~/backend-build.tar.gz ]; then
+    rm -rf backend_strapi
+    tar -xzf ~/backend-build.tar.gz -C ./backend_strapi
+    rm ~/backend-build.tar.gz
+  fi
 
-          # Перезапускаем процессы через PM2
-          pm2 restart 6 # Frontend
-          pm2 restart 5 # Backend
-
+  # Перезапускаем процессы через PM2
+  pm2 restart 6 # Frontend
+  pm2 restart 5 # Backend
     # 9. Передаем файлы на сервер
     - name: Upload frontend build
       uses: appleboy/scp-action@master
