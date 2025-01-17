@@ -68,7 +68,7 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           # Переходим в директорию проекта
-          cd /path/to/project
+          cd /pluginexpert
 
           # Распаковываем frontend
           if [ -f ~/frontend-build.tar.gz ]; then
