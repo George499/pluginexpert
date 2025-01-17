@@ -9,20 +9,32 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    # 1. Клонируем репозиторий
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    # 2. Устанавливаем Node.js
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 'v22.12.0' # укажите вашу версию Node.js
+        node-version: '16' # Используйте подходящую версию Node.js для вашего приложения
 
-    - name: Install dependencies
-      run: npm i  
+    # 3. Установка зависимостей для frontend
+    - name: Install frontend dependencies
+      run: npm install
+      working-directory: ./frontend # Указываем путь к папке frontend, где находится package.json
 
-    - name: Run tests
-      run: npm test  # если у вас есть тесты
+    # 4. Сборка фронтенда
+    - name: Build frontend
+      run: npm run build
+      working-directory: ./frontend # Указываем путь к папке frontend
 
+    # 5. Установка зависимостей для backend (если нужно)
+    - name: Install backend dependencies
+      run: npm install
+      working-directory: ./backend # Указываем путь к папке backend, если нужно установить зависимости для Strapi
+
+    # 6. Деплой на сервер
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
@@ -31,8 +43,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd pluginexpert
+          cd /path/to/your/frontend # Перейти в папку фронтенда на сервере
           git pull origin main
           npm ci
           npm run build
-          pm2 restart 6
+          pm2 restart frontend # Перезапуск фронтенда (укажите правильное имя процесса PM2)
+
+          cd /path/to/your/backend # Перейти в папку бэкенда на сервере
+          git pull origin main
+          npm ci
+          npm run build # Если Strapi требует сборки (например, для админки)
+          pm2 restart backend # Перезапуск бэкенда (укажите правильное имя процесса PM2)
