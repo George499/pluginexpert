@@ -17,7 +17,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16' # Используйте подходящую версию Node.js для вашего приложения
+        node-version: 'v22.12.0' # Используйте подходящую версию Node.js для вашего приложения
 
     # 3. Установка зависимостей для frontend
     - name: Install frontend dependencies
