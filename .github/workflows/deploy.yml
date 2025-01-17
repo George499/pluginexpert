@@ -34,10 +34,7 @@ jobs:
       run: npm run build
       working-directory: ./frontend
 
-    # 4. Архивируем собранный frontend
-    - name: Archive frontend build
-      run: tar -czf frontend-build.tar.gz -C ./frontend/build .
-
+   
     # 5. Проверка изменений в backend (если требуется оставить)
     - name: Check for backend changes
       id: backend_changes
