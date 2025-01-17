@@ -32,7 +32,7 @@ jobs:
     # 5. Установка зависимостей для backend (если нужно)
     - name: Install backend dependencies
       run: npm install
-      working-directory: ./backend # Указываем путь к папке backend, если нужно установить зависимости для Strapi
+      working-directory: ./backend_strapi # Указываем путь к папке backend, если нужно установить зависимости для Strapi
 
     # 6. Деплой на сервер
     - name: Deploy to server
