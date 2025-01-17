@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  
     paths:
       - 'backend_strapi/**'
       - 'frontend/**'
@@ -23,9 +22,9 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20' # Используем актуальную LTS-версию Node.js
+        node-version: ' v22.12.0' # Актуальная версия Node.js
 
-    # 3. Установка зависимостей и сборка frontend
+    # 3. Установка зависимостей и сборка фронтенда
     - name: Install frontend dependencies
       run: npm install
       working-directory: ./frontend
@@ -34,8 +33,7 @@ jobs:
       run: npm run build
       working-directory: ./frontend
 
-   
-    # 5. Проверка изменений в backend (если требуется оставить)
+    # 4. Проверка изменений в бэкенде
     - name: Check for backend changes
       id: backend_changes
       run: |
@@ -45,7 +43,7 @@ jobs:
           echo "no_changes=false" >> $GITHUB_ENV
         fi
 
-    # 6. Установка зависимостей и сборка backend
+    # 5. Установка зависимостей и сборка бэкенда
     - name: Install backend dependencies and build
       if: env.no_changes == 'false'
       run: |
@@ -53,10 +51,24 @@ jobs:
         npm run build
       working-directory: ./backend_strapi
 
-    # 7. Архивируем backend для передачи на сервер
-    - name: Archive backend build
+    # 6. Передаём файлы фронтенда на сервер
+    - name: Upload frontend build to server
+      uses: appleboy/scp-action@master
+      with:
+        source: ./frontend/build/
+        target: ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/pluginexpert/frontend/build/
+        port: ${{ secrets.PORT }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    # 7. Передаём файлы бэкенда на сервер
+    - name: Upload backend to server
       if: env.no_changes == 'false'
-      run: tar -czf backend-build.tar.gz -C ./backend_strapi .
+      uses: appleboy/scp-action@master
+      with:
+        source: ./backend_strapi/
+        target: ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/pluginexpert/backend_strapi/
+        port: ${{ secrets.PORT }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     # 8. Деплой на сервер
     - name: Deploy to server
@@ -67,41 +79,32 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
+          # Убедимся, что Node.js установлен на сервере
+          if ! [ -x "$(command -v node)" ]; then
+            echo "Node.js не найден, устанавливаю..."
+            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+          fi
+
           # Переходим в директорию проекта
-          cd pluginexpert
+          cd ~/pluginexpert
 
-          # Распаковываем frontend
-          if [ -f ~/frontend-build.tar.gz ]; then
-            rm -rf frontend/build
-            tar -xzf ~/frontend-build.tar.gz -C ./frontend
-            rm ~/frontend-build.tar.gz
+          # Убедимся, что директория фронтенда существует
+          if [ -d ./frontend/build ]; then
+            echo "Frontend build files uploaded successfully."
+          else
+            echo "Error: Frontend build files are missing."
+            exit 1
           fi
 
-          # Обновляем backend (если были изменения)
-          if [ -f ~/backend-build.tar.gz ]; then
-            rm -rf backend_strapi
-            tar -xzf ~/backend-build.tar.gz -C ./backend_strapi
-            rm ~/backend-build.tar.gz
+          # Обновляем бэкенд (если были изменения)
+          if [ -d ./backend_strapi ]; then
+            echo "Backend files uploaded successfully."
+          else
+            echo "Error: Backend files are missing."
+            exit 1
           fi
 
-          # Перезапускаем процессы через PM2
+          # Перезапуск процессов через PM2
           pm2 restart 6 # Frontend
           pm2 restart 5 # Backend
-
-    # 9. Передаем файлы на сервер
-    - name: Upload frontend build
-      uses: appleboy/scp-action@master
-      with:
-        source: ./frontend-build.tar.gz
-        target: ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Upload backend build
-      if: env.no_changes == 'false'
-      uses: appleboy/scp-action@master
-      with:
-        source: ./backend-build.tar.gz
-        target: ${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/backend-build.tar.gz
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
