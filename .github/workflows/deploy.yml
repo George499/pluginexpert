@@ -2,7 +2,11 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [ main ]  # или master, в зависимости от вашей основной ветки
+    branches:
+      - main
+    paths:
+      - 'backend_strapi/**'
+
 
 jobs:
   deploy:
@@ -27,13 +31,26 @@ jobs:
     # 4. Сборка фронтенда
     - name: Build frontend
       run: npm run build
-      working-directory: ./frontend # Указываем путь к папке frontend
+      working-directory: ./frontend 
+      
+    - name: Check for backend changes
+      id: backend_changes
+      run: |
+        # Проверяем изменения в папке backend_strapi
+        if git diff --quiet HEAD~1 HEAD -- backend_strapi; then
+          echo "no_changes=true" >> $GITHUB_ENV
+        else
+          echo "no_changes=false" >> $GITHUB_ENV
+        fi
 
-    # 5. Установка зависимостей для backend (если нужно)
-    - name: Install backend dependencies
-      run: npm install
-      working-directory: ./backend_strapi # Указываем путь к папке backend, если нужно установить зависимости для Strapi
-
+    # 5. Установка зависимостей и сборка backend (только если были изменения)
+    - name: Install backend dependencies and build
+      if: env.no_changes == 'false'
+      run: |
+        npm install
+        npm run build
+      working-directory: ./backend_strapi
+      
     # 6. Деплой на сервер
     - name: Deploy to server
       uses: appleboy/ssh-action@master
@@ -43,14 +60,14 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          cd pluginexpert/frontend # Перейти в папку фронтенда на сервере
+          cd frontend 
           git pull origin main
           npm ci
           npm run build
-          pm2 restart 6 # Перезапуск фронтенда (укажите правильное имя процесса PM2)
+          pm2 restart 6 
 
-          cd pluginexpert/backend_strapi # Перейти в папку бэкенда на сервере
+          cd backend_strapi
           git pull origin main
           npm ci
-          npm run build # Если Strapi требует сборки (например, для админки)
-          pm2 restart 5 # Перезапуск бэкенда (укажите правильное имя процесса PM2)
+          npm run build 
+          pm2 restart 5 
