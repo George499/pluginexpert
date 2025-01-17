@@ -68,10 +68,7 @@ jobs:
         source: ./frontend-build.tar.gz
         target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz"
         port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-         echo "Using host: ${{ secrets.HOST }}"
-         echo "Using port: ${{ secrets.PORT }}"
+        key: ${{ secrets.SSH_PRIVATE_KEY }}        
 
     - name: Upload backend build
       if: env.no_changes == 'false'
