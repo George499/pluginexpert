@@ -1,11 +1,10 @@
-name: Deploy to Production
+name: Deploy Frontend to Production
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'backend_strapi/**'
       - 'frontend/**'
   workflow_dispatch:
 
@@ -22,7 +21,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '22.12.0'
+        node-version: '22.12.0' # Указываем требуемую версию Node.js
 
     # 3. Установка зависимостей и сборка frontend
     - name: Install frontend dependencies
@@ -33,74 +32,30 @@ jobs:
       run: npm run build
       working-directory: ./frontend
 
-    # 4. Проверка изменений в backend
-    - name: Check for backend changes
-      id: backend_changes
-      run: |
-        if git diff --quiet HEAD~1 HEAD -- backend_strapi; then
-          echo "no_changes=true" >> $GITHUB_ENV
-        else
-          echo "no_changes=false" >> $GITHUB_ENV
-        fi
+    # 4. Архивируем frontend для передачи на сервер
+    - name: Archive frontend build
+      run: tar -czf frontend-build.tar.gz -C ./frontend .
 
-    # 5. Установка зависимостей и сборка backend
-    - name: Install backend dependencies and build
-      if: env.no_changes == 'false'
-      run: |
-        npm install
-        npm run build
-      working-directory: ./backend_strapi
-
-    # 6. Архивируем backend для передачи на сервер
-    - name: Archive backend build
-      if: env.no_changes == 'false'
-      run: tar -czf backend-build.tar.gz -C ./backend_strapi .
-
-    # 7. Передача файлов на сервер
-    - name: Debug Secrets
-      run: |
-        echo "HOST: ${{ secrets.HOST }}"
-        echo "USERNAME: ${{ secrets.USERNAME }}"
-        echo "PORT: ${{ secrets.PORT }}"
-    
+    # 5. Передача файлов на сервер
     - name: Upload frontend build
-      uses: appleboy/scp-action@v0.1.0
+      uses: appleboy/scp-action@master
       with:
         source: ./frontend-build.tar.gz
         target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz"
         port: ${{ secrets.PORT }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Upload backend build
-      if: env.no_changes == 'false'
-      uses: appleboy/scp-action@v0.1.0
-      with:
-        source: ./backend-build.tar.gz
-        target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/backend-build.tar.gz"
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    # 8. Деплой на сервер
-    - name: Debug Secrets
-      run: |
-        echo "HOST: ${{ secrets.HOST }}"
-        echo "USERNAME: ${{ secrets.USERNAME }}"
-        echo "PORT: ${{ secrets.PORT }}"
-    
+    # 6. Деплой на сервер
     - name: Deploy to server
-      uses: appleboy/ssh-action@v0.1.0
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # Загружаем nvm
-          nvm use 22.12.0 # Активируем нужную версию Node.js
-
           # Переходим в директорию проекта
-          cd pluginexpert
+          cd ~/pluginexpert
 
           # Распаковываем frontend
           if [ -f ~/frontend-build.tar.gz ]; then
@@ -109,13 +64,5 @@ jobs:
             rm ~/frontend-build.tar.gz
           fi
 
-          # Обновляем backend (если были изменения)
-          if [ -f ~/backend-build.tar.gz ]; then
-            rm -rf backend_strapi
-            tar -xzf ~/backend-build.tar.gz -C ./backend_strapi
-            rm ~/backend-build.tar.gz
-          fi
-
-          # Перезапускаем процессы через PM2
-          pm2 restart 6 # Frontend
-          pm2 restart 5 # Backend
+          # Перезапускаем frontend через PM2
+          pm2 restart 6
