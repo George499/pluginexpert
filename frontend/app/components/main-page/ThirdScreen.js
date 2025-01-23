@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import useIntersectionObserver from "../utils/useIntersectionObserver";
+import useIntersectionObserver from "../../utils/useIntersectionObserver";
 
 function ThirdScreen() {
   const { ref, isVisible } = useIntersectionObserver(0.3);

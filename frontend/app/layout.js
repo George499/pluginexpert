@@ -1,7 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { AnimatePresence } from "framer-motion";
-import Header from "./components/Header";
+import Header from "./components/main-page/Header";
 import { Raleway } from "next/font/google";
 import { Play } from "next/font/google";
 

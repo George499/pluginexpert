@@ -1,6 +1,6 @@
 "use client";
 
-import useIntersectionObserver from "../utils/useIntersectionObserver";
+import useIntersectionObserver from "../../utils/useIntersectionObserver";
 
 function SecondScreen() {
   const { ref, isVisible } = useIntersectionObserver(0.3);
