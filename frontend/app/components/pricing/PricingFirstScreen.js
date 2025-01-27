@@ -6,10 +6,10 @@ function PricingFirstScreen() {
   const { ref, isVisible } = useIntersectionObserver(0.3);
   return (
     <div
-      className={`h-screen flex content-center justify-center items-center flex-col bg-[url('/images/bkground_1.png')] bg-fixed relative bg-cover `}
+      className={` flex content-center justify-center items-center flex-col bg-[url('/images/bkground_1.png')] bg-fixed relative bg-cover `}
       id="second screen"
     >
-      <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 items-start justify-center font-semibold mt-[120px]">
+      <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 items-start justify-center font-semibold mt-[200px]">
         {/* <div
           className=" w-[51px] h-[12px] mb-[21px]"
           style={{ backgroundColor: "#a786df" }}
@@ -23,7 +23,7 @@ function PricingFirstScreen() {
         <div className="text-[16px] lg:text-[20px] tracking-normal mb-8 pt-7 text-white">
           <p>Размещение анкеты на ресурсе </p>
         </div>
-        <div className="mb-[30px] text-[40px] lg:text-[57px] xl:text-[81px]">
+        <div className="mb-[30px] text-[40px] lg:text-[57px] xl:text-[81px] text-[#1B1B1E]">
           <p className="leading-[4.5rem] mb-[30px] lg:-mb-[5px] text-white">
             PLUGIN
           </p>
