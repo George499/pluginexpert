@@ -3,7 +3,6 @@
 import useIntersectionObserver from "../../utils/useIntersectionObserver";
 
 function SpeakerPrice({ speaker }) {
-  console.log(speaker);
   const { ref, isVisible } = useIntersectionObserver(0.3);
   return (
     <div

@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import AllSpeakers from "@/components/all-speakers/AllSpeakers";
+import SpeakersContacts from "@/components/all-speakers/SpeakersContacts";
+import AllSpeakersSpecialText from "@/components/all-speakers/AllSpeakersSpecialText";
+import Footer from "@/components/main-page/Footer";
 
 const STRAPI_API_URL = "https://admin.pluginexpert.ru/api";
 
@@ -45,7 +48,12 @@ function Category() {
   }, [selectedCategory]);
 
   return (
-    <AllSpeakers allSpeakers={allSpeakers} allCategories={allCategories} />
+    <>
+      <AllSpeakers allSpeakers={allSpeakers} allCategories={allCategories} />
+      <SpeakersContacts />
+      <AllSpeakersSpecialText />
+      <Footer />
+    </>
   );
 }
 

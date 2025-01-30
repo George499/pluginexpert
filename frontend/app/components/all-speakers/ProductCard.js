@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-function ProductCard({ speaker }) {
+function ProductCard({ speaker, setSelectedCategory }) {
   const imageUrl = speaker.Image?.[0]?.url
     ? `https://admin.pluginexpert.ru${speaker.Image[0].url}`
     : "/images/default.jpg"; // Фолбэк-изображение
@@ -27,18 +27,17 @@ function ProductCard({ speaker }) {
                 <h3 className="font-bold text-[#42484D] text-[17px] lg:text-[20px] mb-5">
                   {speaker.Profession}
                 </h3>
-                <div className="flex flex-col">
+                <div className="flex flex-col text-[#42484D]">
                   <p className="font-bold lg:mt-3">Эксперт в области:</p>
                   <div className="flex flex-col">
                     {speaker.categories?.map((cat, index) => (
-                      <Link
-                        href={`/${cat.slug}`}
+                      <span
                         key={index}
+                        onClick={() => setSelectedCategory(cat.slug)}
                         className="hover:underline cursor-pointer mr-1"
                       >
                         {cat.title}
-                        {index < speaker.categories.length - 1 ? "," : ""}
-                      </Link>
+                      </span>
                     ))}
                   </div>
                 </div>

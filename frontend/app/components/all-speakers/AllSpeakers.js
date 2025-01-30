@@ -8,12 +8,12 @@ import ProductCard from "@/components/all-speakers/ProductCard";
 function AllSpeakers({ allSpeakers, allCategories }) {
   const [isContactsVisible, setIsContactsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
-  console.log(allCategories);
+
   const filteredSpeakers =
     selectedCategory === "all-categories"
       ? allSpeakers
       : allSpeakers.filter((speaker) =>
-          speaker.attributes.categories.data.some(
+          speaker.categories?.data?.some(
             (category) => category.slug === selectedCategory
           )
         );
@@ -77,7 +77,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
         ) : (
           <button
             onClick={handleButtonClick}
-            className="bg-[#42484D] hover:bg-[#3742a3] lg:w-[293px] lg:h-[61px] text-white text-[20px] font-semibold uppercase duration-300 p-4 text-center"
+            className="bg-[#42484D] hover:bg-[#3742a3] lg:w-[293px] lg:h-[61px] text-white text-[20px] font-semibold uppercase duration-300 p-4 text-center mb-[34px]"
           >
             Показать контакты
           </button>
@@ -86,7 +86,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
 
       <div className="w-full bg-white h-full mb-[87px] flex flex-col items-center justify-center">
         <div className="w-4/5 lg:w-2/3 container mx-auto h-full">
-          <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px]">
+          <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px] text-black">
             <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
           </div>
           <div className="columns-auto gap-6 pt-2 mb-[57px]" role="group">
@@ -120,7 +120,11 @@ function AllSpeakers({ allSpeakers, allCategories }) {
                   transition={{ type: "spring", stiffness: 50 }}
                 >
                   {filteredSpeakers.map((speaker) => (
-                    <ProductCard key={speaker.id} speaker={speaker} />
+                    <ProductCard
+                      key={speaker.id}
+                      speaker={speaker}
+                      setSelectedCategory={setSelectedCategory}
+                    />
                   ))}
                 </motion.div>
               </div>
