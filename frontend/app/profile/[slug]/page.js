@@ -4,7 +4,7 @@ import SpeekerInfoScreen from "@/components/speaker-detail/SpeekerInfoScreen";
 import SpeekerSecondScreen from "@/components/speaker-detail/SpeekerSecondScreen";
 import Footer from "@/components/main-page/Footer";
 
-import PricingSecondScreen from "@/components/pricing/PricingSecondScreen";
+import SpeakerPrice from "@/components/speaker-detail/SpeakerPrice";
 
 const STRAPI_API_URL = "https://admin.pluginexpert.ru/api/speakers";
 
@@ -23,7 +23,7 @@ export default async function SpeekerPage({ params }) {
       <SpeekerFirstScreen speaker={speaker} />
       <SpeekerInfoScreen speaker={speaker} />
       <SpeekerSecondScreen speaker={speaker} />
-      <PricingSecondScreen />
+      <SpeakerPrice speaker={speaker} />
       <SpeakerContacts speaker={speaker} />
       <Footer />
     </>

@@ -30,7 +30,7 @@ function SpeakerContacts({ speaker }) {
           {isContactsVisible ? (
             <div className=" text-[20px] tracking-normal   ">
               <p>Пишите: want@pluginagency.ru</p>
-              <p className="mb-[57px] hidden lg:block">
+              <p className="mb-4 hidden lg:block">
                 Звоните: +7 (965) 246 9191{" "}
               </p>
               <div className="mb-4 flex">
