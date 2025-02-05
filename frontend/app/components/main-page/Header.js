@@ -50,94 +50,104 @@ function Header() {
   }, [dataToRef, nav]);
 
   return (
-    <header className="w-full h-24 bg-black/[.08] items-center flex absolute top-0">
-      <div
-        className="w-2/3 mx-auto flex justify-between items-center 
-      text-white font-bold text-base"
-      >
-        <div className="z-20">
-          <Link
-            href="/"
-            onClick={() => setNav(false)}
-            className="cursor-pointer tracking-wide text-[15px]"
-          >
-            PLUG-IN
-          </Link>
-        </div>
-        <NavBar handleClick={handleNavBarClick} />
+    <header className="w-full h-24 bg-transparent items-center flex absolute top-0 left-0 z-50">
+      <div className="lg:flex lg:flex-col items-start absolute">
+        <Link href="/signin" key="signin" legacyBehavior>
+          <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
+            ВОЙТИ
+          </a>
+        </Link>
+        <Link href="/register" key="register" legacyBehavior>
+          <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
+            РЕГИСТРАЦИЯ
+          </a>
+        </Link>
       </div>
-      <div className="ml-auto font-medium flex lg:hidden">
-        <div
-          onClick={() => setNav(!nav)}
-          className="z-20 cursor-pointer align-self-center mx-4"
-        >
-          {!nav ? (
-            <AiOutlineMenu className="h-10 w-10 text-white" />
-          ) : (
-            <AiOutlineClose className="h-10 w-10 text-white" />
-          )}
+      <div className="w-[80%] lg:w-2/3 mx-auto">
+        <div className="w-full flex justify-between items-center text-white font-bold text-base">
+          <div className="z-20">
+            <Link
+              href="/"
+              onClick={() => setNav(false)}
+              className="cursor-pointer tracking-wide text-[15px]"
+            >
+              PLUG-IN
+            </Link>
+          </div>
+          <NavBar handleClick={handleNavBarClick} />
         </div>
+        <div className="ml-auto font-medium flex lg:hidden">
+          <div
+            onClick={() => setNav(!nav)}
+            className="z-20 cursor-pointer align-self-center mx-4"
+          >
+            {!nav ? (
+              <AiOutlineMenu className="h-10 w-10 text-white" />
+            ) : (
+              <AiOutlineClose className="h-10 w-10 text-white" />
+            )}
+          </div>
 
-        <ul
-          className={
-            !nav
-              ? "hidden"
-              : "absolute z-10 top-0 left-0 w-full h-screen bg-[url('/images/bkground_1.png')] text-white flex flex-col justify-center items-center"
-          }
-        >
-          <li
-            className="py-6 text-4xl cursor-pointer"
-            data-to="process"
-            onClick={(e) => handleBurgerClick(e)}
+          <ul
+            className={
+              !nav
+                ? "hidden"
+                : "absolute z-10 top-0 left-0 w-full h-screen bg-[url('/images/bkground_1.png')] text-white flex flex-col justify-center items-center"
+            }
           >
-            Процесс
-          </li>
-          <li
-            className="py-6 text-4xl cursor-pointer"
-            data-to="production"
-            onClick={(e) => handleBurgerClick(e)}
-          >
-            Продакшн
-          </li>
-
-          <li className="py-6 text-4xl cursor-pointer">
-            <a
-              onClick={() => {
-                router.push("/all-categories");
-                setNav(!nav);
-              }}
+            <li
+              className="py-6 text-4xl cursor-pointer"
+              data-to="process"
+              onClick={(e) => handleBurgerClick(e)}
             >
-              Все спикеры
-            </a>
-          </li>
-          <li
-            className="py-6 text-4xl cursor-pointer"
-            onClick={(e) => handleBurgerClick(e)}
-            data-to="contacts"
-          >
-            Контакты
-          </li>
-          <li className="py-6 text-4xl cursor-pointer">
-            <a
-              onClick={() => {
-                router.push("/forSpeekers");
-                setNav(!nav);
-              }}
+              Процесс
+            </li>
+            <li
+              className="py-6 text-4xl cursor-pointer"
+              data-to="production"
+              onClick={(e) => handleBurgerClick(e)}
             >
-              Спикерам
-            </a>
-          </li>
-          <li className="py-6 text-4xl cursor-pointer">
-            <a
-              onClick={() => {
-                router.push("/blog");
-                setNav(!nav);
-              }}
+              Продакшн
+            </li>
+            <li className="py-6 text-4xl cursor-pointer">
+              <a
+                onClick={() => {
+                  router.push("/all-categories");
+                  setNav(!nav);
+                }}
+              >
+                Все спикеры
+              </a>
+            </li>
+            <li
+              className="py-6 text-4xl cursor-pointer"
+              onClick={(e) => handleBurgerClick(e)}
+              data-to="contacts"
             >
-              Блог
-            </a>
-          </li>
-        </ul>
+              Контакты
+            </li>
+            <li className="py-6 text-4xl cursor-pointer">
+              <a
+                onClick={() => {
+                  router.push("/forSpeekers");
+                  setNav(!nav);
+                }}
+              >
+                Спикерам
+              </a>
+            </li>
+            <li className="py-6 text-4xl cursor-pointer">
+              <a
+                onClick={() => {
+                  router.push("/blog");
+                  setNav(!nav);
+                }}
+              >
+                Блог
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
   );
