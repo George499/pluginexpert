@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Используем новый хук из next/navigation
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); // Состояние для видимости пароля
 
-  // Валидация пароля (можно добавить более строгую логику в зависимости от требований)
+  const router = useRouter(); // Инициализируем роутер
+
+  // Валидация пароля
   const validatePassword = () => {
     if (!password) {
       setError("Пароль не может быть пустым");
@@ -24,13 +28,13 @@ export default function LoginPage() {
 
     // Формируем данные для отправки
     const formData = new FormData();
-    formData.append("username", username);
+    formData.append("identifier", username); // Для Strapi используем "identifier" для логина
     formData.append("password", password);
 
     try {
       // Отправка данных на сервер
       const response = await fetch(
-        "https://admin.pluginexpert.ru/api/auth/login",
+        "https://admin.pluginexpert.ru/api/auth/local",
         {
           method: "POST",
           body: formData,
@@ -40,9 +44,11 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        alert("Вход успешен!");
-        // После успешного входа, можно перенаправить пользователя, например, на страницу профиля
-        // window.location.href = '/profile';
+        // Сохраняем JWT токен в localStorage (или context)
+        localStorage.setItem("authToken", result.jwt);
+
+        // Редирект на страницу dashboard
+        router.push("/dashboard");
       } else {
         setError(result.message || "Неверный логин или пароль");
       }
@@ -78,14 +84,23 @@ export default function LoginPage() {
             <label htmlFor="password" className="block">
               Пароль
             </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
+            <div className="relative">
+              <input
+                type={passwordVisible ? "text" : "password"} // Меняем тип поля в зависимости от состояния
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setPasswordVisible(!passwordVisible)} // Переключаем видимость пароля
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+              >
+                {passwordVisible ? "Скрыть" : "Показать"}
+              </button>
+            </div>
           </div>
 
           {/* Кнопка отправки */}
