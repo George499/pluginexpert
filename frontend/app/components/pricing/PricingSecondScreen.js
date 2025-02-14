@@ -22,6 +22,20 @@ function PricingSecondScreen() {
             <p className="-mb-[30px] lg:-mb-[10px]">РАЗМЕЩЕНИЯ</p>
           </div>
         </div>
+        <div className="text-[16px] lg:text-[20px] tracking-normal  ">
+          <p>Разместив анкету вы получаете:</p>
+          <ul className="list-disc pl-5 list-inside pt-3.5 mb-4">
+            {[
+              "Рост числа обращений",
+              "Продвижение в поисковых сетях",
+              "Самостоятельное обновления информации в анкете",
+              "Прямую коммуникацию с клиентом / заказчиком",
+              "Заказы без комиссий",
+            ].map((li, index) => (
+              <li key={index}>{li}</li>
+            ))}
+          </ul>
+        </div>
 
         <div className="text-[16px] lg:text-[20px] tracking-normal mb-14 pt-7 ">
           <p>Три тарифа в зависимости от длительности размещения </p>
@@ -43,7 +57,7 @@ function PricingSecondScreen() {
               ></div>
               <p className=" mb-[30px] lg:-mb-[5px] ">3 МЕСЯЦА</p>
               <div className="tracking-tighter leading-[4.5rem] lg:flex ">
-                <p className="-mb-[30px] lg:-mb-[10px] text-[#a786df]">3 000</p>
+                <p className="-mb-[30px] lg:-mb-[10px] text-[#a786df]">4 000</p>
               </div>
             </li>
             <li className="w-1/2 lg:w-3/4 mb-8 lg:mb-0 mr-8">
@@ -53,7 +67,7 @@ function PricingSecondScreen() {
               ></div>
               <p className=" mb-[30px] lg:-mb-[5px] ">6 МЕСЯЦЕВ</p>
               <div className="tracking-tighter leading-[4.5rem] lg:flex ">
-                <p className="-mb-[30px] lg:-mb-[10px] text-[#a786df]">5 000</p>
+                <p className="-mb-[30px] lg:-mb-[10px] text-[#a786df]">6 000</p>
               </div>
             </li>
             <li className="w-1/2 lg:w-3/4 mb-8 lg:mb-0 mr-8">
@@ -61,7 +75,7 @@ function PricingSecondScreen() {
                 className={`h-[8px] w-2/5 lg:w-1/6 mb-[25px]`}
                 style={{ backgroundColor: "#a786df" }}
               ></div>
-              <p className=" mb-[30px] lg:-mb-[5px] ">12 МЕСЯЦЕВ</p>
+              <p className=" mb-[30px] lg:-mb-[5px] ">10 МЕСЯЦЕВ</p>
               <div className="tracking-tighter leading-[4.5rem] lg:flex ">
                 <p className="-mb-[30px] lg:-mb-[10px] text-[#a786df]">
                   12 000

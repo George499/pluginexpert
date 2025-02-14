@@ -26,7 +26,6 @@ function SpeakerSecondScreen({ speaker }) {
               О чем читает и чему учит:
             </h1>
 
-            {/* ✅ Используем BlocksRenderer вместо PortableText */}
             {speechContent ? (
               <BlocksRenderer
                 content={speechContent}

@@ -1,5 +1,5 @@
 import SpeakerContacts from "@/components/speaker-detail/SpeakerContacts";
-import SpeekerFirstScreen from "../../components/speaker-detail/SpeekerFirstScreen";
+import SpeekerFirstScreen from "@/components/speaker-detail/SpeekerFirstScreen";
 import SpeekerInfoScreen from "@/components/speaker-detail/SpeekerInfoScreen";
 import SpeekerSecondScreen from "@/components/speaker-detail/SpeekerSecondScreen";
 import Footer from "@/components/main-page/Footer";

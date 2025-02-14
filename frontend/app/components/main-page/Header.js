@@ -52,12 +52,12 @@ function Header() {
   return (
     <header className="w-full h-24 bg-transparent items-center flex absolute top-0 left-0 z-50">
       <div className="lg:flex lg:flex-col items-start absolute">
-        <Link href="/signin" key="signin" legacyBehavior>
+        <Link href="/auth/signin" key="signin" legacyBehavior>
           <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
             ВОЙТИ
           </a>
         </Link>
-        <Link href="/register" key="register" legacyBehavior>
+        <Link href="/auth/register" key="register" legacyBehavior>
           <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
             РЕГИСТРАЦИЯ
           </a>
@@ -100,7 +100,7 @@ function Header() {
               data-to="process"
               onClick={(e) => handleBurgerClick(e)}
             >
-              Процесс
+              Спикеры
             </li>
             <li
               className="py-6 text-4xl cursor-pointer"

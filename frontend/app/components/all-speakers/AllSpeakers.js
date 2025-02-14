@@ -27,7 +27,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
   return (
     <div className="bg-hero-image bg-fixed flex content-center justify-center items-center flex-col h-full w-full">
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center font-semibold mt-[120px]  relative">
-        <div className="relative mb-[10px] w-full">
+        <div className="relative mb-[10px] w-full upfront">
           <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
           <p className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
             ПОДБОР СПИКЕРОВ
@@ -54,34 +54,14 @@ function AllSpeakers({ allSpeakers, allCategories }) {
             ДЛЯ РАЗМЕЩЕНИ АНКЕТЫ НА НАШЕМ РЕСУРСЕ – СВЯЖИТЕСЬ С НАМИ
           </p>
         </div>
-        {isContactsVisible ? (
-          <div className=" text-[20px] tracking-normal   ">
-            <p>Пишите: want@pluginagency.ru</p>
-            <p className="mb-4 hidden lg:block">Звоните: +7 (965) 246 9191 </p>
-            <div className="mb-4 flex">
-              <p className="lg:hidden ">Звоните:</p>
-              <a className="block lg:hidden" href="tel:+7 (965) 246 9191">
-                +7 (965) 246 9191
-              </a>
-            </div>
-
-            <div className="flex flex-row items-center">
-              <a href="https://wa.me/+79652469191">
-                <RiWhatsappFill className="text-white w-[35px] h-[35px] cursor-pointer" />
-              </a>
-              <a href="https://t.me/+79652469191">
-                <FaTelegram className="text-white w-[30px] h-[30px] cursor-pointer ml-3" />
-              </a>
-            </div>
-          </div>
-        ) : (
+        <Link href="/pricing">
           <button
             onClick={handleButtonClick}
             className="bg-[#42484D] hover:bg-[#3742a3] lg:w-[293px] lg:h-[61px] text-white text-[20px] font-semibold uppercase duration-300 p-4 text-center mb-[34px]"
           >
-            Показать контакты
+            РАЗМЕСТИТЬ АНКЕТУ
           </button>
-        )}
+        </Link>
       </div>
 
       <div className="w-full bg-white h-full mb-[87px] flex flex-col items-center justify-center">
@@ -90,19 +70,21 @@ function AllSpeakers({ allSpeakers, allCategories }) {
             <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
           </div>
           <div className="columns-auto gap-6 pt-2 mb-[57px]" role="group">
-            {allCategories.map((category, index) => (
-              <button
-                onClick={() => handleClick(category.slug)}
-                key={category.id || index}
-                className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
-                  selectedCategory === category.slug
-                    ? "text-[#4e5ac3]"
-                    : "text-[#42484D]"
-                } hover:text-[#4e5ac3]`}
-              >
-                {category.title}
-              </button>
-            ))}
+            {allCategories
+              .sort((a, b) => a.index - b.index) // Сортировка по index
+              .map((category, index) => (
+                <button
+                  onClick={() => handleClick(category.slug)}
+                  key={category.id || index}
+                  className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
+                    selectedCategory === category.slug
+                      ? "text-[#4e5ac3]"
+                      : "text-[#42484D]"
+                  } hover:text-[#4e5ac3]`}
+                >
+                  {category.title}
+                </button>
+              ))}
           </div>
         </div>
 

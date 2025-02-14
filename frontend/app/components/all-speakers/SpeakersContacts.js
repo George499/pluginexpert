@@ -1,7 +1,3 @@
-import { FaTelegram } from "react-icons/fa";
-import { RiWhatsappFill } from "react-icons/ri";
-import { useState } from "react";
-
 function SpeakerContacts() {
   return (
     <div
@@ -17,8 +13,11 @@ function SpeakerContacts() {
         <div className="text-white text-[16px] lg:text-[20px] tracking-normal font-semibold">
           <p className="mb-[46px]">
             Хотите получать больше заказов на ваши образовательные услуги?
-            Хотите получать прямые заказы от клиентов? Хотите работать без
-            посредников? Тогда разместите анкету на нашем ресурсе
+            <br />
+            Хотите получать прямые заказы от клиентов?
+            <br />
+            Хотите работать без посредников? <br />
+            Тогда разместите анкету на нашем ресурсе
           </p>
 
           <div className="flex flex-col items-start">
