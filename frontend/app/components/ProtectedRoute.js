@@ -4,26 +4,22 @@ import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    // Проверяем наличие токена в localStorage
     const authToken = localStorage.getItem("authToken");
 
-    // Если токен отсутствует, перенаправляем на страницу логина
     if (!authToken) {
-      router.push("/auth/signin");
+      router.replace("/auth/signin"); // Используем replace, чтобы избежать добавления в историю
     } else {
-      setLoading(false); // Если токен есть, продолжаем загрузку страницы
+      setIsAuthenticated(true);
     }
   }, [router]);
 
-  // Пока проверяем авторизацию, показываем индикатор загрузки или пустой экран
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isAuthenticated === null) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
 
-  // Возвращаем дочерние компоненты, если пользователь авторизован
   return <>{children}</>;
 };
 
