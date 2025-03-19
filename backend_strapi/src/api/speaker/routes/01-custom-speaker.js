@@ -7,7 +7,7 @@ module.exports = {
       path: "/speakers/:id",
       handler: "speaker.update",
       config: {
-        auth: true, // Требует авторизацию
+        auth: { scope: "api::speakers.speaker" }, 
         policies: [],
       },
     },
