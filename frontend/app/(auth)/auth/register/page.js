@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link"; // Импортируем Link для создания ссылки
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ export default function RegisterPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const router = useRouter(); // Создаем экземпляр роутера
+  const router = useRouter();
 
   const validatePassword = () => {
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
@@ -142,6 +143,16 @@ export default function RegisterPage() {
             >
               Зарегистрироваться
             </button>
+          </div>
+          
+          {/* Ссылка на страницу входа */}
+          <div className="text-center mt-4">
+            <p>
+              Уже есть аккаунт?{" "}
+              <Link href="/auth/signin" className="text-blue-600 hover:underline">
+                Войти
+              </Link>
+            </p>
           </div>
         </form>
       </div>

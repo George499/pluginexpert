@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Используем новый хук из next/navigation
+import { useRouter } from "next/navigation";
+import Link from "next/link"; // Импортируем Link для создания ссылки
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false); // Состояние для видимости пароля
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const router = useRouter(); // Инициализируем роутер
+  const router = useRouter();
 
-  // Валидация пароля
   const validatePassword = () => {
     if (!password) {
       setError("Пароль не может быть пустым");
@@ -26,13 +26,11 @@ export default function LoginPage() {
 
     if (!validatePassword()) return;
 
-    // Формируем данные для отправки
     const formData = new FormData();
-    formData.append("identifier", username); // Для Strapi используем "identifier" для логина
+    formData.append("identifier", username);
     formData.append("password", password);
 
     try {
-      // Отправка данных на сервер
       const response = await fetch(
         "https://admin.pluginexpert.ru/api/auth/local",
         {
@@ -44,10 +42,7 @@ export default function LoginPage() {
       const result = await response.json();
 
       if (response.ok) {
-        // Сохраняем JWT токен в localStorage (или context)
         localStorage.setItem("authToken", result.jwt);
-
-        // Редирект на страницу dashboard
         router.push("/dashboard");
       } else {
         setError(result.message || "Неверный логин или пароль");
@@ -86,7 +81,7 @@ export default function LoginPage() {
             </label>
             <div className="relative">
               <input
-                type={passwordVisible ? "text" : "password"} // Меняем тип поля в зависимости от состояния
+                type={passwordVisible ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -95,7 +90,7 @@ export default function LoginPage() {
               />
               <button
                 type="button"
-                onClick={() => setPasswordVisible(!passwordVisible)} // Переключаем видимость пароля
+                onClick={() => setPasswordVisible(!passwordVisible)}
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
               >
                 {passwordVisible ? "Скрыть" : "Показать"}
@@ -111,6 +106,16 @@ export default function LoginPage() {
             >
               Войти
             </button>
+          </div>
+          
+          {/* Ссылка на страницу регистрации */}
+          <div className="text-center mt-4">
+            <p>
+              Еще нет аккаунта?{" "}
+              <Link href="/auth/register" className="text-blue-600 hover:underline">
+                Зарегистрироваться
+              </Link>
+            </p>
           </div>
         </form>
       </div>

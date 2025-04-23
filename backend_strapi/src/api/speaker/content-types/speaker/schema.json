@@ -5,7 +5,7 @@
     "singularName": "speaker",
     "pluralName": "speakers",
     "displayName": "Speaker",
-    "description": ""
+    "description": "Профили спикеров сайта"
   },
   "options": {
     "draftAndPublish": true
@@ -45,8 +45,23 @@
     "Bio": {
       "type": "blocks"
     },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "speaker"
+    },
+    "education": {
+      "type": "richtext"
+    },
     "Price": {
       "type": "blocks"
+    },
+    "tel": {
+      "type": "string"
+    },
+    "telegram": {
+      "type": "string"
     }
   }
 }
