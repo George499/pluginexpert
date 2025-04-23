@@ -22,9 +22,6 @@
       "type": "uid",
       "targetField": "Name"
     },
-    "Bio": {
-      "type": "richtext"
-    },
     "speech_topics": {
       "type": "blocks"
     },
@@ -44,6 +41,12 @@
         "videos",
         "audios"
       ]
+    },
+    "Bio": {
+      "type": "blocks"
+    },
+    "Price": {
+      "type": "blocks"
     }
   }
 }

@@ -450,7 +450,6 @@ export interface PluginUsersPermissionsUser
     displayName: 'User';
   };
   options: {
-    timestamps: true;
     draftAndPublish: false;
   };
   attributes: {
@@ -479,6 +478,7 @@ export interface PluginUsersPermissionsUser
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    speaker: Schema.Attribute.Relation<'oneToOne', 'api::speaker.speaker'>;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -576,7 +576,6 @@ export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
     Name: Schema.Attribute.String;
     Profession: Schema.Attribute.String;
     Slug: Schema.Attribute.UID<'Name'>;
-    Bio: Schema.Attribute.RichText;
     speech_topics: Schema.Attribute.Blocks;
     categories: Schema.Attribute.Relation<
       'manyToMany',
@@ -586,6 +585,8 @@ export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
       'images' | 'files' | 'videos' | 'audios',
       true
     >;
+    Bio: Schema.Attribute.Blocks;
+    Price: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
