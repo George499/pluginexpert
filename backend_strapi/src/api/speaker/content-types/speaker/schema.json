@@ -22,6 +22,9 @@
       "type": "uid",
       "targetField": "Name"
     },
+    "Bio": {
+      "type": "richtext"
+    },
     "speech_topics": {
       "type": "blocks"
     },
@@ -42,9 +45,6 @@
         "audios"
       ]
     },
-    "Bio": {
-      "type": "blocks"
-    },
     "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",
@@ -55,13 +55,55 @@
       "type": "richtext"
     },
     "Price": {
-      "type": "blocks"
+      "type": "richtext"
     },
     "tel": {
       "type": "string"
     },
     "telegram": {
       "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "whatsapp": {
+      "type": "string"
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "vk": {
+      "type": "string"
+    },
+    "ok": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "isPaid": {
+      "type": "boolean",
+      "default": false
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "max": 5
     }
   }
 }
