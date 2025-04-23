@@ -55,7 +55,7 @@
       "type": "richtext"
     },
     "Price": {
-      "type": "richtext"
+      "type": "blocks"
     },
     "tel": {
       "type": "string"
