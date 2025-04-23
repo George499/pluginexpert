@@ -23,7 +23,7 @@
       "targetField": "Name"
     },
     "Bio": {
-      "type": "richtext"
+      "type": "blocks"
     },
     "speech_topics": {
       "type": "blocks"
@@ -52,7 +52,7 @@
       "inversedBy": "speaker"
     },
     "education": {
-      "type": "richtext"
+      "type": "blocks"
     },
     "Price": {
       "type": "blocks"
