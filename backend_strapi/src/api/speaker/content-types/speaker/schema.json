@@ -34,17 +34,7 @@
       "target": "api::category.category",
       "inversedBy": "speakers"
     },
-    "Image": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
+   
     "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",
