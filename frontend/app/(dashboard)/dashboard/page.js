@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import { ProfileForm } from "@/components/dashboard/ProfileForm";
+import  ProfileForm  from "@/components/dashboard/ProfileForm";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
 function App() {

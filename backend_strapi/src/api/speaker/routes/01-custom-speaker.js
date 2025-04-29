@@ -5,8 +5,7 @@ module.exports = {
     {
       method: "PUT",
       path: "/speakers/:id",
-      handler: "speaker.update",
-      
+      handler: "api::speaker.speaker.update", 
     },
   ],
 };
