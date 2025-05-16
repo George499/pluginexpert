@@ -109,86 +109,54 @@ export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId }) => {
 };
 
 // Функция для создания платежа через ЮКассу
-export const createYookassaPayment = async (planData, speakerId) => {
+// Функция для создания платежа через ЮКассу (через новый API-роут)
+export const createYookassaPayment = async (planData, speakerId, userEmail) => {
   try {
-    // Проверяем speakerId
-    if (!speakerId) {
-      throw new Error('ID спикера не указан');
-    }
-    
-    // Получаем JWT токен из localStorage
-    const authToken = localStorage.getItem('authToken');
-    
-    if (!authToken) {
-      throw new Error('Нет авторизации');
-    }
-    
-    console.log('Создание платежа для спикера ID:', speakerId);
-    
-    // Запрос к бэкенду для создания платежа в ЮКассе
-    const response = await fetch('/api/payments', {
+    if (!speakerId) throw new Error('ID спикера не указан');
+    if (!userEmail) throw new Error('Email пользователя не найден');
+
+    // Не нужен authToken, если не требуется авторизация на сервере
+    const response = await fetch('/api/yookassa', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         amount: planData.price,
-        duration: planData.duration,
-        speakerId: speakerId,
         description: `Подписка на ${planData.duration} месяцев`,
+        speakerId,
+        planId: planData.id,
+        email: userEmail,
       }),
     });
-    
-    const responseText = await response.text();
-    console.log('Raw response from server:', responseText);
-    
-    let data;
-    try {
-      data = JSON.parse(responseText);
-      console.log('Parsed response:', data);
-    } catch (e) {
-      console.error('Error parsing response:', e);
-      throw new Error('Не удалось разобрать ответ сервера');
-    }
-    
+
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorMessage = data.error || 'Ошибка при создании платежа';
-      console.error('Server returned error:', data);
-      throw new Error(errorMessage);
+      throw new Error(data.error || 'Ошибка при создании платежа');
     }
-    
+
     if (!data.paymentUrl) {
-      console.error('Response does not contain paymentUrl:', data);
       throw new Error('Не удалось получить ссылку на оплату');
     }
-    
-    // ВАЖНАЯ ЧАСТЬ - сохраняем данные платежа в localStorage
-    // Эти данные будут использоваться при возврате из ЮКассы
+
+    // Сохраняем данные платежа в localStorage
     if (data.storageData) {
-      console.log('Сохраняем данные платежа в localStorage:', data.storageData);
       localStorage.setItem('currentPayment', JSON.stringify(data.storageData));
     } else if (data.paymentId) {
-      // Запасной вариант, если сервер не вернул готовый объект storageData
-      const paymentInfo = {
+      localStorage.setItem('currentPayment', JSON.stringify({
         paymentId: data.paymentId,
-        speakerId: speakerId,
-        timestamp: Date.now()
-      };
-      console.log('Сохраняем данные платежа в localStorage (запасной вариант):', paymentInfo);
-      localStorage.setItem('currentPayment', JSON.stringify(paymentInfo));
-    } else {
-      console.warn('Не найдены данные для сохранения в localStorage');
+        speakerId,
+        timestamp: Date.now(),
+      }));
     }
-    
+
     // Перенаправляем пользователя на страницу оплаты ЮКассы
-    console.log('Перенаправление на страницу оплаты:', data.paymentUrl);
     window.location.href = data.paymentUrl;
   } catch (error) {
     console.error('Ошибка при создании платежа:', error);
-    throw error; // Пробрасываем ошибку для обработки в компоненте
+    throw error;
   }
 };
+
 
 // Функция для проверки статуса оплаты
 export const checkPaymentStatus = async (paymentId) => {

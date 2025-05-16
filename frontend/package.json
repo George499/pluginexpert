@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@a2seven/yoo-checkout": "^1.1.4",
     "@strapi/blocks-react-renderer": "^1.0.1",
     "browser-image-compression": "^2.0.2",
     "framer-motion": "^11.11.9",
