@@ -30,13 +30,11 @@ const SocialCard = ({ icon, label, link, username }) => {
 };
 
 // profile.id передается отдельно, так как его нет в formData
-const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdit, speakerId, isPaid }) => {
+const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdit, speakerId, isPaid, userEmail, speakerDocumentId }) => {
+  
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const searchParams = useSearchParams();
-  
-  console.log('ProfileViewPanel formData:', isPaid);
  
-  
   // Проверяем, нужно ли открыть модальное окно оплаты при загрузке
   useEffect(() => {
     const openPayment = searchParams.get('openPayment');
@@ -68,9 +66,8 @@ const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdi
       return;
     }
     
-    console.log('Creating payment for speaker ID:', speakerId);
     setIsPaymentModalOpen(false);
-    createYookassaPayment(planData, speakerId);
+    createYookassaPayment(planData, speakerId, userEmail, speakerDocumentId);
   };
 
   // Если данные еще не загружены, показываем сообщение о загрузке
@@ -257,6 +254,8 @@ const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdi
           onClose={handleClosePaymentModal} 
           onSelectPlan={handleSelectPlan}
           speakerId={speakerId}
+          userEmail={userEmail}
+          speakerDocumentId={speakerDocumentId}
         />
       )}
     </div>

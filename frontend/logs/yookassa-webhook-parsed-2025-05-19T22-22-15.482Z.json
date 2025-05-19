@@ -1,0 +1,43 @@
+{
+  "timestamp": "2025-05-19T22:22:15.482Z",
+  "event": "payment.succeeded",
+  "object": {
+    "id": "2fbdc2d2-000f-5000-b000-1968d0883174",
+    "status": "succeeded",
+    "amount": {
+      "value": "4000.00",
+      "currency": "RUB"
+    },
+    "income_amount": {
+      "value": "3860.00",
+      "currency": "RUB"
+    },
+    "description": "Подписка на 3 месяцев",
+    "recipient": {
+      "account_id": "1045209",
+      "gateway_id": "2410174"
+    },
+    "payment_method": {
+      "type": "yoo_money",
+      "id": "2fbdc2d2-000f-5000-b000-1968d0883174",
+      "saved": false,
+      "status": "inactive",
+      "title": "YooMoney wallet 410011758831136",
+      "account_number": "410011758831136"
+    },
+    "captured_at": "2025-05-19T22:22:18.167Z",
+    "created_at": "2025-05-19T22:22:10.528Z",
+    "test": true,
+    "refunded_amount": {
+      "value": "0.00",
+      "currency": "RUB"
+    },
+    "paid": true,
+    "refundable": true,
+    "metadata": {
+      "email": "test123@test.ru",
+      "planId": "1",
+      "speakerId": "1"
+    }
+  }
+}

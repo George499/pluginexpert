@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-05-19T22:22:15.480Z",
+  "headers": {
+    "accept": "*/*",
+    "connection": "keep-alive",
+    "content-length": "1077",
+    "content-type": "application/json",
+    "host": "dull-coins-judge.loca.lt",
+    "signature": "v1 2fbdc2da 1 MGUCMQCKT4pojnvrOmUgz3U/u5cU5HlSWX/T/A/KD27VtD3ibdKpXyy2myyMn0ni8x6laqgCMGhczAnWhNtafc8oJX7CtnzATmyDoN33EsFE3GrjkK+AfoR+l3HmdXBwuixMgYzpMQ==",
+    "user-agent": "AHC/2.1",
+    "x-forwarded-for": "77.75.153.78",
+    "x-forwarded-host": "dull-coins-judge.loca.lt",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https, https"
+  },
+  "rawBody": "{\n  \"type\" : \"notification\",\n  \"event\" : \"payment.succeeded\",\n  \"object\" : {\n    \"id\" : \"2fbdc2d2-000f-5000-b000-1968d0883174\",\n    \"status\" : \"succeeded\",\n    \"amount\" : {\n      \"value\" : \"4000.00\",\n      \"currency\" : \"RUB\"\n    },\n    \"income_amount\" : {\n      \"value\" : \"3860.00\",\n      \"currency\" : \"RUB\"\n    },\n    \"description\" : \"Подписка на 3 месяцев\",\n    \"recipient\" : {\n      \"account_id\" : \"1045209\",\n      \"gateway_id\" : \"2410174\"\n    },\n    \"payment_method\" : {\n      \"type\" : \"yoo_money\",\n      \"id\" : \"2fbdc2d2-000f-5000-b000-1968d0883174\",\n      \"saved\" : false,\n      \"status\" : \"inactive\",\n      \"title\" : \"YooMoney wallet 410011758831136\",\n      \"account_number\" : \"410011758831136\"\n    },\n    \"captured_at\" : \"2025-05-19T22:22:18.167Z\",\n    \"created_at\" : \"2025-05-19T22:22:10.528Z\",\n    \"test\" : true,\n    \"refunded_amount\" : {\n      \"value\" : \"0.00\",\n      \"currency\" : \"RUB\"\n    },\n    \"paid\" : true,\n    \"refundable\" : true,\n    \"metadata\" : {\n      \"email\" : \"test123@test.ru\",\n      \"planId\" : \"1\",\n      \"speakerId\" : \"1\"\n    }\n  }\n}"
+}

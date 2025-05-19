@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-05-19T22:22:15.587Z",
+  "event": "payment.succeeded",
+  "status": "succeeded",
+  "paymentId": "2fbdc2d2-000f-5000-b000-1968d0883174",
+  "amount": {
+    "value": "4000.00",
+    "currency": "RUB"
+  },
+  "metadata": {
+    "email": "test123@test.ru",
+    "planId": "1",
+    "speakerId": "1"
+  }
+}

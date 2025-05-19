@@ -2,13 +2,16 @@
 // app/components/PaymentModal.js
 import React, { useState, useEffect } from 'react';
 
-export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId }) => {
+export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId, userEmail, speakerDocumentId }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  console.log();
+  
   
   // Проверка speakerId при монтировании компонента
   useEffect(() => {
+
     if (isOpen && !speakerId) {
       console.error('PaymentModal opened with undefined speakerId');
       setError('ID спикера не указан. Пожалуйста, обновите страницу.');
@@ -76,7 +79,7 @@ export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId }) => {
                 setLoading(true);
                 setError(null);
                 try {
-                  await createYookassaPayment(plan, speakerId);
+                  await createYookassaPayment(plan, speakerId, userEmail, speakerDocumentId);
                 } catch (err) {
                   setError(err.message || 'Произошла ошибка при создании платежа');
                   setLoading(false);
@@ -108,14 +111,14 @@ export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId }) => {
   );
 };
 
-// Функция для создания платежа через ЮКассу
 // Функция для создания платежа через ЮКассу (через новый API-роут)
-export const createYookassaPayment = async (planData, speakerId, userEmail) => {
+export const createYookassaPayment = async (planData, speakerId, userEmail, speakerDocumentId) => {
+  
   try {
     if (!speakerId) throw new Error('ID спикера не указан');
     if (!userEmail) throw new Error('Email пользователя не найден');
 
-    // Не нужен authToken, если не требуется авторизация на сервере
+    // Запрос к API для создания платежа
     const response = await fetch('/api/yookassa', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -125,6 +128,7 @@ export const createYookassaPayment = async (planData, speakerId, userEmail) => {
         speakerId,
         planId: planData.id,
         email: userEmail,
+        speakerDocumentId: speakerDocumentId
       }),
     });
 
@@ -146,6 +150,7 @@ export const createYookassaPayment = async (planData, speakerId, userEmail) => {
         paymentId: data.paymentId,
         speakerId,
         timestamp: Date.now(),
+        speakerDocumentId
       }));
     }
 
@@ -156,6 +161,7 @@ export const createYookassaPayment = async (planData, speakerId, userEmail) => {
     throw error;
   }
 };
+
 
 
 // Функция для проверки статуса оплаты

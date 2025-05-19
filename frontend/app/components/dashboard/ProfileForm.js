@@ -1014,6 +1014,7 @@ const ProfileForm = () => {
 
   if (loading) return <div className="text-center py-20 text-black">Загрузка данных...</div>;
 
+
   return isEditing ? (
     <ProfileEditForm 
       formData={formData}
@@ -1041,6 +1042,8 @@ const ProfileForm = () => {
       onEdit={() => setIsEditing(true)}
       speakerId={profile?.id}
       isPaid={profile?.isPaid}
+      userEmail={profile?.email}
+      speakerDocumentId={profile?.documentId}
     />
   );
 };

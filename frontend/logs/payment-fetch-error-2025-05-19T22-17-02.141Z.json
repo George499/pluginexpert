@@ -1,0 +1,16 @@
+{
+  "timestamp": "2025-05-19T22:17:02.141Z",
+  "error": "Payment fetch error",
+  "paymentId": "test-payment-1",
+  "objectFromWebhook": {
+    "id": "test-payment-1",
+    "amount": {
+      "value": "499.00",
+      "currency": "RUB"
+    },
+    "metadata": {
+      "userId": "123",
+      "subscriptionType": "premium"
+    }
+  }
+}

@@ -1,10 +1,10 @@
 'use client'
-// app/(dashboard)/payment-complete/page.js с дополнительным логированием и обработкой ошибок
+// app/(dashboard)/payment-complete/page.js - оптимизированная версия
 import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-// Функция проверки статуса платежа (внедрена напрямую для упрощения отладки)
+// Функция проверки статуса платежа
 const checkPaymentStatus = async (paymentId) => {
   try {
     console.log('Проверка статуса платежа для ID:', paymentId);
@@ -23,12 +23,8 @@ const checkPaymentStatus = async (paymentId) => {
       return 'error';
     }
     
-    console.log('Отправка запроса к API для проверки статуса платежа...');
-    
-    // Полный URL для отладки
-    const url = `/api/payments/check/${paymentId}`;
-    console.log('URL запроса:', url);
-    
+    // Запрос к API
+    const url = `/api/payment/check/${paymentId}`;
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -37,11 +33,8 @@ const checkPaymentStatus = async (paymentId) => {
       },
     });
     
-    console.log('Получен ответ от API. Статус:', response.status);
-    
     // Получаем тело ответа
     const responseText = await response.text();
-    console.log('Тело ответа (raw):', responseText);
     
     // Если ответ пустой, возвращаем unknown
     if (!responseText || responseText.trim() === '') {
@@ -52,7 +45,6 @@ const checkPaymentStatus = async (paymentId) => {
     let data;
     try {
       data = JSON.parse(responseText);
-      console.log('Разобранные данные ответа:', data);
     } catch (e) {
       console.error('Ошибка разбора JSON-ответа:', e);
       return 'error';
@@ -69,7 +61,6 @@ const checkPaymentStatus = async (paymentId) => {
       return 'unknown';
     }
     
-    console.log('Статус платежа:', data.status);
     return data.status;
   } catch (error) {
     console.error('Ошибка при проверке статуса платежа:', error);
@@ -79,51 +70,35 @@ const checkPaymentStatus = async (paymentId) => {
 
 export default function PaymentComplete() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [paymentStatus, setPaymentStatus] = useState('loading');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('Проверка статуса платежа...');
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [errorDetails, setErrorDetails] = useState(null);
-  
-  // Получаем параметры из URL (если есть)
-  const paymentId = searchParams.get('paymentId');
-  const speakerId = searchParams.get('speakerId');
-
-  console.log('Инициализация страницы подтверждения платежа');
-  console.log('Параметры URL:', { paymentId, speakerId });
 
   useEffect(() => {
-    console.log('Эффект запущен. Проверка авторизации...');
-    
     // Проверяем авторизацию
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      console.log('Токен авторизации отсутствует. Перенаправление на страницу входа...');
       router.push('/login');
       return;
     }
     
-    console.log('Пользователь авторизован');
     setIsAuthenticated(true);
     
-    // Пытаемся получить информацию о платеже из localStorage
-    console.log('Поиск информации о платеже в localStorage...');
+    // Получаем информацию о платеже из localStorage
     const storedPaymentStr = localStorage.getItem('currentPayment');
     let storedPayment = null;
     
     if (storedPaymentStr) {
       try {
         storedPayment = JSON.parse(storedPaymentStr);
-        console.log('Найдены данные о платеже в localStorage:', storedPayment);
         
         // Проверяем, что данные не устарели (не старше 1 часа)
         const paymentAge = Date.now() - (storedPayment.timestamp || 0);
         const isPaymentExpired = paymentAge > 60 * 60 * 1000; // 1 час
         
         if (isPaymentExpired) {
-          console.log('Данные о платеже устарели');
-          storedPayment = null;
           localStorage.removeItem('currentPayment');
         } else {
           setPaymentInfo(storedPayment);
@@ -132,22 +107,14 @@ export default function PaymentComplete() {
         console.error('Ошибка при разборе данных платежа из localStorage:', e);
         localStorage.removeItem('currentPayment');
       }
-    } else {
-      console.log('Данные о платеже в localStorage не найдены');
     }
     
-    // Определяем ID платежа и спикера (приоритет: URL, затем localStorage)
-    const effectivePaymentId = paymentId || (storedPayment && storedPayment.paymentId);
-    const effectiveSpeakerId = speakerId || (storedPayment && storedPayment.speakerId);
-    
-    console.log('Эффективные данные платежа:', { 
-      effectivePaymentId, 
-      effectiveSpeakerId 
-    });
+    // Получаем paymentId и speakerId из localStorage
+    const paymentId = storedPayment?.paymentId;
+    const speakerId = storedPayment?.speakerId;
 
     // Если нет ни ID платежа, ни ID спикера, перенаправляем в личный кабинет
-    if (!effectivePaymentId && !effectiveSpeakerId) {
-      console.log('Отсутствуют необходимые данные. Перенаправление в личный кабинет...');
+    if (!paymentId && !speakerId) {
       setLoadingMessage('Недостаточно данных. Перенаправление...');
       setTimeout(() => {
         router.push('/dashboard');
@@ -156,23 +123,19 @@ export default function PaymentComplete() {
     }
 
     // Проверяем статус платежа по ID
-    if (effectivePaymentId) {
+    if (paymentId) {
       const checkStatus = async () => {
-        console.log('Проверка статуса платежа...');
         setLoadingMessage('Проверка статуса платежа...');
         
         try {
-          const status = await checkPaymentStatus(effectivePaymentId);
-          console.log('Получен статус платежа:', status);
+          const status = await checkPaymentStatus(paymentId);
           setPaymentStatus(status);
           
           // Если платеж успешен, очищаем данные из localStorage
           if (status === 'succeeded') {
-            console.log('Платеж успешен. Очищаем данные из localStorage');
             localStorage.removeItem('currentPayment');
           }
         } catch (error) {
-          console.error('Ошибка при проверке статуса платежа:', error);
           setPaymentStatus('error');
           setErrorDetails(error.message || 'Неизвестная ошибка');
         }
@@ -181,46 +144,37 @@ export default function PaymentComplete() {
       checkStatus();
 
       // Проверяем статус каждые 5 секунд, если платеж в обработке
-      console.log('Настройка периодической проверки статуса...');
       const interval = setInterval(async () => {
         try {
-          const status = await checkPaymentStatus(effectivePaymentId);
-          console.log('Периодическая проверка статуса:', status);
+          const status = await checkPaymentStatus(paymentId);
           setPaymentStatus(status);
           
           // Если статус изменился на успешный, прекращаем проверку
           if (status === 'succeeded') {
-            console.log('Платеж успешен. Очищаем данные и останавливаем проверки');
             clearInterval(interval);
             localStorage.removeItem('currentPayment');
           }
         } catch (error) {
-          console.error('Ошибка в интервальной проверке статуса платежа:', error);
           // Не меняем статус, продолжаем попытки
         }
       }, 5000);
 
       return () => {
-        console.log('Очистка эффекта. Остановка периодических проверок');
         clearInterval(interval);
       };
     }
-  }, [paymentId, speakerId, router]);
+  }, [router]);
 
   // Отображаем пустой компонент во время проверки авторизации
   if (!isAuthenticated) {
-    console.log('Пользователь не авторизован. Не рендерим основной контент');
     return null;
   }
 
-  // Получаем эффективный ID спикера (из URL или localStorage)
-  const effectiveSpeakerId = speakerId || (paymentInfo && paymentInfo.speakerId);
-  console.log('Рендеринг с effectiveSpeakerId:', effectiveSpeakerId);
+  // Получаем ID спикера из данных платежа
+  const effectiveSpeakerId = paymentInfo?.speakerId;
 
   // Отображаем соответствующий контент в зависимости от статуса платежа
   const renderContent = () => {
-    console.log('Рендеринг контента для статуса:', paymentStatus);
-    
     switch (paymentStatus) {
       case 'loading':
         return (
