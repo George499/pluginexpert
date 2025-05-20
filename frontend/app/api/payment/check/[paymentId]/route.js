@@ -66,7 +66,7 @@ const updateSpeakerPaymentStatus = async (speakerDocumentId, paymentInfo) => {
     console.log(`Найден спикер в Strapi с id ${strapiId}`);
     
     // 2. Обновляем спикера по полученному id
-    const updateResponse = await fetch(`${STRAPI_API_URL}/api/speakers/${strapiId}`, {
+    const updateResponse = await fetch(`${STRAPI_API_URL}/api/speakers/${speakerDocumentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

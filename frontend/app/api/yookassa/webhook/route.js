@@ -168,7 +168,8 @@ export async function POST(request) {
       timestamp: new Date().toISOString(),
       error: 'Ошибка при обновлении speaker',
       message: error.message,
-      speakerId: fullPaymentInfo.metadata.speakerId
+      speakerId: fullPaymentInfo.metadata.speakerId,
+      speakerDocumentId: fullPaymentInfo.metadata.speakerDocumentId
     }, 'strapi-update-error');
   }
 }

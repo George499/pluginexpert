@@ -35,11 +35,10 @@ export async function POST(request) {
       },
       description: description || `Оплата подписки`,
       metadata: {
-        speakerId,
-        planId,
-        email,
-        speakerDocumentId
-      }
+  speakerDocumentId,
+  planId,
+  email
+}
     };
 
     // Отправляем запрос на создание платежа

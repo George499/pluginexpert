@@ -12,7 +12,6 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
       return ctx.unauthorized("Не авторизован");
     }
 
-    // Проверяем: нет ли уже спикера для этого пользователя
     const existingSpeaker = await strapi.entityService.findMany('api::speaker.speaker', {
       filters: { userId },
     });
@@ -21,7 +20,6 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
       return ctx.badRequest('У пользователя уже есть профиль спикера');
     }
 
-    // Создаем нового спикера
     const createdSpeaker = await strapi.entityService.create('api::speaker.speaker', {
       data: {
         ...data,
@@ -30,6 +28,34 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
     });
 
     return createdSpeaker;
+  },
+
+  async updateByDocumentId(ctx) {
+    const { documentId } = ctx.params;
+    const { data } = ctx.request.body;
+
+    try {
+      // Найти спикера по documentId
+      const entries = await strapi.entityService.findMany('api::speaker.speaker', {
+        filters: { documentId },
+      });
+
+      if (!entries || entries.length === 0) {
+        return ctx.notFound('Спикер с таким documentId не найден');
+      }
+
+      const entry = entries[0];
+
+      // Обновить по id
+      const updated = await strapi.entityService.update('api::speaker.speaker', entry.id, {
+        data,
+      });
+
+      return updated;
+    } catch (err) {
+      console.error('Ошибка при обновлении спикера по documentId:', err);
+      return ctx.internalServerError('Ошибка при обновлении');
+    }
   }
 
 }));
