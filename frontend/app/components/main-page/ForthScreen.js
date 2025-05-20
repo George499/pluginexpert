@@ -32,7 +32,7 @@ function ForthScreen({}) {
     const fetchSpeakers = async () => {
       try {
         let url =
-          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=Image";
+          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery";
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }
