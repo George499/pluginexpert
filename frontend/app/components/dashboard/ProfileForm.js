@@ -24,7 +24,8 @@ const ProfileForm = () => {
     ok: '',
     instagram: '',
     linkedin: '',
-    isPaid: ''
+    isPaid: ''    
+  
   });
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -203,7 +204,7 @@ const ProfileForm = () => {
           ok: userData.speaker.ok || '',
           instagram: userData.speaker.instagram || '',
           linkedin: userData.speaker.linkedin || '',
-          isPaid: userData.speaker.isPaid || false
+          isPaid: userData.speaker.isPaid || false,
         });
         
         // Добавляем метку времени к URL изображений для предотвращения кэширования
@@ -1044,6 +1045,9 @@ const ProfileForm = () => {
       isPaid={profile?.isPaid}
       userEmail={profile?.email}
       speakerDocumentId={profile?.documentId}
+      subscriptionExpiresAt={profile?.subscriptionExpiresAt}
+  lastPaymentDate={profile?.lastPaymentDate}
+  lastPaymentAmount={profile?.lastPaymentAmount}
     />
   );
 };

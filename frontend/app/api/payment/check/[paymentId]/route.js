@@ -14,8 +14,6 @@ const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
 // Функция обновления статуса оплаты в Strapi
 const updateSpeakerPaymentStatus = async (speakerDocumentId, paymentInfo) => {
   try {
-    console.log(`Обновление статуса оплаты для спикера с documentId ${speakerDocumentId} в Strapi...`);
-    
     // Получаем информацию о плане подписки
     const planId = paymentInfo.metadata?.planId;
     const amount = paymentInfo.amount?.value;
@@ -36,7 +34,13 @@ const updateSpeakerPaymentStatus = async (speakerDocumentId, paymentInfo) => {
     expirationDate.setDate(now.getDate() + subscriptionDays);
     
     // 1. Сначала ищем спикера по documentId в Strapi
-    console.log(`Поиск спикера с documentId ${speakerDocumentId} в Strapi...`);
+    console.log('>> Данные для отправки в Strapi:', JSON.stringify({
+  isPaid: true,
+  subscriptionExpiresAt: expirationDate.toISOString(),
+  lastPaymentDate: now.toISOString(),
+  lastPaymentAmount: parseFloat(amount),
+  lastPaymentId: paymentInfo.id
+}, null, 2));
     
     const findSpeakerResponse = await fetch(
       `${STRAPI_API_URL}/api/speakers?filters[documentId][$eq]=${speakerDocumentId}`, 
@@ -66,7 +70,7 @@ const updateSpeakerPaymentStatus = async (speakerDocumentId, paymentInfo) => {
     console.log(`Найден спикер в Strapi с id ${strapiId}`);
     
     // 2. Обновляем спикера по полученному id
-    const updateResponse = await fetch(`${STRAPI_API_URL}/api/speakers/${speakerDocumentId}`, {
+    const updateResponse = await fetch(`${STRAPI_API_URL}/api/speakers/by-document/${speakerDocumentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

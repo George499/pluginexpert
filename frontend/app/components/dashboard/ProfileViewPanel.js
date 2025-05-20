@@ -30,7 +30,17 @@ const SocialCard = ({ icon, label, link, username }) => {
 };
 
 // profile.id передается отдельно, так как его нет в formData
-const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdit, speakerId, isPaid, userEmail, speakerDocumentId }) => {
+const ProfileViewPanel = ({ formData, 
+  avatarPreview, 
+  galleryPreviews = [], 
+  onEdit, 
+  speakerId, 
+  userEmail, 
+  speakerDocumentId, 
+  subscriptionExpiresAt,
+  lastPaymentDate,
+  lastPaymentAmount }) => {
+  
   
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -136,10 +146,19 @@ const ProfileViewPanel = ({ formData, avatarPreview, galleryPreviews = [], onEdi
             )}
             
             {formData.isPaid && (
-              <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded mb-4">
-                <span className="font-medium">✓ Оплачено</span>
-              </div>
-            )}
+  <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4">
+    <div className="font-semibold mb-1">✓ Оплачено</div>
+    {lastPaymentDate && (
+      <div className="text-sm">Последняя оплата: <span className="font-medium">{new Date(lastPaymentDate).toLocaleDateString()}</span></div>
+    )}
+    {lastPaymentAmount && (
+      <div className="text-sm">Сумма: <span className="font-medium">{lastPaymentAmount} ₽</span></div>
+    )}
+    {subscriptionExpiresAt && (
+      <div className="text-sm">Действительно до: <span className="font-medium">{new Date(subscriptionExpiresAt).toLocaleDateString()}</span></div>
+    )}
+  </div>
+)}
             
             {formData.tel && (
               <div className="mb-3">
