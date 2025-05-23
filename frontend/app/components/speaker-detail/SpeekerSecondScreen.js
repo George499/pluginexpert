@@ -3,35 +3,33 @@
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
 function SpeakerSecondScreen({ speaker }) {
-  const speechContent = Array.isArray(speaker.speech_topics)
-    ? speaker.speech_topics
-    : [
-        {
-          type: "paragraph",
-          children: [
-            { text: speaker.speech_topics || "Информация отсутствует." },
-          ],
-        },
-      ];
+  // Получаем контент из структуры данных Strapi 5
+  const speechContent = speaker.speech_topics || [
+    {
+      type: "paragraph",
+      children: [{ text: "Информация отсутствует." }],
+    },
+  ];
 
   return (
     <div
       className="bg-[url('/images/bkground_1.png')] bg-fixed min-h-[580px] flex flex-col relative"
-      id="contacts"
+      id="speech-topics"
     >
       <div className="bg-[#42484d] flex content-center justify-center items-center flex-col mb-[81px]">
         <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center pt-[51px] lg:pt-[81px]">
+          <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
+          <h2 className="text-[40px] lg:text-[57px] leading-[3.5rem] lg:leading-[4.5rem] text-white font-bold mb-[30px]">
+            ТЕМЫ ВЫСТУПЛЕНИЙ
+          </h2>
+          
           <div className="text-white xl:text-[20px] md:text-[18px] tracking-normal mb-[81px] font-play">
-            <h1 className="text-2xl mb-5 font-bold text-white">
-              О чем читает и чему учит:
-            </h1>
-
             {speechContent ? (
               <BlocksRenderer
                 content={speechContent}
                 blocks={{
                   paragraph: ({ children }) => (
-                    <p className="font-play text-[16px] xl:text-[20px] md:text-[18px]">
+                    <p className="font-play text-[16px] xl:text-[20px] md:text-[18px] my-4 leading-relaxed">
                       {children}
                     </p>
                   ),
@@ -39,7 +37,7 @@ function SpeakerSecondScreen({ speaker }) {
                     const Tag = `h${level}`;
                     return (
                       <Tag
-                        className={`mt-5 text-md font-bold leading-[2.5rem] text-white`}
+                        className={`mt-5 mb-3 text-md font-bold leading-[2.5rem] text-white`}
                       >
                         {children}
                       </Tag>
@@ -47,31 +45,38 @@ function SpeakerSecondScreen({ speaker }) {
                   },
                   list: ({ children, format }) =>
                     format === "unordered" ? (
-                      <ul className="mb-6 list-disc ml-4">{children}</ul>
+                      <ul className="mb-6 list-disc ml-4 space-y-2">{children}</ul>
                     ) : (
-                      <ol className="mb-6 list-decimal ml-4">{children}</ol>
+                      <ol className="mb-6 list-decimal ml-4 space-y-2">{children}</ol>
                     ),
                   listItem: ({ children }) => (
                     <li className="ml-4">{children}</li>
                   ),
                   link: ({ href, children }) => (
-                    <a href={href} className="text-blue-500 hover:underline">
+                    <a href={href} className="text-blue-300 hover:underline transition-colors duration-200">
                       {children}
                     </a>
                   ),
                 }}
               />
             ) : (
-              "Пока ничего нет"
+              <p className="my-4 text-xl">Информация о темах выступлений будет добавлена в ближайшее время.</p>
             )}
 
-            <p>
-              Не нашли подходящей темы - это еще не значит, что спикер по ней не
-              проводит мастер-класс.
-              <br />
-              Для уточнения темы выступления спикера свяжитесь с нами по почте
-              want@plugin.expert
-            </p>
+            <div className="mt-10 p-6 bg-[#363b3f] rounded-lg shadow-md">
+              <p className="text-lg">
+                Не нашли подходящей темы? Это ещё не значит, что спикер по ней не
+                проводит мастер-класс.
+                <br />
+                Для уточнения темы выступления спикера свяжитесь с нами по почте{" "}
+                <a 
+                  href="mailto:want@plugin.expert" 
+                  className="text-blue-300 hover:underline transition-colors duration-200"
+                >
+                  want@plugin.expert
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

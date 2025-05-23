@@ -33,17 +33,27 @@ export default async function SpeekerPage({ params }) {
 // ✅ Функция получения данных конкретного спикера (SSR)
 async function getSpeaker(slug) {
   try {
-    const res = await fetch(
-      `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&populate[0]=categories&populate[1]=Image`, // ✅ Учитываем заглавную букву "Slug"
-      {
-        next: { revalidate: 60 }, // ✅ Страница обновляется каждые 60 секунд
-      }
-    );
+    const url = `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&populate[0]=categories&populate[1]=avatar`;
+    console.log("Fetching URL:", url);
+    
+    const res = await fetch(url, {
+      next: { revalidate: 60 }, // ✅ Страница обновляется каждые 60 секунд
+    });
 
     const data = await res.json();
+    console.log("API response data:", data);
 
-    // ✅ Проверяем, есть ли данные
-    if (!data.data.length) return null;
+    // Проверяем структуру ответа
+    if (!data || !data.data) {
+      console.error("Неверная структура данных:", data);
+      return null;
+    }
+
+    // Проверяем, является ли data.data массивом и содержит ли элементы
+    if (!Array.isArray(data.data) || data.data.length === 0) {
+      console.log("Спикер не найден с slug:", slug);
+      return null;
+    }
 
     return data.data[0]; // ✅ Вернем объект без .attributes
   } catch (error) {
@@ -51,33 +61,3 @@ async function getSpeaker(slug) {
     return null;
   }
 }
-
-// ✅ Функция для генерации `slug`-ов спикеров (SSG)
-// export async function generateStaticParams() {
-//   const res = await fetch(`${STRAPI_API_URL}?populate=categories`);
-//   const data = await res.json();
-
-//   return data.data.map((speaker) => ({
-//     slug: speaker.attributes.slug, // ✅ Возвращаем массив slug-ов
-//   }));
-// }
-
-// export async function generateMetadata({ params }) {
-//   const speaker = await getSpeaker(params.slug);
-
-//   return {
-//     title: speaker ? `${speaker.attributes.name} – Спикер` : "Спикер не найден",
-//     description: speaker
-//       ? speaker.attributes.description
-//       : "Анкета спикера отсутствует",
-//     keywords: "анкетa спикера, подбор спикера, найти коуча",
-//     openGraph: {
-//       title: speaker?.attributes.name,
-//       description: speaker?.attributes.description,
-//       images: [
-//         speaker?.attributes.Image?.data?.attributes?.url ||
-//           "/images/default.jpg",
-//       ],
-//     },
-//   };
-// }
