@@ -11,12 +11,14 @@ function ForthScreen({}) {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
   const [speakers, setSpeakers] = useState([]);
-  console.log(speakers);
+  console.log(categories);
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch("https://admin.pluginexpert.ru/api/categories");
+        const res = await fetch(
+          "https://admin.pluginexpert.ru/api/categories?pagination[page]=1&pagination[pageSize]=100"
+        );
         if (!res.ok) throw new Error("Ошибка загрузки категорий");
         const data = await res.json();
         setCategories(data.data);
