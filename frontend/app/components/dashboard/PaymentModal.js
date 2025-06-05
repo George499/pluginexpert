@@ -32,7 +32,7 @@ export const PaymentModal = ({ isOpen, onClose, onSelectPlan, speakerId, userEma
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full text-gray-800">
-        <h3 className="text-xl font-bold mb-4 text-gray-900">Выберите план подписки</h3>
+        <h3 className="text-xl font-bold mb-4 text-gray-900">Выберите тариф</h3>
         
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
