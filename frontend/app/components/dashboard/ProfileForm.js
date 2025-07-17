@@ -47,10 +47,10 @@ const ProfileForm = () => {
 
   const [isCompressingAvatar, setIsCompressingAvatar] = useState(false);
   const [isCompressingGallery, setIsCompressingGallery] = useState(false);
-  
+
   // Состояние для доступных категорий
   const [availableCategories, setAvailableCategories] = useState([]);
-  
+
   console.log(profile);
   const MAX_SIZE = 5 * 1024 * 1024; // 5MB в байтах
   // Целевой размер после сжатия (немного меньше лимита)
@@ -147,7 +147,7 @@ const ProfileForm = () => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token || !profile?.documentId) return;
-        
+
         // Делаем запрос с populate для categories
         const response = await fetch(
           `${API_URL}/api/speakers/${profile.documentId}?populate=categories`,
@@ -157,17 +157,20 @@ const ProfileForm = () => {
             },
           }
         );
-        
+
         if (response.ok) {
           const data = await response.json();
-          console.log('Speaker schema check:', data);
-          console.log('Categories field exists:', 'categories' in (data.data || data));
+          console.log("Speaker schema check:", data);
+          console.log(
+            "Categories field exists:",
+            "categories" in (data.data || data)
+          );
         }
       } catch (error) {
-        console.error('Error checking categories field:', error);
+        console.error("Error checking categories field:", error);
       }
     };
-    
+
     if (profileExists) {
       checkCategoriesField();
     }
@@ -177,9 +180,11 @@ const ProfileForm = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/categories?populate=*&pagination[pageSize]=100`);
+        const response = await fetch(
+          `${API_URL}/api/categories?populate=*&pagination[pageSize]=100`
+        );
         const data = await response.json();
-        
+
         // Обрабатываем разные структуры данных
         let categoryArray = [];
         if (Array.isArray(data)) {
@@ -187,25 +192,25 @@ const ProfileForm = () => {
         } else if (data.data && Array.isArray(data.data)) {
           categoryArray = data.data;
         }
-        
+
         // Преобразуем данные и фильтруем категорию "Все спикеры"
         const categories = categoryArray
-          .filter(item => item.slug !== 'all-categories')
-          .map(item => ({
+          .filter((item) => item.slug !== "all-categories")
+          .map((item) => ({
             id: item.id,
             title: item.title,
             slug: item.slug,
             gender: item.gender,
-            index: item.index
+            index: item.index,
           }));
-        
+
         setAvailableCategories(categories);
       } catch (error) {
-        console.error('Error fetching categories:', error);
-        toast.error('Не удалось загрузить категории');
+        console.error("Error fetching categories:", error);
+        toast.error("Не удалось загрузить категории");
       }
     };
-    
+
     fetchCategories();
   }, []);
 
@@ -216,12 +221,12 @@ const ProfileForm = () => {
       [field]: value,
     }));
   };
-  
+
   // Обработчик изменения категорий
   const handleCategoriesChange = (categories) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      categories
+      categories,
     }));
   };
 
@@ -292,25 +297,28 @@ const ProfileForm = () => {
           instagram: userData.speaker.instagram || "",
           linkedin: userData.speaker.linkedin || "",
           isPaid: userData.speaker.isPaid || false,
-          categories: (() => {
-            const cats = userData.speaker.categories;
-            let categoryArray = [];
-            
-            // Обрабатываем разные структуры данных
-            if (Array.isArray(cats)) {
-              categoryArray = cats;
-            } else if (cats?.data && Array.isArray(cats.data)) {
-              categoryArray = cats.data;
-            }
-            
-            return categoryArray.map(cat => ({
-              id: cat.id,
-              title: cat.title,
-              slug: cat.slug,
-              gender: cat.gender,
-              index: cat.index
-            })).filter(cat => cat.slug !== 'all-categories');
-          })() || [],
+          categories:
+            (() => {
+              const cats = userData.speaker.categories;
+              let categoryArray = [];
+
+              // Обрабатываем разные структуры данных
+              if (Array.isArray(cats)) {
+                categoryArray = cats;
+              } else if (cats?.data && Array.isArray(cats.data)) {
+                categoryArray = cats.data;
+              }
+
+              return categoryArray
+                .map((cat) => ({
+                  id: cat.id,
+                  title: cat.title,
+                  slug: cat.slug,
+                  gender: cat.gender,
+                  index: cat.index,
+                }))
+                .filter((cat) => cat.slug !== "all-categories");
+            })() || [],
         });
 
         // Добавляем метку времени к URL изображений для предотвращения кэширования
@@ -432,25 +440,28 @@ const ProfileForm = () => {
             instagram: userData.speaker.instagram || "",
             linkedin: userData.speaker.linkedin || "",
             isPaid: userData.speaker.isPaid || false,
-            categories: (() => {
-              const cats = userData.speaker.categories;
-              let categoryArray = [];
-              
-              // Обрабатываем разные структуры данных
-              if (Array.isArray(cats)) {
-                categoryArray = cats;
-              } else if (cats?.data && Array.isArray(cats.data)) {
-                categoryArray = cats.data;
-              }
-              
-              return categoryArray.map(cat => ({
-                id: cat.id,
-                title: cat.title,
-                slug: cat.slug,
-                gender: cat.gender,
-                index: cat.index
-              })).filter(cat => cat.slug !== 'all-categories');
-            })() || [],
+            categories:
+              (() => {
+                const cats = userData.speaker.categories;
+                let categoryArray = [];
+
+                // Обрабатываем разные структуры данных
+                if (Array.isArray(cats)) {
+                  categoryArray = cats;
+                } else if (cats?.data && Array.isArray(cats.data)) {
+                  categoryArray = cats.data;
+                }
+
+                return categoryArray
+                  .map((cat) => ({
+                    id: cat.id,
+                    title: cat.title,
+                    slug: cat.slug,
+                    gender: cat.gender,
+                    index: cat.index,
+                  }))
+                  .filter((cat) => cat.slug !== "all-categories");
+              })() || [],
           });
 
           // Загрузка аватара
@@ -706,67 +717,7 @@ const ProfileForm = () => {
     });
   };
 
-  // Функция для обновления категорий спикера
-  const updateSpeakerCategories = async (token, speakerId, documentId, categories) => {
-    try {
-      // Сначала попробуем простой массив ID
-      let updateData = {
-        data: {
-          categories: categories
-            .filter(cat => cat.slug !== 'all-categories')
-            .map(cat => cat.id)
-        }
-      };
-      
-      console.log('Updating categories with:', updateData);
-      
-      const response = await fetch(`${API_URL}/api/speakers/${documentId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(updateData)
-      });
-      
-      if (!response.ok) {
-        // Если не работает, пробуем формат connect/disconnect
-        console.log('Simple array format failed, trying connect/disconnect format');
-        
-        updateData = {
-          data: {
-            categories: {
-              set: categories
-                .filter(cat => cat.slug !== 'all-categories')
-                .map(cat => cat.id)
-            }
-          }
-        };
-        
-        const response2 = await fetch(`${API_URL}/api/speakers/${documentId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(updateData)
-        });
-        
-        if (!response2.ok) {
-          console.error('Failed to update categories with both formats');
-          const error = await response2.json();
-          console.error('Error details:', error);
-          return false;
-        }
-      }
-      
-      console.log('Categories updated successfully');
-      return true;
-    } catch (error) {
-      console.error('Error updating categories:', error);
-      return false;
-    }
-  };
+  // Функция для обновления категорий спикер
 
   // Функция для загрузки аватара
   const uploadAvatar = async (token, profile) => {
@@ -1137,6 +1088,10 @@ const ProfileForm = () => {
         linkedin: formData.linkedin || "",
         Slug: profile?.Slug || "",
         isPaid: profile?.isPaid || false,
+        categories:
+          formData.categories
+            ?.filter((cat) => cat.slug !== "all-categories")
+            ?.map((cat) => cat.id) || [],
       };
 
       // Подготавливаем данные галереи и получаем массив файлов
@@ -1160,9 +1115,9 @@ const ProfileForm = () => {
           // Используем documentId для обновления профиля в Strapi
           const updateUrl = `${API_URL}/api/speakers/${documentId}`;
           const requestBody = { data: speakerData };
-          
+
           // Логируем данные для отладки
-          console.log('Updating speaker with data:', requestBody);
+          console.log("Updating speaker with data:", requestBody);
 
           const updateRes = await fetch(updateUrl, {
             method: "PUT",
@@ -1186,14 +1141,6 @@ const ProfileForm = () => {
             setProfile(updatedProfile);
 
             toast.success("Профиль успешно обновлен!");
-            
-            // Пробуем обновить категории отдельно
-            const categoriesUpdated = await updateSpeakerCategories(token, profile.id, documentId, formData.categories);
-            if (categoriesUpdated) {
-              toast.success("Категории успешно обновлены!");
-            } else {
-              toast.warning("Не удалось обновить категории. Возможно, это поле недоступно.");
-            }
 
             // Обновляем галерею, передавая подготовленные файлы
             await updateGallery(token, profile, galleryFiles);
@@ -1325,9 +1272,14 @@ const ProfileForm = () => {
 
             // Загружаем галерею для нового профиля, передавая подготовленные файлы
             await updateGallery(token, newProfile, galleryFiles);
-            
+
             // Пробуем обновить категории для нового профиля
-            const categoriesUpdated = await updateSpeakerCategories(token, newId, newDocumentId, formData.categories);
+            const categoriesUpdated = await updateSpeakerCategories(
+              token,
+              newId,
+              newDocumentId,
+              formData.categories
+            );
             if (categoriesUpdated) {
               console.log("Категории успешно добавлены к новому профилю");
             }

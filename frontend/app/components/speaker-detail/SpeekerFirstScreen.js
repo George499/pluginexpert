@@ -7,11 +7,11 @@ import { useState, useEffect } from "react";
 
 function SpeekerFirstScreen({ speaker }) {
   const [declinedCategory, setDeclinedCategory] = useState("");
-  
+
   // Получаем URL аватара из новой структуры данных Strapi 5
-  const avatarUrl = speaker.avatar?.data?.url 
-    ? `https://admin.pluginexpert.ru${speaker.avatar.data.url}`
-    : "/images/default.jpg"; // Фолбэк-изображение
+  const avatarUrl = speaker.gallery?.[0]?.url
+    ? `https://admin.pluginexpert.ru${speaker.gallery[0].url}`
+    : "/images/default.jpg";
 
   // Определение падежа вручную (аналог russian-nouns-js)
   useEffect(() => {
@@ -44,7 +44,9 @@ function SpeekerFirstScreen({ speaker }) {
           <div className="flex flex-col lg:flex-row mb-6 justify-between text-[40px] lg:text-[57px] xl:text-[60px] leading-[2.5rem] lg:leading-[4.5rem]">
             <div className="flex flex-col self-center mr-12">
               <p className="text-white">{nameParts[1]?.toUpperCase()}</p>
-              <p className="text-white tracking-tighter">{nameParts[0]?.toUpperCase()}</p>
+              <p className="text-white tracking-tighter">
+                {nameParts[0]?.toUpperCase()}
+              </p>
 
               <div className="text-white tracking-tighter relative">
                 <div className="w-full h-[1px] ml-[5px] bg-white absolute top-[2px]"></div>

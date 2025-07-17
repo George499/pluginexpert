@@ -7,11 +7,10 @@ import { motion } from "framer-motion";
 // import CustomButton from "./CustomButton"; // Assuming CustomButton is a separate component
 import Product from "./Product";
 
-function ForthScreen({}) {
+function ForthScreen() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
   const [speakers, setSpeakers] = useState([]);
-  console.log(categories);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,11 +51,9 @@ function ForthScreen({}) {
 
   const handleClick = (slug) => {
     if (selectedCategory === slug) {
-      // Если повторно нажали на ту же категорию, сбросить выбранную категорию и спикеров
-      setSelectedCategory(null);
+      setSelectedCategory("all-categories");
       setSpeakers([]);
     } else {
-      // В противном случае установить новую категорию и сбросить спикеров
       setSelectedCategory(slug);
     }
   };

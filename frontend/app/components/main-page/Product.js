@@ -7,11 +7,13 @@ function Product({ speaker }) {
   if (!speaker) {
     return <p>Спикер не найден</p>;
   }
+  console.log(speaker);
 
   const { Name, Slug, Bio, Profession } = speaker;
-  const imageUrl = speaker.Image?.[0]?.url
-    ? `https://admin.pluginexpert.ru${speaker.Image[0].url}`
-    : "/images/default.jpg"; // Фолбэк-изображение
+
+  const imageUrl = speaker.gallery?.[0]?.url
+    ? `https://admin.pluginexpert.ru${speaker.gallery[0].url}`
+    : "/images/default.jpg";
 
   return (
     <Link href={`/profile/${Slug}`} className="block">
