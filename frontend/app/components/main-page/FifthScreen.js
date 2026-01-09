@@ -7,9 +7,9 @@ function popularSpeekers() {
       id="speekers"
     >
       <div className="bg-[#42484d] h-3/4 flex content-center justify-center items-center flex-col">
-        <div className="container my-[81px] flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center">
+        <div className="container my-[81px] max-[1000px]:my-[60px] flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center">
           <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
-          <h2 className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[3.5rem] lg:leading-[4.5rem] text-white font-bold mb-[81px]">
+          <h2 className="heading-line text-[40px] lg:text-[57px] xl:text-[81px] leading-[3.5rem] lg:leading-[4.5rem] text-white font-bold mb-[81px]">
             ПОПУЛЯРНЫЕ СПИКЕРЫ
           </h2>
           <div className="text-white text-[16px] lg:text-[20px] tracking-normal font-semibold">

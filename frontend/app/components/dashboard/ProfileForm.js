@@ -1273,7 +1273,7 @@ const ProfileForm = () => {
             // Загружаем галерею для нового профиля, передавая подготовленные файлы
             await updateGallery(token, newProfile, galleryFiles);
 
-            // Пробуем обновить категории для нового профиля
+          /*   // Пробуем обновить категории для нового профиля
             const categoriesUpdated = await updateSpeakerCategories(
               token,
               newId,
@@ -1282,7 +1282,7 @@ const ProfileForm = () => {
             );
             if (categoriesUpdated) {
               console.log("Категории успешно добавлены к новому профилю");
-            }
+            } */
 
             // Обновляем состояние приложения
             setProfile(newProfile);

@@ -1,28 +1,17 @@
-import localFont from "next/font/local";
-import "globals.css";
-import { AnimatePresence } from "framer-motion";
+// app/profile/layout.js
 import Header from "@/components/main-page/Header";
+import { AnimatePresence } from "framer-motion";
 import { Raleway } from "next/font/google";
 import { Play } from "next/font/google";
 
 const raleway = Raleway({ subsets: ["latin"], weight: ["400", "700"] });
 const play = Play({ subsets: ["latin"], weight: ["400", "700"] });
 
-export const metadata = {
-  title: "Plug-In Expert - Главная страница",
-  description:
-    "Plug-In Expert – агентство по подбору спикеров в соответствии с вашими задачами. Мы поможем найти спикеров.",
-};
-
-export default function RootLayout({ children }) {
+export default function ProfileLayout({ children }) {
   return (
-    <html lang="ru">
-      <body
-        className={`${raleway.className} ${play.className} antialiased min-h-screen`}
-      >
-        <Header />
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
-      </body>
-    </html>
+    <div className={`${raleway.className} ${play.className} antialiased min-h-screen`}>
+      <Header />
+      <AnimatePresence mode="wait">{children}</AnimatePresence>
+    </div>
   );
 }

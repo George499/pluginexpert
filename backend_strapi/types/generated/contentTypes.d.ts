@@ -528,6 +528,36 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiConsentConsent extends Struct.CollectionTypeSchema {
+  collectionName: 'consents';
+  info: {
+    singularName: 'consent';
+    pluralName: 'consents';
+    displayName: 'Consent';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Schema.Attribute.String;
+    slug: Schema.Attribute.UID<'title'>;
+    content: Schema.Attribute.Blocks;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::consent.consent'
+    > &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPopularSpeakerPopularSpeaker
   extends Struct.CollectionTypeSchema {
   collectionName: 'popular_speakers';
@@ -561,13 +591,43 @@ export interface ApiPopularSpeakerPopularSpeaker
   };
 }
 
+export interface ApiPostPost extends Struct.CollectionTypeSchema {
+  collectionName: 'posts';
+  info: {
+    singularName: 'post';
+    pluralName: 'posts';
+    displayName: 'Post';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Schema.Attribute.String;
+    slug: Schema.Attribute.UID<'title'>;
+    content: Schema.Attribute.Blocks;
+    main_image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
   collectionName: 'speakers';
   info: {
     singularName: 'speaker';
     pluralName: 'speakers';
     displayName: 'Speaker';
-    description: '';
+    description: '\u041F\u0440\u043E\u0444\u0438\u043B\u0438 \u0441\u043F\u0438\u043A\u0435\u0440\u043E\u0432 \u0441\u0430\u0439\u0442\u0430';
   };
   options: {
     draftAndPublish: true;
@@ -576,17 +636,34 @@ export interface ApiSpeakerSpeaker extends Struct.CollectionTypeSchema {
     Name: Schema.Attribute.String;
     Profession: Schema.Attribute.String;
     Slug: Schema.Attribute.UID<'Name'>;
+    Bio: Schema.Attribute.Blocks;
     speech_topics: Schema.Attribute.Blocks;
     categories: Schema.Attribute.Relation<
       'manyToMany',
       'api::category.category'
     >;
-    Image: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
+    users_permissions_user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
     >;
-    Bio: Schema.Attribute.Blocks;
     Price: Schema.Attribute.Blocks;
+    tel: Schema.Attribute.String;
+    telegram: Schema.Attribute.String;
+    email: Schema.Attribute.Email;
+    whatsapp: Schema.Attribute.String;
+    facebook: Schema.Attribute.String;
+    vk: Schema.Attribute.String;
+    ok: Schema.Attribute.String;
+    instagram: Schema.Attribute.String;
+    linkedin: Schema.Attribute.String;
+    isPaid: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    subscriptionExpiresAt: Schema.Attribute.DateTime;
+    lastPaymentDate: Schema.Attribute.DateTime;
+    lastPaymentAmount: Schema.Attribute.Decimal;
+    lastPaymentId: Schema.Attribute.String;
+    avatar: Schema.Attribute.Media<'images'>;
+    gallery: Schema.Attribute.Media<'images', true>;
+    education: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -609,6 +686,7 @@ export interface ApiSpecialTextSpecialText extends Struct.CollectionTypeSchema {
     singularName: 'special-text';
     pluralName: 'special-texts';
     displayName: 'Special text';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -616,6 +694,7 @@ export interface ApiSpecialTextSpecialText extends Struct.CollectionTypeSchema {
   attributes: {
     body: Schema.Attribute.Blocks;
     page: Schema.Attribute.String;
+    pathname: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -1015,7 +1094,9 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::category.category': ApiCategoryCategory;
+      'api::consent.consent': ApiConsentConsent;
       'api::popular-speaker.popular-speaker': ApiPopularSpeakerPopularSpeaker;
+      'api::post.post': ApiPostPost;
       'api::speaker.speaker': ApiSpeakerSpeaker;
       'api::special-text.special-text': ApiSpecialTextSpecialText;
       'admin::permission': AdminPermission;

@@ -18,15 +18,16 @@ function Product({ speaker }) {
   return (
     <Link href={`/profile/${Slug}`} className="block">
       <div className="group relative">
-        <Image
-          src={imageUrl}
-          alt={`Image of ${Name}`}
-          layout="responsive"
-          width={500}
-          height={750}
-          objectFit="cover"
-          priority
-        />
+        <div className="relative w-full aspect-[2/3]"> 
+            <Image
+              src={imageUrl || "/images/placeholder.jpg"}
+              alt={speaker?.Name || "Спикер"}
+              fill
+              className="object-cover rounded"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
+
 
         {/* Hover-эффект */}
         <div className="absolute w-full h-full top-0 left-0 lg:flex pointer-events-none">

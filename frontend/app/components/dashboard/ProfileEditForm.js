@@ -51,8 +51,24 @@ const ProfileEditForm = ({
       onSubmit={handleSubmit}
       className="bg-white rounded-lg p-6 shadow-md text-black"
     >
-      <h2 className="text-xl font-semibold mb-4">
-        {profileExists ? "Редактирование профиля" : "Создание профиля"}
+     <h2 className="text-xl font-semibold mb-4 leading-snug mt-0">
+        {profileExists ? (
+          <>
+            {/* Для экранов шире 550px — одна строка */}
+            <span className="hidden min-[551px]:inline">Редактирование профиля</span>
+            {/* Для экранов до 550px — перенос */}
+            <span className="block min-[551px]:hidden">
+              Редактирование <br /> профиля
+            </span>
+          </>
+        ) : (
+          <>
+            <span className="hidden min-[551px]:inline">Создание профиля</span>
+            <span className="block min-[551px]:hidden">
+              Создание <br /> профиля
+            </span>
+          </>
+        )}
       </h2>
 
       {/* Аватар */}

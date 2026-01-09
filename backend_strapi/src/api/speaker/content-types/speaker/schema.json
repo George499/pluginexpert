@@ -34,15 +34,11 @@
       "target": "api::category.category",
       "inversedBy": "speakers"
     },
-   
     "users_permissions_user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "speaker"
-    },
-    "education": {
-      "type": "blocks"
     },
     "Price": {
       "type": "blocks"
@@ -79,17 +75,17 @@
       "default": false
     },
     "subscriptionExpiresAt": {
-  "type": "datetime"
-},
-"lastPaymentDate": {
-  "type": "datetime"
-},
-"lastPaymentAmount": {
-  "type": "decimal"
-},
-"lastPaymentId": {
-  "type": "string"
-},
+      "type": "datetime"
+    },
+    "lastPaymentDate": {
+      "type": "datetime"
+    },
+    "lastPaymentAmount": {
+      "type": "decimal"
+    },
+    "lastPaymentId": {
+      "type": "string"
+    },
     "avatar": {
       "type": "media",
       "multiple": false,
@@ -104,8 +100,10 @@
       "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "max": 5
+      ]
+    },
+    "education": {
+      "type": "blocks"
     }
   }
 }

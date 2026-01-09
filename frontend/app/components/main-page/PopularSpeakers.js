@@ -36,14 +36,17 @@ function PopularSpeakers() {
       >
         {popularSpeakers?.map((speaker) => (
           <div className="group relative" key={speaker.id}>
-            <Image
-              src={`${API_BASE_URL}${speaker.image[0].url}`}
-              alt={`Image of ${speaker.name}`}
-              layout="responsive"
-              width="100%"
-              height="100%"
-              objectFit="cover"
-            />
+             <div className="relative w-full aspect-[4/5]"> 
+                <Image
+                  src={`${API_BASE_URL}${speaker.image[0].url}`}
+                  alt={`Image of ${speaker.name}`}
+                  fill                                        // растягиваем по контейнеру
+                  sizes="(max-width: 1024px) 100vw, 33vw"     // адаптивные размеры
+                  className="object-cover rounded"
+                  priority={false}                            // можно true только на главной
+                />
+            </div>
+
 
             <div className="hidden absolute w-full h-full top-0 left-0 lg:flex">
               {/* Прозрачный фон */}

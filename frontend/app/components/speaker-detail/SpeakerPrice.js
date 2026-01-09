@@ -15,14 +15,14 @@ function SpeakerPrice({ speaker }) {
       style={{ backgroundColor: "#f0f0f0" }}
       id="price"
     >
-      <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 items-start justify-center font-semibold">
+      <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 max-[600px]:my-10 items-start justify-center font-semibold">
         <div
           className="w-[51px] h-[12px] mb-[21px]"
           style={{ backgroundColor: "#a786df" }}
         ></div>
         <div className="mb-14 text-[40px] lg:text-[57px] xl:text-[81px]">
-          <p className="leading-[4.5rem] mb-[30px] lg:-mb-[5px]">СТОИМОСТЬ</p>
-          <div className="tracking-tighter leading-[4.5rem] lg:flex">
+          <p className="leading-[4.5rem] max-[1000px]:leading-[2rem] mb-[30px] lg:-mb-[5px]">СТОИМОСТЬ</p>
+          <div className="tracking-tighter leading-[4.5rem] max-[1000px]:leading-[2rem] lg:flex">
             <p className="-mb-[30px] lg:-mb-[10px]">УСЛУГ</p>
           </div>
         </div>

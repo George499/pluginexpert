@@ -44,6 +44,10 @@ const ProfileViewPanel = ({ formData,
   
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const searchParams = useSearchParams();
+
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [agreePersonal, setAgreePersonal] = useState(false);
+
  
   // Проверяем, нужно ли открыть модальное окно оплаты при загрузке
   useEffect(() => {
@@ -83,7 +87,7 @@ const ProfileViewPanel = ({ formData,
   // Если данные еще не загружены, показываем сообщение о загрузке
   if (!formData) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-md max-w-4xl mx-auto mb-10 flex items-center justify-center">
+      <div className="bg-white rounded-lg p-6 shadow-md max-w-4xl mx-auto mb-10 flex items-center justify-center ">
         <div className="text-center py-10">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
           <p className="text-gray-600">Загрузка данных спикера...</p>
@@ -94,15 +98,27 @@ const ProfileViewPanel = ({ formData,
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-md max-w-4xl mx-auto mb-10">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Профиль спикера</h2>
+      <div className="flex justify-between items-center max-[450px]:items-start mb-6">
+        <h2 className="
+            text-2xl font-bold text-gray-800 
+            max-[450px]:text-xl
+            max-[400px]:text-base
+          ">
+          Профиль спикера
+        </h2>
+
         <button
           onClick={onEdit}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="
+            bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline
+            mt-5 max-[800px]:mt-10 
+            min-[800px]:ml-0
+          "
         >
           Редактировать
         </button>
-      </div>
+    </div>
+
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Левая колонка: фото и контакты */}
@@ -136,14 +152,77 @@ const ProfileViewPanel = ({ formData,
               </div>
             )}
             
-            {!formData.isPaid && speakerId && (
-              <button
-                onClick={handlePayButtonClick}
-                className="bg-green-500 hover:bg-green-600 w-[90%] text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4"
-              >
-                Оплатить
-              </button>
-            )}
+                    {!formData.isPaid && speakerId && (
+          <>
+            {/* Текст перед чекбоксами */}
+            <p className="text-sm font-medium mb-2">
+              Нажимая кнопку “Оплатить”, я:
+            </p>
+
+            {/* Чекбокс 1 */}
+            <div className="flex items-start gap-2 mb-2">
+              <input
+                type="checkbox"
+                id="agreeTerms"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+                className="mt-1"
+              />
+              <label htmlFor="agreeTerms" className="text-sm">
+                Ознакомлен и принимаю условия{" "}
+                <a
+                  href="/docs/Пользовательское_соглашение.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Пользовательского соглашения
+                </a>{" "}
+                и{" "}
+                <a
+                  href="/docs/Политика_конфиденциальности_ИП_Гузановский.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Положения об обработке персональных данных
+                </a>
+              </label>
+            </div>
+
+            {/* Чекбокс 2 */}
+            <div className="flex items-start gap-2 mb-4">
+              <input
+                type="checkbox"
+                id="agreePersonal"
+                checked={agreePersonal}
+                onChange={(e) => setAgreePersonal(e.target.checked)}
+                className="mt-1"
+              />
+              <label htmlFor="agreePersonal" className="text-sm">
+                Даю{" "}
+                <a
+                  href="/docs/Согласие_на_обработку_ПД.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  согласие ИП Гузановскому А.С. на обработку своих персональных данных
+                </a>
+              </label>
+            </div>
+
+            {/* Кнопка оплатить */}
+            <button
+              onClick={handlePayButtonClick}
+              className="bg-green-500 hover:bg-green-600 w-[90%] text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-4 disabled:opacity-50"
+              disabled={!agreeTerms || !agreePersonal}
+            >
+              Оплатить
+            </button>
+          </>
+        )}
+
             
             {formData.isPaid && (
   <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded mb-4">

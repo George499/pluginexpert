@@ -34,7 +34,7 @@ function Header() {
           </div>
 
           {isAuthenticated && (
-            <div>
+            <div className="mt-10 min-[1120px]:mt-0">
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm font-medium bg-[#42484D] hover:bg-[#3742a3] text-[#fffffe] rounded-md"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTelegram } from "react-icons/fa";
 import { RiWhatsappFill } from "react-icons/ri";
 import Link from "next/link";
@@ -6,17 +6,50 @@ import { motion } from "framer-motion";
 import ProductCard from "@/components/all-speakers/ProductCard";
 
 function AllSpeakers({ allSpeakers, allCategories }) {
+  const [categories, setCategories] = useState([]);
   const [isContactsVisible, setIsContactsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
+  const [visibleCount, setVisibleCount] = useState(15);
+  const [speakers, setSpeakers] = useState([]);
 
-  const filteredSpeakers =
-    selectedCategory === "all-categories"
-      ? allSpeakers
-      : allSpeakers.filter((speaker) =>
-          speaker.categories?.data?.some(
-            (category) => category.slug === selectedCategory
-          )
-        );
+  useEffect(() => {
+      const fetchCategories = async () => {
+        try {
+          const res = await fetch(
+            "https://admin.pluginexpert.ru/api/categories?pagination[page]=1&pagination[pageSize]=100"
+          );
+          if (!res.ok) throw new Error("Ошибка загрузки категорий");
+          const data = await res.json();
+          setCategories(data.data);
+        } catch (error) {
+          console.error("Ошибка:", error);
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+
+  useEffect(() => {
+    const fetchSpeakers = async () => {
+      try {
+        let url =
+          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery";
+        if (selectedCategory !== "all-categories") {
+          url += `&filters[categories][slug][$eq]=${selectedCategory}`;
+        }
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Ошибка загрузки спикеров");
+        const data = await res.json();
+        setSpeakers(data.data);
+      } catch (error) {
+        console.error("Ошибка:", error);
+      }
+    };
+
+    fetchSpeakers();
+  }, [selectedCategory]);
+
+  console.log("Speakers in AllSpeakers:", speakers || allSpeakers);
 
   const handleClick = (slug) => {
     setSelectedCategory((prev) => (prev === slug ? "all-categories" : slug));
@@ -28,14 +61,26 @@ function AllSpeakers({ allSpeakers, allCategories }) {
     <div className="bg-hero-image bg-fixed flex content-center justify-center items-center flex-col h-full w-full">
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center font-semibold mt-[120px]  relative">
         <div className="relative mb-[10px] w-full upfront">
+        {/* Хлебные крошки */}
+        <nav className="text-sm text-gray-200 mb-4" aria-label="Breadcrumb">
+          <ol className="flex items-center gap-2">
+            <li>
+              <Link href="/" className="hover:text-white/80 text-white">
+                Главная
+              </Link>
+            </li>
+            <li className="text-white/50">/</li>
+            <li className="text-white">База спикеров</li>
+          </ol>
+        </nav>
           <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
-          <p className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
+          <h1 className="heading-line text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
             ПОДБОР СПИКЕРОВ
-          </p>
-          <div className="w-3/4 h-[1px] ml-[5px] bg-white absolute bottom-1"></div>
+          </h1>
+          <div className="w-3/4 max-[1000px]:w-2/3 h-[1px] ml-[5px] bg-white absolute -bottom-5"></div>
         </div>
 
-        <span className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-black tracking-tighter mb-[34px]">
+        <span className="heading-line text-[40px] lg:text-[57px] mt-5 xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-black tracking-tighter mb-[34px]">
           ПО КАТЕГОРИЯМ
         </span>
 
@@ -44,10 +89,11 @@ function AllSpeakers({ allSpeakers, allCategories }) {
             МЫ НА ПОСТОЯННОЙ ОСНОВЕ ОБНОВЛЯЕМ БАЗУ СПИКЕРОВ ПО РАЗЛИЧНЫМ
             КАТЕГОРИЯМ
           </p>
-          <p>В ОПИСАНИИ КАЖДОГО СПИКЕРА:</p>
+           <p>В АНКЕТЕ КАЖДОГО СПИКЕРА:</p>
           <ul className="list-disc list-inside mb-[34px]">
-            <li>Прямые контакты</li>
-            <li>РЕГАЛИИ</li>
+            <li>ПРЯМЫЕ КОНТАКТЫ</li>
+            <li>ТЕМЫ ВЫСТУПЛЕНИЙ</li>
+            <li>РЕГАЛИИ И ЗВАНИЯ</li>
             <li>ТЕМЫ ЛЕКЦИЙ И ВЫСТУПЛЕНИЙ</li>
           </ul>
           <p className="mb-[34px] uppercase">
@@ -64,32 +110,49 @@ function AllSpeakers({ allSpeakers, allCategories }) {
         </Link>
       </div>
 
-      <div className="w-full bg-white h-full mb-[87px] flex flex-col items-center justify-center">
+      <div className="w-full bg-white h-full mb-[87px] max-[450px]:mb-[40px] flex flex-col items-center justify-center">
         <div className="w-4/5 lg:w-2/3 container mx-auto h-full">
-          <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px] text-black">
-            <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
-          </div>
-          <div className="columns-auto gap-6 pt-2 mb-[57px]" role="group">
-            {allCategories
-              .sort((a, b) => a.index - b.index) // Сортировка по index
-              .map((category, index) => (
+           <div className="justify-start font-bold text-[16px] lg:text-[20px] text-[#42484D] tracking-[.25em]">
+            <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px]">
+              <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
+            </div>
+            <div className="columns-auto gap-6 pt-2 mb-[10px]" role="group">
+              {categories.length === 0 ? (
+                <p>Загрузка...</p>
+              ) : (
+                categories
+                  .sort((a, b) => a.index - b.index)
+                  .slice(0, visibleCount)  
+                  .map((category, index) => (
+                    <button
+                      onClick={() => handleClick(category.slug)}
+                      key={category._id || index}
+                      className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
+                        selectedCategory === category.slug
+                          ? "text-[#4e5ac3]"
+                          : "text-[#42484D]"
+                      } hover:text-[#4e5ac3]`}
+                    >
+                      {category.title}
+                    </button>
+                  ))
+              )}
+            </div>
+            {visibleCount < categories.length && (
+              <div className="w-full flex justify-start mt-2 mb-[34px]">
                 <button
-                  onClick={() => handleClick(category.slug)}
-                  key={category.id || index}
-                  className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
-                    selectedCategory === category.slug
-                      ? "text-[#4e5ac3]"
-                      : "text-[#42484D]"
-                  } hover:text-[#4e5ac3]`}
+                  onClick={() => setVisibleCount(prev => prev + 15)}
+                  className="bg-[#42484D] hover:bg-[#3742a3] text-white px-6 py-2 rounded duration-300 uppercase tracking-tight"
                 >
-                  {category.title}
+                  Ещё категории
                 </button>
-              ))}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="w-full h-full items-center justify-center mb-[57px]">
-          {filteredSpeakers.length === 0 ? (
+          {speakers.length === 0 ? (
             <div className="text-[20px] lg:text-[24px] tracking-normal mb-[57px] font-semibold text-[#fffffe]">
               Скоро здесь будут наши проекты
             </div>
@@ -101,7 +164,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
                   animate={{ x: 0 }}
                   transition={{ type: "spring", stiffness: 50 }}
                 >
-                  {filteredSpeakers.map((speaker) => (
+                  {speakers.map((speaker) => (
                     <ProductCard
                       key={speaker.id}
                       speaker={speaker}

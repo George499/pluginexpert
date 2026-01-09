@@ -3,9 +3,9 @@ import { AnimatePresence } from "framer-motion";
 import Header from "@/components/auth/Header";
 
 export const metadata = {
-  title: "Plug-In Expert - Главная страница",
+  title: "Вход или регистрация | Plug-In Expert",
   description:
-    "Plug-In Expert – агентство по подбору спикеров в соответствии с вашими задачами. Мы поможем найти спикеров.",
+    "Авторизация и регистрация на сайте Plug-In Expert. Войдите в личный кабинет или создайте новую учетную запись.",
 };
 
 export default function AuthLayout({ children }) {

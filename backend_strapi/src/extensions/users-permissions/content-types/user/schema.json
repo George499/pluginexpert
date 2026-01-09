@@ -68,7 +68,8 @@
     "speaker": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::speaker.speaker"
+      "target": "api::speaker.speaker",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

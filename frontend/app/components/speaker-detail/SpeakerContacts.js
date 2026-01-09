@@ -10,8 +10,9 @@ import {
   FaLinkedin, 
   FaOdnoklassniki, 
   FaEnvelope, 
-  FaPhone 
+  FaPhone,
 } from "react-icons/fa";
+import { RiWhatsappFill } from "react-icons/ri";
 
 function SpeakerContacts({ speaker }) {
   const [isContactsVisible, setIsContactsVisible] = useState(false);
@@ -66,84 +67,85 @@ function SpeakerContacts({ speaker }) {
         <h1 className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white font-bold mb-[57px]">
           КОНТАКТЫ СПИКЕРА
         </h1>
-        <div className="text-white text-[16px] lg:text-[20px] tracking-normal font-semibold">
+        <div className="text-white text-[16px] lg:text-[20px] tracking-normal font-normal">
           <p className="mb-[46px]">
             Вас заинтересовал спикер {speaker.Name}? <br />
             Хотите привлечь данного спикера к обучению своих сотрудников или
             позвать на корпоративное мероприятие?
             <br />
-            Свяжитесь со спикером напрямую и обсудите детали привлечения
+           
+            Свяжитесь со спикером напрямую
+           и обсудите детали привлечения
             спикера в соответствии с вашим запросом.
           </p>
 
           {isContactsVisible ? (
-            <div className="p-6 bg-[#42484D] rounded-lg shadow-lg text-[20px] tracking-normal">
-              {/* Контакты спикера */}
-              {speaker.email && (
-                <div className="flex items-center gap-3 mb-4">
-                  <FaEnvelope className="text-white w-[25px] h-[25px]" />
-                  <a 
-                    href={`mailto:${speaker.email}`} 
-                    className="hover:text-blue-300 transition-colors duration-200"
-                  >
-                    {speaker.email}
-                  </a>
-                </div>
-              )}
-              
-              {speaker.tel && (
-                <div className="flex items-center gap-3 mb-4">
-                  <FaPhone className="text-white w-[25px] h-[25px]" />
-                  <a 
-                    href={`tel:${speaker.tel}`} 
-                    className="hover:text-blue-300 transition-colors duration-200"
-                  >
-                    {speaker.tel}
-                  </a>
-                </div>
-              )}
-              
-              {/* Общая контактная информация */}
-              <div className="mt-6 mb-4">
-                <p>Или обращайтесь в агентство:</p>
-                <p className="my-2">Email: <a href="mailto:want@pluginagency.ru" className="hover:text-blue-300 transition-colors duration-200">want@pluginagency.ru</a></p>
-                <p className="mb-4 hidden lg:block">Телефон: <a href="tel:+79652469191" className="hover:text-blue-300 transition-colors duration-200">+7 (965) 246 9191</a></p>
-                <div className="mb-4 flex lg:hidden">
-                  <p className="mr-2">Телефон:</p>
-                  <a className="hover:text-blue-300 transition-colors duration-200" href="tel:+79652469191">
-                    +7 (965) 246 9191
-                  </a>
-                </div>
-              </div>
+            <div className="p-6 bg-[#42484D] rounded-lg shadow-lg text-[20px] tracking-normal grid grid-cols-1 lg:grid-cols-2 gap-8">
+  {/* Левая колонка — спикер */}
+  <div>
+    <p className="mb-4 font-bold uppercase">КОНТАКТЫ СПИКЕРА</p>
+    {speaker.email && (
+      <div className="flex items-center gap-3 mb-4">
+        <FaEnvelope className="text-white w-[25px] h-[25px]" />
+        <a href={`mailto:${speaker.email}`} className="hover:text-blue-300 transition-colors duration-200">
+          {speaker.email}
+        </a>
+      </div>
+    )}
+    {speaker.tel && (
+      <div className="flex items-center gap-3 mb-4">
+        <FaPhone className="text-white w-[25px] h-[25px]" />
+        <a href={`tel:${speaker.tel}`} className="hover:text-blue-300 transition-colors duration-200">
+          {speaker.tel}
+        </a>
+      </div>
+    )}
 
-              {/* Социальные сети */}
-              {socials.length > 0 && (
-                <div>
-                  <p className="mb-3">Социальные сети спикера:</p>
-                  <div className="flex flex-row items-center gap-4 flex-wrap">
-                    {socials.map((social, index) => (
-                      <a key={index} href={social.url} target="_blank" rel="noopener noreferrer" 
-                         className="hover:opacity-80 transition-opacity duration-200">
-                        {social.icon}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {/* Агентские соцсети */}
-              <div className="mt-6">
-                <p className="mb-3">Социальные сети агентства:</p>
-                <div className="flex flex-row items-center gap-4">
-                  <a href="https://wa.me/+79652469191" className="hover:opacity-80 transition-opacity duration-200">
-                    <FaWhatsapp className="text-white w-[30px] h-[30px] cursor-pointer" />
-                  </a>
-                  <a href="https://t.me/+79652469191" className="hover:opacity-80 transition-opacity duration-200">
-                    <FaTelegram className="text-white w-[30px] h-[30px] cursor-pointer" />
-                  </a>
-                </div>
-              </div>
-            </div>
+    {socials.length > 0 && (
+      <div>
+        <p className="mb-3">Социальные сети спикера:</p>
+        <div className="flex flex-row items-center gap-4 flex-wrap">
+          {socials.map((social, index) => (
+            <a key={index} href={social.url} target="_blank" rel="noopener noreferrer" 
+               className="hover:opacity-80 transition-opacity duration-200">
+              {social.icon}
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+
+  {/* Правая колонка — агентство */}
+  <div>
+    <p className="mb-4 font-bold uppercase">КОНТАКТЫ АГЕНТСТВА</p>
+    <div className="flex items-center gap-3 mb-4" id="contacts">
+      <FaEnvelope className="text-white w-[25px] h-[25px]" />
+      <a href="mailto:mailto:hello@pluginexpert.ru" className="hover:text-blue-300 transition-colors duration-200">
+        hello@pluginexpert.ru
+      </a>
+    </div>
+    <div className="flex items-center gap-3 mb-4">
+      <FaPhone className="text-white w-[25px] h-[25px]" />
+      <a href="tel:+79153857591" className="hover:text-blue-300 transition-colors duration-200">
+        +7 (915) 385-75-91
+      </a>
+    </div>
+
+    <p className="mb-3">Социальные сети агентства:</p>
+    <div className="flex flex-row items-center gap-4">
+      <a href="https://wa.me/+79153857591" className="hover:opacity-80 transition-opacity duration-200">
+        <RiWhatsappFill
+                               className={`w-[35px] h-[35px] cursor-pointer text-[#fffffe]`}
+         />
+      </a>
+      <a href="https://t.me/+79153857591" className="hover:opacity-80 transition-opacity duration-200">
+        <FaTelegram className="w-[30px] h-[30px] cursor-pointer ml-3 text-[#fffffe]" />
+      </a>
+    </div>
+  </div>
+</div>
+
           ) : (
             <button
               onClick={handleClick}

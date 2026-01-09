@@ -2,13 +2,10 @@
 const nextConfig = {
   // Сохраняем существующие настройки для изображений
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "admin.pluginexpert.ru",
-        // Если вы хотите разрешить все пути, оставьте pathname: '/**'
-        pathname: "/**",
-      },
+  unoptimized: true,
+   remotePatterns: [
+      { protocol: 'https', hostname: 'admin.pluginexpert.ru', pathname: '/uploads/**' },
+      { protocol: 'https', hostname: 'pluginexpert.ru', pathname: '/uploads/**' },
     ],
   },
   
@@ -22,6 +19,15 @@ const nextConfig = {
       config.devtool = 'eval-source-map';
     }
     return config;
+  },
+   async redirects() {
+    return [
+      {
+        source: "/speakers/blog",
+        destination: "/blog",
+        permanent: true, // 301 редирект
+      },
+    ];
   },
 };
 

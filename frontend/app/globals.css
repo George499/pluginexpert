@@ -26,4 +26,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+.heading-line {
+    @apply font-semibold uppercase tracking-[.25em]
+         leading-[2.5rem] md:leading-[3rem] xl:leading-[4.5rem];
+         letter-spacing: normal !important;
+  }
 }

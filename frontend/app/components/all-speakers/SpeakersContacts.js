@@ -5,7 +5,7 @@ function SpeakerContacts() {
       id="contacts"
     >
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center my-10 ">
-        <div className="w-[51px] h-[12px] bg-white mb-[57px]"></div>
+        <div className="w-[51px] h-[12px] bg-white mb-[57px] max-[450px]:mb-[20px]"></div>
         {/* <h1
           className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white font-bold mb-[57px]"
           dangerouslySetInnerHTML={{ __html: speekerContactsTitle }}

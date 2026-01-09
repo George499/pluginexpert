@@ -50,106 +50,100 @@ function Header() {
   }, [dataToRef, nav]);
 
   return (
-    <header className="w-full h-24 bg-transparent items-center flex absolute top-0 left-0 z-50">
-      <div className="lg:flex lg:flex-col items-start absolute">
-        <Link href="/auth/signin" key="signin" legacyBehavior>
-          <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
-            ВОЙТИ
-          </a>
-        </Link>
-        <Link href="/auth/register" key="register" legacyBehavior>
-          <a className="mx-4 text-black uppercase font-bold hover:text-[#42484D]">
-            РЕГИСТРАЦИЯ
-          </a>
-        </Link>
-      </div>
-      <div className="w-[80%] lg:w-2/3 mx-auto">
-        <div className="w-full flex justify-between items-center text-white font-bold text-base">
-          <div className="z-20">
-            <Link
-              href="/"
-              onClick={() => setNav(false)}
-              className="cursor-pointer tracking-wide text-[15px]"
-            >
-              PLUG-IN
-            </Link>
-          </div>
-          <NavBar handleClick={handleNavBarClick} />
-        </div>
-        <div className="ml-auto font-medium flex lg:hidden">
-          <div
-            onClick={() => setNav(!nav)}
-            className="z-20 cursor-pointer align-self-center mx-4"
-          >
-            {!nav ? (
-              <AiOutlineMenu className="h-10 w-10 text-white" />
-            ) : (
-              <AiOutlineClose className="h-10 w-10 text-white" />
-            )}
-          </div>
+    <header className="w-full h-24 bg-transparent flex items-center absolute top-0 left-0 z-50">
+  <div className="w-[90%] lg:w-2/3 mx-auto flex justify-between max-[380px]:justify-around  max-[320px]:w-[95%] items-center">
 
-          <ul
-            className={
-              !nav
-                ? "hidden"
-                : "absolute z-10 top-0 left-0 w-full h-screen bg-[url('/images/bkground_1.png')] text-white flex flex-col justify-center items-center"
-            }
-          >
-            <li
-              className="py-6 text-4xl cursor-pointer"
-              data-to="process"
-              onClick={(e) => handleBurgerClick(e)}
-            >
-              Спикеры
-            </li>
-            <li
-              className="py-6 text-4xl cursor-pointer"
-              data-to="production"
-              onClick={(e) => handleBurgerClick(e)}
-            >
-              Продакшн
-            </li>
-            <li className="py-6 text-4xl cursor-pointer">
-              <a
-                onClick={() => {
-                  router.push("/all-categories");
-                  setNav(!nav);
-                }}
-              >
-                Все спикеры
-              </a>
-            </li>
-            <li
-              className="py-6 text-4xl cursor-pointer"
-              onClick={(e) => handleBurgerClick(e)}
-              data-to="contacts"
-            >
-              Контакты
-            </li>
-            <li className="py-6 text-4xl cursor-pointer">
-              <a
-                onClick={() => {
-                  router.push("/forSpeekers");
-                  setNav(!nav);
-                }}
-              >
-                Спикерам
-              </a>
-            </li>
-            <li className="py-6 text-4xl cursor-pointer">
-              <a
-                onClick={() => {
-                  router.push("/blog");
-                  setNav(!nav);
-                }}
-              >
-                Блог
-              </a>
-            </li>
-          </ul>
-        </div>
+    {/* Логотип */}
+    <Link
+      href="/"
+      onClick={() => setNav(false)}
+      className="cursor-pointer tracking-wide text-[15px] max-[400px]:text-[12px] font-bold text-white z-20"
+    >
+      PLUG-IN
+    </Link>
+
+    {/* Центр — Войти / Регистрация (всегда видны) */}
+    <div className="flex gap-6 mx-auto max-[380px]:gap-2">
+    <Link href="/auth/signin" legacyBehavior>
+      <a className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
+        ВОЙТИ
+      </a>
+    </Link>
+    <Link href="/auth/register" legacyBehavior>
+      <a className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
+        РЕГИСТРАЦИЯ
+      </a>
+    </Link>
+</div>
+
+
+    {/* Справа — навигация (desktop >400px) */}
+    <div className="hidden min-[601px]:flex gap-6 ml-auto text-white font-bold uppercase">
+      <Link href="/all-speakers" className="hover:text-[#42484D]">
+        Все спикеры
+      </Link>
+      <Link href="/pricing" className="hover:text-[#42484D]">
+        Цены
+      </Link>
+      <Link href="/blog" className="hover:text-[#42484D]">
+        Блог
+      </Link>
+    </div>
+
+    {/* Справа — бургер (mobile ≤400px) */}
+    <div className="flex ml-auto min-[601px]:hidden">
+      <div
+        onClick={() => setNav(!nav)}
+        className="z-20 cursor-pointer mx-4"
+      >
+        {!nav ? (
+          <AiOutlineMenu className="h-10 w-10 max-[400px]:h-7 max-[400px]:w-7 text-white" />
+        ) : (
+          <AiOutlineClose className="h-10 w-10 max-[400px]:h-7 max-[400px]:w-7 text-white" />
+        )}
       </div>
-    </header>
+    </div>
+  </div>
+
+  {/* Выпадающее меню (только mobile ≤400px) */}
+  <ul
+    className={
+      !nav
+        ? "hidden"
+        : "absolute z-10 top-0 left-0 w-full h-screen bg-[url('/images/bkground_1.png')] text-white flex flex-col justify-center items-center min-[601px]:hidden"
+    }
+  >
+       {/* Спикеры */}
+      <li className="py-6 text-4xl cursor-pointer">
+        <a onClick={() => { router.push("/all-speakers"); setNav(!nav); }}>Спикеры</a>
+      </li>
+
+      {/* Цены */}
+      <li className="py-6 text-4xl cursor-pointer">
+        <a onClick={() => { router.push("/pricing"); setNav(!nav); }}>Цены</a>
+      </li>
+
+      {/* Блог */}
+      <li className="py-6 text-4xl cursor-pointer">
+        <a onClick={() => { router.push("/blog"); setNav(!nav); }}>Блог</a>
+      </li>
+
+      {/* Пропуск строки */}
+      <li className="py-4"></li>
+
+      {/* Войти */}
+      <li className="py-6 text-4xl text-black cursor-pointer">
+        <a onClick={() => { router.push("/auth/signin"); setNav(!nav); }}>Войти</a>
+      </li>
+
+      {/* Регистрация */}
+      <li className="py-6 text-4xl text-black cursor-pointer">
+        <a onClick={() => { router.push("/auth/register"); setNav(!nav); }}>Регистрация</a>
+      </li>
+  </ul>
+</header>
+
+
   );
 }
 
