@@ -31,16 +31,27 @@ function Category() {
   useEffect(() => {
     const fetchSpeakers = async () => {
       try {
-        let url = `${STRAPI_API_URL}/speakers?populate[0]=categories&populate[1]=Image`;
+        let url = `${STRAPI_API_URL}/speakers?populate[0]=categories&populate[1]=gallery`;
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Ошибка загрузки спикеров");
+        if (!res.ok) {
+          const text = await res.text();
+          console.warn(
+            "Ошибка загрузки спикеров:",
+            res.status,
+            res.statusText,
+            text.slice(0, 200)
+          );
+          setAllSpeakers([]);
+          return;
+        }
         const data = await res.json();
-        setAllSpeakers(data.data);
+        setAllSpeakers(data.data ?? []);
       } catch (error) {
-        console.error("Ошибка загрузки спикеров:", error);
+        console.warn("Ошибка загрузки спикеров:", error?.message ?? error);
+        setAllSpeakers([]);
       }
     };
 

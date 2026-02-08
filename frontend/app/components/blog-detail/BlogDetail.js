@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
-import Link from "next/link";
 
 export default function PostDetail() {
   const { slug } = useParams();  // 👈 достаём slug из URL
@@ -72,36 +71,6 @@ export default function PostDetail() {
     <>
       <main className="min-h-screen bg-[url('/images/bkground_1.png')] bg-fixed text-white px-6 py-20">
         <div className="max-w-3xl mx-auto">
-            {/* Хлебные крошки */}
-        <nav
-          className="text-sm text-gray-300 mb-6 mt-4"
-          aria-label="Breadcrumb"
-        >
-          <ol className="flex items-center gap-2 flex-wrap">
-            {/* Главная */}
-            <li>
-              <Link href="/" className="hover:text-white text-white/80 transition-colors">
-                Главная
-              </Link>
-            </li>
-
-            <li className="text-white/50">/</li>
-
-            {/* Страница блога */}
-            <li>
-              <Link href="/blog" className="hover:text-white text-white/80 transition-colors">
-                Блог
-              </Link>
-            </li>
-
-            <li className="text-white/50">/</li>
-
-            {/* Текущая статья */}
-            <li className="text-white truncate max-w-[250px] sm:max-w-[400px] md:max-w-[600px]" title={post.title}>
-              {post.title}
-            </li>
-          </ol>
-        </nav>
 
           <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
 

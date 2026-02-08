@@ -1,13 +1,7 @@
-import localFont from "next/font/local";
 import "globals.css";
 import { AnimatePresence } from "framer-motion";
 import Header from "@/components/main-page/Header";
-import { Raleway } from "next/font/google";
-import { Play } from "next/font/google";
 import Script from "next/script";
-
-const raleway = Raleway({ subsets: ["latin"], weight: ["400", "700"] });
-const play = Play({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "База спикеров, тренеров и коучей с контактами | Plug-In Expert",
@@ -51,40 +45,34 @@ export const metadata = {
 };
 
 
-export default function RootLayout({ children }) {
+export default function HomeLayout({ children }) {
   return (
-    <html lang="ru">
-       <head>
-        <Script
-          id="schema-org-home"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "url": "https://pluginexpert.ru/",
-              "name": "Plug-In Expert",
-              "logo": "https://pluginexpert.ru/images/plugin.jpg",
-              "description":
-                "Plug-In Expert — агентство по подбору и продвижению спикеров. База спикеров, тренеров и коучей с контактными данными.",
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+7 (915) 385-75-91",
-                "email": "hello@pluginexpert.ru",
-                "contactType": "Customer Service",
-                "areaServed": "RU",
-                "availableLanguage": ["Russian"]
-              }
-            }),
-          }}
-        />
-      </head>
-      <body
-        className={`${raleway.className} ${play.className} antialiased min-h-screen`}
-      >
-        <Header />
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
-      </body>
-    </html>
+    <>
+      <Script
+        id="schema-org-home"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "url": "https://pluginexpert.ru/",
+            "name": "Plug-In Expert",
+            "logo": "https://pluginexpert.ru/images/plugin.jpg",
+            "description":
+              "Plug-In Expert — агентство по подбору и продвижению спикеров. База спикеров, тренеров и коучей с контактными данными.",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+7 (915) 385-75-91",
+              "email": "hello@pluginexpert.ru",
+              "contactType": "Customer Service",
+              "areaServed": "RU",
+              "availableLanguage": ["Russian"]
+            }
+          }),
+        }}
+      />
+      <Header />
+      <AnimatePresence mode="wait">{children}</AnimatePresence>
+    </>
   );
 }

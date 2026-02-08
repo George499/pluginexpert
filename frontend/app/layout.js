@@ -4,8 +4,8 @@ import { Raleway, Play } from "next/font/google";
 import CookieBanner from "./components/cookie_banner/CookieBanner";
 import Script from "next/script";
 
-const raleway = Raleway({ subsets: ["latin"], weight: ["400", "700"] });
-const play = Play({ subsets: ["latin"], weight: ["400", "700"] });
+const raleway = Raleway({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-raleway" });
+const play = Play({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-play" });
 
 export const metadata = {
   metadataBase: new URL("https://pluginexpert.ru"),
@@ -165,7 +165,7 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className={`${raleway.className} ${play.className} antialiased`}>
+      <body className={`${raleway.variable} ${play.variable} antialiased`}>
         {children}
         <CookieBanner />
       </body>

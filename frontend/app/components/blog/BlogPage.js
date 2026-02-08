@@ -59,19 +59,6 @@ export default async function BlogPage() {
         </Link>
       </div>
 
-        {/* Хлебные крошки */}
-        <nav className="text-sm text-gray-400 mb-8" aria-label="Breadcrumb">
-          <ol className="flex items-center gap-2">
-            <li>
-              <Link href="/" className="hover:text-white text-white/80">
-                Главная
-              </Link>
-            </li>
-            <li className="text-white/50">/</li>
-            <li className="text-white">Блог</li>
-          </ol>
-        </nav>
-
       {/* Остальные карточки */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {otherPosts.map((post) => (

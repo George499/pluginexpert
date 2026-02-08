@@ -13,13 +13,14 @@
     --foreground: #ededed;
   }
 }
-.text-play {
-  font-family: "Play", sans-serif;
+.text-play,
+.font-play {
+  font-family: var(--font-play), "Play", sans-serif;
 }
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-raleway), "Raleway", sans-serif;
 }
 
 @layer utilities {

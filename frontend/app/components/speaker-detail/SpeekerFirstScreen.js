@@ -4,7 +4,6 @@ import { HiOutlineArrowCircleDown } from "react-icons/hi";
 import { Link as ScrollLink } from "react-scroll";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 
 function SpeekerFirstScreen({ speaker }) {
   const [declinedCategory, setDeclinedCategory] = useState("");
@@ -63,26 +62,6 @@ useEffect(() => {
         mb-10 xl:mb-0
       "
     >
-       {/* Хлебные крошки */}
-        <nav className="text-sm text-gray-200 mb-4" aria-label="Breadcrumb">
-          <ol className="flex items-center gap-2 flex-wrap">
-            <li>
-              <Link href="/" className="hover:text-white text-white/80">
-                Главная
-              </Link>
-            </li>
-            <li className="text-white/50">/</li>
-            <li>
-              <Link href="/all-speakers" className="hover:text-white text-white/80">
-                База спикеров
-              </Link>
-            </li>
-            <li className="text-white/50">/</li>
-            <li className="text-white line-clamp-1">
-              {speaker?.Name || "Спикер"}
-            </li>
-          </ol>
-        </nav>
       <div className="flex flex-col lg:flex-row justify-between
       text-[40px] lg:text-[57px] xl:text-[60px]
       leading-[2.5rem] lg:leading-[4.5rem]

@@ -10,11 +10,9 @@ export const metadata = {
 
 export default function AuthLayout({ children }) {
   return (
-    <html lang="ru">
-      <body className="antialiased min-h-screen">
-        <Header />
-        {children}
-      </body>
-    </html>
+    <>
+      <Header />
+      {children}
+    </>
   );
 }

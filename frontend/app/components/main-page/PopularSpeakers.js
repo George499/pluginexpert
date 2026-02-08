@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/legacy/image";
+import Image from "next/image";
 
 const API_BASE_URL = "https://admin.pluginexpert.ru";
 
@@ -34,16 +34,19 @@ function PopularSpeakers() {
         transition={{ type: "spring", stiffness: 50 }}
         className="grid grid-cols-2 lg:grid-cols-3 gap-0"
       >
-        {popularSpeakers?.map((speaker) => (
+        {popularSpeakers?.map((speaker) => {
+          const imageUrl = speaker.image?.[0]?.url;
+          if (!imageUrl) return null;
+          return (
           <div className="group relative" key={speaker.id}>
-             <div className="relative w-full aspect-[4/5]"> 
+             <div className="relative w-full aspect-[4/5]">
                 <Image
-                  src={`${API_BASE_URL}${speaker.image[0].url}`}
-                  alt={`Image of ${speaker.name}`}
-                  fill                                        // растягиваем по контейнеру
-                  sizes="(max-width: 1024px) 100vw, 33vw"     // адаптивные размеры
+                  src={`${API_BASE_URL}${imageUrl}`}
+                  alt={speaker.name ? `Фото: ${speaker.name}` : "Спикер"}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 33vw"
                   className="object-cover rounded"
-                  priority={false}                            // можно true только на главной
+                  priority={false}
                 />
             </div>
 
@@ -61,7 +64,8 @@ function PopularSpeakers() {
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </motion.div>
     </div>
   );

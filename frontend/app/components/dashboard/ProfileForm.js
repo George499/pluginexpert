@@ -51,7 +51,6 @@ const ProfileForm = () => {
   // Состояние для доступных категорий
   const [availableCategories, setAvailableCategories] = useState([]);
 
-  console.log(profile);
   const MAX_SIZE = 5 * 1024 * 1024; // 5MB в байтах
   // Целевой размер после сжатия (немного меньше лимита)
   const TARGET_SIZE = 4.9 * 1024 * 1024; // 4.9MB в байтах
@@ -158,16 +157,9 @@ const ProfileForm = () => {
           }
         );
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Speaker schema check:", data);
-          console.log(
-            "Categories field exists:",
-            "categories" in (data.data || data)
-          );
-        }
+        if (!response.ok) return;
       } catch (error) {
-        console.error("Error checking categories field:", error);
+        // ignore schema check errors
       }
     };
 
@@ -272,10 +264,10 @@ const ProfileForm = () => {
           return;
         }
 
-        // Сохраняем профиль в состоянии
+        // Сохраняем профиль в состоянии (id — для upload refId, documentId — для API URL)
         setProfile({
           ...userData.speaker,
-          documentId: userData.speaker.documentId,
+          documentId: userData.speaker.documentId ?? userData.speaker.id,
         });
         setProfileExists(true);
 
@@ -420,7 +412,10 @@ const ProfileForm = () => {
         setCurrentUser(userData);
 
         if (userData.speaker) {
-          setProfile(userData.speaker);
+          setProfile({
+            ...userData.speaker,
+            documentId: userData.speaker.documentId ?? userData.speaker.id,
+          });
           setProfileExists(true);
 
           setFormData({
@@ -889,12 +884,6 @@ const ProfileForm = () => {
         allFiles.push(...existingFiles.filter((file) => file !== null));
       }
 
-      // Добавляем лог для отладки
-      console.log(
-        `Подготовлено ${allFiles.length} файлов для сохранения`,
-        allFiles
-      );
-
       toast.success(
         `Подготовлено ${allFiles.length} изображений для сохранения`
       );
@@ -1069,7 +1058,7 @@ const ProfileForm = () => {
         throw new Error("Не удалось получить ID пользователя");
       }
 
-      // Формируем данные для профиля спикера БЕЗ категорий
+      // Формируем данные для профиля спикера (только поля из схемы Strapi)
       const speakerData = {
         Name: formData.fullName || "Спикер",
         Profession: formData.profession || "",
@@ -1087,7 +1076,7 @@ const ProfileForm = () => {
         instagram: formData.instagram || "",
         linkedin: formData.linkedin || "",
         Slug: profile?.Slug || "",
-        isPaid: profile?.isPaid || false,
+        isPaid: profile?.isPaid ?? false,
         categories:
           formData.categories
             ?.filter((cat) => cat.slug !== "all-categories")
@@ -1117,8 +1106,6 @@ const ProfileForm = () => {
           const requestBody = { data: speakerData };
 
           // Логируем данные для отладки
-          console.log("Updating speaker with data:", requestBody);
-
           const updateRes = await fetch(updateUrl, {
             method: "PUT",
             headers: {
@@ -1197,11 +1184,22 @@ const ProfileForm = () => {
           setProfile({ ...profile, ...speakerData });
         }
       }
-      // СОЗДАНИЕ НОВОГО ПРОФИЛЯ
+      // СОЗДАНИЕ НОВОГО ПРОФИЛЯ через стандартный Strapi REST API
       else {
         try {
+          // Шаг 1: Создаём спикера (без связи с пользователем — чтобы не было "Invalid key")
           const createUrl = `${API_URL}/api/speakers`;
-          const requestBody = { data: speakerData };
+          const ALLOWED_SPEAKER_KEYS = [
+            "Name", "Profession", "Bio", "speech_topics", "education", "Price",
+            "tel", "telegram", "email", "whatsapp", "facebook", "vk", "ok",
+            "instagram", "linkedin", "Slug", "isPaid", "categories",
+          ];
+          const dataForCreate = ALLOWED_SPEAKER_KEYS.reduce((acc, key) => {
+            if (Object.prototype.hasOwnProperty.call(speakerData, key)) {
+              acc[key] = speakerData[key];
+            }
+            return acc;
+          }, {});
 
           const createRes = await fetch(createUrl, {
             method: "POST",
@@ -1209,91 +1207,10 @@ const ProfileForm = () => {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({ data: dataForCreate }),
           });
 
-          if (createRes.ok) {
-            const result = await createRes.json();
-
-            // Определяем id и documentId нового профиля
-            let newId, newDocumentId;
-
-            if (result.data) {
-              // Strapi v5 формат
-              newId = result.data.id;
-              newDocumentId =
-                result.data.attributes?.documentId || result.data.documentId;
-            } else {
-              // Старый формат или другая структура
-              newId = result.id;
-              newDocumentId = result.documentId;
-            }
-
-            if (!newDocumentId) {
-              // Если documentId отсутствует, используем id как fallback
-              newDocumentId = newId;
-            }
-
-            // Создаем объект нового профиля
-            const newProfile = {
-              id: newId,
-              documentId: newDocumentId,
-              ...speakerData,
-            };
-
-            // Связываем профиль с пользователем
-            try {
-              const updateUserRes = await fetch(
-                `${API_URL}/api/users/${userId}`,
-                {
-                  method: "PUT",
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ speaker: newId }),
-                }
-              );
-
-              if (!updateUserRes.ok) {
-                toast.error("Профиль создан, но не связан с вашим аккаунтом");
-              }
-            } catch (userUpdateError) {
-              console.error(
-                "Ошибка связывания профиля с пользователем:",
-                userUpdateError
-              );
-            }
-
-            // Загружаем аватар для нового профиля
-            if (avatar) {
-              await uploadAvatar(token, newProfile);
-            }
-
-            // Загружаем галерею для нового профиля, передавая подготовленные файлы
-            await updateGallery(token, newProfile, galleryFiles);
-
-          /*   // Пробуем обновить категории для нового профиля
-            const categoriesUpdated = await updateSpeakerCategories(
-              token,
-              newId,
-              newDocumentId,
-              formData.categories
-            );
-            if (categoriesUpdated) {
-              console.log("Категории успешно добавлены к новому профилю");
-            } */
-
-            // Обновляем состояние приложения
-            setProfile(newProfile);
-            setProfileExists(true);
-            toast.success("Профиль успешно создан!");
-            setIsEditing(false);
-
-            // Обновляем данные профиля с категориями
-            setTimeout(() => refreshProfile(), 1000);
-          } else {
-            // Обработка ошибки создания профиля
+          if (!createRes.ok) {
             let errorMessage = "Не удалось создать профиль";
             try {
               const errorData = await createRes.json();
@@ -1310,6 +1227,74 @@ const ProfileForm = () => {
             }
             throw new Error(errorMessage);
           }
+
+          const createResult = await createRes.json();
+          const raw = createResult?.data ?? createResult;
+          const newId = raw.id;
+          const newDocumentId = raw.documentId ?? raw.id;
+
+          if (!newId) {
+            toast.error("Профиль создан, но не удалось получить ID");
+            setSaving(false);
+            return;
+          }
+
+          // Шаг 2: Привязываем спикера к пользователю через обновление спикера
+          try {
+            await fetch(
+              `${API_URL}/api/speakers/${newDocumentId}`,
+              {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: { users_permissions_user: userId },
+                }),
+              }
+            );
+          } catch (linkError) {
+            console.warn("Не удалось привязать спикера к пользователю через speaker:", linkError);
+          }
+
+          // Шаг 3 (резервный): Привязываем через обновление пользователя
+          try {
+            await fetch(
+              `${API_URL}/api/users/${userId}`,
+              {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ speaker: newId }),
+              }
+            );
+          } catch (userLinkError) {
+            console.warn("Не удалось привязать спикера через user:", userLinkError);
+          }
+
+          const newProfile = {
+            id: newId,
+            documentId: newDocumentId,
+            ...speakerData,
+          };
+
+          // Загружаем аватар для нового профиля (refId = numeric id)
+          if (avatar) {
+            await uploadAvatar(token, newProfile);
+          }
+
+          // Загружаем галерею для нового профиля
+          await updateGallery(token, newProfile, galleryFiles);
+
+          setProfile(newProfile);
+          setProfileExists(true);
+          toast.success("Профиль успешно создан!");
+          setIsEditing(false);
+
+          setTimeout(() => refreshProfile(), 1000);
         } catch (createError) {
           console.error("Ошибка при создании профиля:", createError);
           toast.error(`Не удалось создать профиль: ${createError.message}`);

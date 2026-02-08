@@ -8,7 +8,6 @@ function Header() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
-  // Проверяем авторизацию при монтировании компонента
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
     if (authToken) {
@@ -17,31 +16,26 @@ function Header() {
   }, []);
 
   const handleLogout = () => {
-    // Удаляем токен из localStorage при выходе
     localStorage.removeItem("authToken");
     setIsAuthenticated(false);
-    router.push("/auth/signin"); // Перенаправляем на страницу входа
+    router.push("/auth/signin");
   };
 
   return (
-    <header className="w-full h-24 bg-transparent items-center flex absolute top-0 left-0 z-50">
-      <div className="w-[80%] lg:w-2/3 mx-auto">
-        <div className="w-full flex justify-between items-center text-white font-bold text-base">
-          <div className="z-20">
-            <Link href="/" className="cursor-pointer tracking-wide text-[15px]">
-              PLUG-IN
-            </Link>
-          </div>
+    <header className="w-full h-20 backdrop-blur-md bg-black/30 border-b border-white/10 items-center flex fixed top-0 left-0 z-50">
+      <div className="w-[90%] lg:w-2/3 mx-auto">
+        <div className="w-full flex justify-between items-center text-white font-bold">
+          <Link href="/" className="cursor-pointer text-lg tracking-[.25em] uppercase hover:text-[#a7a7a7] transition-colors">
+            PLUG-IN
+          </Link>
 
           {isAuthenticated && (
-            <div className="mt-10 min-[1120px]:mt-0">
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-sm font-medium bg-[#42484D] hover:bg-[#3742a3] text-[#fffffe] rounded-md"
-              >
-                Выйти
-              </button>
-            </div>
+            <button
+              onClick={handleLogout}
+              className="px-6 py-2.5 text-sm font-semibold uppercase tracking-wider bg-[#42484D] hover:bg-[#3742a3] text-white transition-all duration-300"
+            >
+              Выйти
+            </button>
           )}
         </div>
       </div>

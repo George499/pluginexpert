@@ -80,7 +80,7 @@ export default function PaymentComplete() {
     // Проверяем авторизацию
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
-      router.push('/login');
+      router.push('/auth/signin');
       return;
     }
     

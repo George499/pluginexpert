@@ -1,15 +1,14 @@
 "use client";
 
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from "next/link";
 
 function Product({ speaker }) {
   if (!speaker) {
     return <p>Спикер не найден</p>;
   }
-  console.log(speaker);
 
-  const { Name, Slug, Bio, Profession } = speaker;
+  const { Name, Slug, Profession } = speaker;
 
   const imageUrl = speaker.gallery?.[0]?.url
     ? `https://admin.pluginexpert.ru${speaker.gallery[0].url}`
@@ -18,14 +17,14 @@ function Product({ speaker }) {
   return (
     <Link href={`/profile/${Slug}`} className="block">
       <div className="group relative">
-        <div className="relative w-full aspect-[2/3]"> 
+        <div className="relative w-full aspect-[2/3]">
             <Image
-              src={imageUrl || "/images/placeholder.jpg"}
-              alt={speaker?.Name || "Спикер"}
+              src={imageUrl}
+              alt={Name ? `Фото: ${Name}` : "Спикер"}
               fill
               className="object-cover rounded"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+            />
         </div>
 
 

@@ -19,12 +19,7 @@ function FirstScreen() {
         max-[320px]:mt-[90px] 
         max-[320px]:mb-[36px]
       "
-    >  {/* Хлебные крошки */}
-      <nav className="text-sm text-gray-200 mb-4" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2">
-          <li className="text-gray-400">Главная</li>
-        </ol>
-      </nav>
+    >
       {/* Заголовки */}
       <div
         className="

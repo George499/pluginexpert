@@ -8,13 +8,11 @@ export const metadata = {
     "Plug-In Expert – агентство по подбору спикеров в соответствии с вашими задачами. Мы поможем найти спикеров.",
 };
 
-export default function RootLayout({ children }) {
+export default function DashboardLayout({ children }) {
   return (
-    <html lang="ru">
-      <body className="antialiased min-h-screen">
-        <Header />
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
-      </body>
-    </html>
+    <>
+      <Header />
+      <AnimatePresence mode="wait">{children}</AnimatePresence>
+    </>
   );
 }

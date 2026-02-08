@@ -38,11 +38,22 @@ function AllSpeakers({ allSpeakers, allCategories }) {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Ошибка загрузки спикеров");
+        if (!res.ok) {
+          const text = await res.text();
+          console.warn(
+            "Ошибка загрузки спикеров:",
+            res.status,
+            res.statusText,
+            text.slice(0, 200)
+          );
+          setSpeakers([]);
+          return;
+        }
         const data = await res.json();
-        setSpeakers(data.data);
+        setSpeakers(data.data ?? []);
       } catch (error) {
-        console.error("Ошибка:", error);
+        console.warn("Ошибка загрузки спикеров:", error?.message ?? error);
+        setSpeakers([]);
       }
     };
 
@@ -61,18 +72,6 @@ function AllSpeakers({ allSpeakers, allCategories }) {
     <div className="bg-hero-image bg-fixed flex content-center justify-center items-center flex-col h-full w-full">
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center font-semibold mt-[120px]  relative">
         <div className="relative mb-[10px] w-full upfront">
-        {/* Хлебные крошки */}
-        <nav className="text-sm text-gray-200 mb-4" aria-label="Breadcrumb">
-          <ol className="flex items-center gap-2">
-            <li>
-              <Link href="/" className="hover:text-white/80 text-white">
-                Главная
-              </Link>
-            </li>
-            <li className="text-white/50">/</li>
-            <li className="text-white">База спикеров</li>
-          </ol>
-        </nav>
           <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
           <h1 className="heading-line text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
             ПОДБОР СПИКЕРОВ

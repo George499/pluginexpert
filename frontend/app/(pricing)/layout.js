@@ -1,13 +1,7 @@
-import localFont from "next/font/local";
 import "globals.css";
 import { AnimatePresence } from "framer-motion";
 import Header from "@/components/main-page/Header";
-import { Raleway } from "next/font/google";
-import { Play } from "next/font/google";
 import Script from "next/script";
-
-const raleway = Raleway({ subsets: ["latin"], weight: ["400", "700"] });
-const play = Play({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "Как стать спикером — разместить анкету спикера | Plug-In Expert",
@@ -49,40 +43,34 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default function PricingLayout({ children }) {
   return (
-    <html lang="ru">
-       <head>
-        <Script
-          id="schema-org-pricing"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "url": "https://pluginexpert.ru/pricing",
-              "name": "Plug-In Expert",
-              "logo": "https://pluginexpert.ru/images/plugin.jpg",
-              "description":
-                "Разместите анкету спикера на сайте Plug-In Expert и начните получать заказы напрямую. Агентство по подбору и продвижению спикеров, тренеров и коучей.",
-              "contactPoint": {
-                "@type": "ContactPoint",
-                "telephone": "+7 (915) 385-75-91",
-                "email": "hello@pluginexpert.ru",
-                "contactType": "Customer Service",
-                "areaServed": "RU",
-                "availableLanguage": ["Russian"]
-              }
-            }),
-          }}
-        />
-      </head>
-      <body
-        className={`${raleway.className} ${play.className} antialiased min-h-screen`}
-      >
-        <Header />
-        <AnimatePresence mode="wait">{children}</AnimatePresence>
-      </body>
-    </html>
+    <>
+      <Script
+        id="schema-org-pricing"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "url": "https://pluginexpert.ru/pricing",
+            "name": "Plug-In Expert",
+            "logo": "https://pluginexpert.ru/images/plugin.jpg",
+            "description":
+              "Разместите анкету спикера на сайте Plug-In Expert и начните получать заказы напрямую. Агентство по подбору и продвижению спикеров, тренеров и коучей.",
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+7 (915) 385-75-91",
+              "email": "hello@pluginexpert.ru",
+              "contactType": "Customer Service",
+              "areaServed": "RU",
+              "availableLanguage": ["Russian"]
+            }
+          }),
+        }}
+      />
+      <Header />
+      <AnimatePresence mode="wait">{children}</AnimatePresence>
+    </>
   );
 }

@@ -39,11 +39,22 @@ function ForthScreen() {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }
         const res = await fetch(url);
-        if (!res.ok) throw new Error("Ошибка загрузки спикеров");
+        if (!res.ok) {
+          const text = await res.text();
+          console.warn(
+            "Ошибка загрузки спикеров:",
+            res.status,
+            res.statusText,
+            text.slice(0, 200)
+          );
+          setSpeakers([]);
+          return;
+        }
         const data = await res.json();
-        setSpeakers(data.data);
+        setSpeakers(data.data ?? []);
       } catch (error) {
-        console.error("Ошибка:", error);
+        console.warn("Ошибка загрузки спикеров:", error?.message ?? error);
+        setSpeakers([]);
       }
     };
 

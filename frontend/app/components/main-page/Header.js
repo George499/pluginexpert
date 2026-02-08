@@ -64,15 +64,11 @@ function Header() {
 
     {/* Центр — Войти / Регистрация (всегда видны) */}
     <div className="flex gap-6 mx-auto max-[380px]:gap-2">
-    <Link href="/auth/signin" legacyBehavior>
-      <a className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
-        ВОЙТИ
-      </a>
+    <Link href="/auth/signin" className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
+      ВОЙТИ
     </Link>
-    <Link href="/auth/register" legacyBehavior>
-      <a className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
-        РЕГИСТРАЦИЯ
-      </a>
+    <Link href="/auth/register" className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
+      РЕГИСТРАЦИЯ
     </Link>
 </div>
 

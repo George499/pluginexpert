@@ -1,7 +1,6 @@
 "use client";
 
 import useIntersectionObserver from "../../utils/useIntersectionObserver";
-import Link from "next/link";
 
 function PricingFirstScreen() {
   const { ref, isVisible } = useIntersectionObserver(0.3);
@@ -11,18 +10,6 @@ function PricingFirstScreen() {
   id="first-screen"
 >
   <div className="container flex flex-col w-4/5 lg:w-2/3 my-20 items-start justify-center font-semibold mt-[120px]">
-  {/* Хлебные крошки */}
-      <nav className="text-sm text-gray-200 mb-4" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2">
-          <li>
-            <Link href="/" className="hover:text-white text-white/80">
-              Главная
-            </Link>
-          </li>
-          <li className="text-white/50">/</li>
-          <li className="text-white">Разместить анкету</li>
-        </ol>
-      </nav>
     {/* Маленький белый штрих перед заголовком */}
     <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
 
