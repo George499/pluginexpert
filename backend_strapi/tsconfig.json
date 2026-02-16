@@ -14,7 +14,8 @@
     "noImplicitThis": true,
     "allowJs": true,
     "checkJs": false,
-    "rootDir": "./src",
+    "rootDir": ".",
+    "outDir": ".",
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
