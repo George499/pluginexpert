@@ -29,7 +29,7 @@ function Header() {
         <div className="w-full flex justify-between items-center text-white font-bold text-base">
           <div className="z-20">
             <Link href="/" className="cursor-pointer tracking-wide text-[15px]">
-              PLUG-IN
+              ПРЯМАЯ РЕЧЬ
             </Link>
           </div>
 

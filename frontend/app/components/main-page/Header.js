@@ -59,7 +59,7 @@ function Header() {
       onClick={() => setNav(false)}
       className="cursor-pointer tracking-wide text-[15px] max-[400px]:text-[12px] font-bold text-white z-20"
     >
-      PLUG-IN
+      ПРЯМАЯ РЕЧЬ
     </Link>
 
     {/* Центр — Войти / Регистрация (всегда видны) */}

@@ -33,9 +33,9 @@ function FirstScreen() {
           max-[320px]:text-[26px] max-[320px]:leading-[2rem] max-[320px]:max-w-[240px]
         "
       >
-        <p className="text-white">PLUG-IN</p>
-        <p className="text-[#1B1B1E]">SPEAKERS</p>
-        <p className="text-[#1B1B1E]">ACCELERATOR</p>
+        <p className="text-white">ПРЯМАЯ РЕЧЬ</p>
+        <p className="text-[#1B1B1E]">СПИКЕРЫ</p>
+        <p className="text-[#1B1B1E]">БЕЗ ПОСРЕДНИКОВ</p>
 
         {/* Нижняя строка + линия */}
         <p

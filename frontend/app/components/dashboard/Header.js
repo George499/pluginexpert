@@ -26,7 +26,7 @@ function Header() {
       <div className="w-[90%] lg:w-2/3 mx-auto">
         <div className="w-full flex justify-between items-center text-white font-bold">
           <Link href="/" className="cursor-pointer text-lg tracking-[.25em] uppercase hover:text-[#a7a7a7] transition-colors">
-            PLUG-IN
+            ПРЯМАЯ РЕЧЬ
           </Link>
 
           {isAuthenticated && (

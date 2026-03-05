@@ -32,11 +32,11 @@ function SecondScreen() {
                   mb-6 lg:mb-8 max-[320px]:mb-4
                 "
               >
-                <p className="text-[#1B1B1E]">PLUGIN</p>
+                <p className="text-[#1B1B1E]">ПРЯМАЯ РЕЧЬ</p>
 
                 <div className="tracking-tighter lg:flex">
-                  <p className="text-[#1B1B1E] lg:mr-5">SPEAKERS</p>
-                  <p className="text-[#1B1B1E]">ACCELERATOR</p>
+                  <p className="text-[#1B1B1E] lg:mr-5">СПИКЕРЫ</p>
+                  <p className="text-[#1B1B1E]">БЕЗ ПОСРЕДНИКОВ</p>
                 </div>
               </div>
 

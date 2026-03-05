@@ -26,7 +26,7 @@ export default function NotFound() {
             href="/"
             className="cursor-pointer tracking-wide text-[15px] max-[400px]:text-[12px] font-bold text-white z-20"
           >
-            PLUG-IN
+            ПРЯМАЯ РЕЧЬ
           </Link>
           <div className="flex gap-6 mx-auto max-[380px]:gap-2">
             <Link href="/auth/signin" className="text-black uppercase font-bold hover:text-[#a7a7a7] text-[17px] max-[380px]:text-[12px]">
@@ -119,7 +119,7 @@ export default function NotFound() {
       {/* Footer */}
       <footer className="w-full py-6 text-center">
         <p className="text-white/70 text-sm">
-          © 2025 PLUG-IN SOLUTIONS
+          © 2025 ПРЯМАЯ РЕЧЬ SOLUTIONS
         </p>
       </footer>
     </div>
