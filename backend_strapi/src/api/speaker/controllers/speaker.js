@@ -63,16 +63,16 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
     }
 
     try {
-      const entries = await strapi.entityService.findMany('api::speaker.speaker', {
-        filters: { documentId },
+      // strapi.documents() корректно работает и с черновиками, и с опубликованными — в отличие от entityService.findMany.
+      const entry = await strapi.documents('api::speaker.speaker').findOne({
+        documentId,
         populate: ['users_permissions_user'],
+        status: 'draft',
       });
 
-      if (!entries || entries.length === 0) {
+      if (!entry) {
         return ctx.notFound('Спикер с таким documentId не найден');
       }
-
-      const entry = entries[0];
 
       if (entry.users_permissions_user?.id !== userId) {
         return ctx.forbidden('Нет прав на редактирование этой анкеты');
@@ -92,7 +92,8 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
         Object.entries(data || {}).filter(([key]) => !PROTECTED_FIELDS.includes(key))
       );
 
-      const updated = await strapi.entityService.update('api::speaker.speaker', entry.id, {
+      const updated = await strapi.documents('api::speaker.speaker').update({
+        documentId,
         data: sanitized,
       });
 
