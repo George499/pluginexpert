@@ -24,6 +24,11 @@ jobs:
           script_stop: true
           script: |
             set -e
+
+            # Загружаем nvm для non-interactive SSH (иначе npm/node не в PATH).
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
             cd ~/pluginexpert
             git fetch --all --prune
             git checkout main
