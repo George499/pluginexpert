@@ -41,15 +41,19 @@ module.exports = createCoreController('api::speaker.speaker', ({ strapi }) => ({
       );
     })(rawData || {});
 
-    const createdSpeaker = await strapi.entityService.create('api::speaker.speaker', {
+    // Двухшаговое создание: сначала спикер, потом привязка к юзеру.
+    // strapi.documents() корректно работает с черновиками — entityService.findOne не возвращал бы только что созданный draft.
+    const created = await strapi.documents('api::speaker.speaker').create({
       data: sanitized,
+      status: 'draft',
     });
 
-    await strapi.entityService.update('api::speaker.speaker', createdSpeaker.id, {
+    const linked = await strapi.documents('api::speaker.speaker').update({
+      documentId: created.documentId,
       data: { users_permissions_user: userId },
+      status: 'draft',
     });
 
-    const linked = await strapi.entityService.findOne('api::speaker.speaker', createdSpeaker.id);
     return linked;
   },
 
