@@ -908,7 +908,7 @@ const ProfileForm = () => {
 
     try {
       // Сначала удаляем все связи с текущими изображениями в галерее
-      const updateRelationUrl = `${API_URL}/api/speakers/${
+      const updateRelationUrl = `${API_URL}/api/speakers/by-document/${
         profile.documentId || profile.id
       }`;
       const updateRelationBody = {
