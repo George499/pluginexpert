@@ -35,6 +35,7 @@ export async function POST(request) {
       },
       description: description || `Оплата подписки`,
       metadata: {
+  speakerId,
   speakerDocumentId,
   planId,
   email

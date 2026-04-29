@@ -127,7 +127,7 @@ export default async function SpeekerPage({ params }) {
 // ✅ Функция получения данных конкретного спикера (SSR)
 async function getSpeaker(slug) {
   try {
-    const url = `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&populate[0]=categories&populate[1]=gallery`;
+    const url = `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&filters[isPaid][$eq]=true&populate[0]=categories&populate[1]=gallery`;
     console.log("Fetching URL:", url);
 
     const res = await fetch(url, {

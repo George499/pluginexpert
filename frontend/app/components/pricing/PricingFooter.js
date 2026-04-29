@@ -23,7 +23,7 @@ function PricingFooter() {
               <span className="hidden lg:flex">
                 © {new Date().getFullYear()}
               </span>
-              <span className="ml-5"> ПРЯМАЯ РЕЧЬ SOLUTIONS</span>
+              <span className="ml-5"> ПРЯМАЯ РЕЧЬ БАЗА СПИКЕРОВ</span>
             </span>
           </p>
         </div>

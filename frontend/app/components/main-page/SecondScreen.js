@@ -40,22 +40,11 @@ function SecondScreen() {
                 </div>
               </div>
 
-        <div className="text-[16px] lg:text-[20px] tracking-normal mb-8 max-[531px]:mb-2 pt-7 max-[531px]:pt-3 
+        <div className="text-[16px] lg:text-[20px] tracking-normal mb-8 max-[531px]:mb-2 pt-7 max-[531px]:pt-3
         max-[320px]:text-[13px] max-[320px]:pt-2 max-[320px]:mb-3
         ">
           <p>Площадка для прямых отношений между спикерами и их заказчиками</p>
         </div>
-        <h2
-          className="
-            text-[40px] lg:text-[57px] xl:text-[81px]
-            leading-[2.5rem] lg:leading-[3.5rem] xl:leading-[4.5rem]
-            font-bold
-            mb-6 lg:mb-8 max-[320px]:mb-4
-          "
-        >
-          СПИКЕРЫ
-          <br className="hidden lg:block" /> БЕЗ ПОСРЕДНИКОВ
-        </h2>
 
         <div
           ref={ref}

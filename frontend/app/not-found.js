@@ -119,7 +119,7 @@ export default function NotFound() {
       {/* Footer */}
       <footer className="w-full py-6 text-center">
         <p className="text-white/70 text-sm">
-          © 2025 ПРЯМАЯ РЕЧЬ SOLUTIONS
+          © 2025 ПРЯМАЯ РЕЧЬ БАЗА СПИКЕРОВ
         </p>
       </footer>
     </div>

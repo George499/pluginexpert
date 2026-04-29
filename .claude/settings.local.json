@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m markitdown \"C:\\\\Users\\\\gi32m\\\\Downloads\\\\Telegram Desktop\\\\Замена английских слов.pptx\")",
+      "Bash(pip install *)",
+      "Bash(cp \"C:\\\\Users\\\\gi32m\\\\Downloads\\\\Telegram Desktop\\\\Замена английских слов.pptx\" /tmp/replace.pptx)",
+      "Read(//tmp/**)",
+      "Bash(python \"C:\\\\Users\\\\gi32m\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\3966ef86-6097-4b21-93e3-49782300d9b4\\\\750d6565-2fa6-4cb3-a2e8-885de15a5b52\\\\skills\\\\pptx\\\\scripts\\\\office\\\\soffice.py\" --headless --convert-to pdf /tmp/replace.pptx --outdir /tmp)",
+      "Bash(where soffice *)",
+      "Bash(where libreoffice *)",
+      "Bash(mkdir -p /tmp/pptx_imgs)",
+      "Bash(python -c ' *)",
+      "Bash(mkdir -p \"C:/temp/pptx_imgs\")",
+      "PowerShell([Console]::OutputEncoding = [System.Text.UTF8Encoding]::new\\(\\); $p = \"C:\\\\Users\\\\gi32m\\\\OneDrive\\\\Документы\\\\Github\\\\pluginexpert\\\\backend_strapi\"; Test-Path $p; Get-ChildItem -LiteralPath $p -Force -Name 2>&1 | Out-String -Width 4096)",
+      "PowerShell([Console]::OutputEncoding = [System.Text.UTF8Encoding]::new\\(\\); $p = \"C:\\\\Users\\\\gi32m\\\\OneDrive\\\\Документы\\\\Github\\\\pluginexpert\\\\backend_strapi\"; $items = Get-ChildItem -LiteralPath $p -Force; Write-Output \"Count: $\\($items.Count\\)\"; $items | Select-Object -First 30 | ForEach-Object { Write-Output \\(\"{0,-12} {1}\" -f $_.Mode, $_.Name\\) })",
+      "PowerShell([Console]::OutputEncoding = [System.Text.UTF8Encoding]::new\\(\\); $p = \"C:\\\\Users\\\\gi32m\\\\OneDrive\\\\Документы\\\\Github\\\\pluginexpert\\\\backend_strapi\"; \\(Get-Item -LiteralPath $p\\).Attributes; Get-ChildItem -LiteralPath $p -Force -Hidden:$false | Format-Table -AutoSize)",
+      "Bash(git -C \"C:/Users/gi32m/OneDrive/Документы/Github/pluginexpert\" status -s)",
+      "Bash(awk '{print $1}')"
+    ]
+  }
+}

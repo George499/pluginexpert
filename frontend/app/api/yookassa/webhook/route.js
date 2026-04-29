@@ -9,16 +9,38 @@ const shopId = process.env.YOOKASSA_SHOP_ID;
 const secretKey = process.env.YOOKASSA_SECRET_KEY;
 const yooCheckout = new YooCheckout({ shopId, secretKey });
 
-// Функция для записи лога в файл
+// Strapi
+const STRAPI_API_URL = process.env.STRAPI_API_URL || 'https://admin.pluginexpert.ru';
+const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN;
+
+// Длительность подписки по тарифу (в днях). Соответствие тарифам в PaymentModal.
+const PLAN_DURATION_DAYS = {
+  '1': 90,   // 3 месяца
+  '2': 180,  // 6 месяцев
+  '3': 300,  // 10 месяцев
+};
+
+const getSubscriptionDays = (planId) => PLAN_DURATION_DAYS[String(planId)] ?? 90;
+
+// Запись лога в файл. По умолчанию выключена в продакшене (логи уходят в stdout).
+// Чтобы включить файловые логи в проде — установить WEBHOOK_FILE_LOGS=true.
+const FILE_LOGS_ENABLED =
+  process.env.WEBHOOK_FILE_LOGS === 'true' ||
+  (process.env.WEBHOOK_FILE_LOGS !== 'false' && process.env.NODE_ENV !== 'production');
+
 const logToFile = async (data, prefix = 'webhook') => {
+  if (!FILE_LOGS_ENABLED) {
+    console.log(`[webhook:${prefix}]`, JSON.stringify(data));
+    return null;
+  }
   try {
     const timestamp = new Date().toISOString().replace(/:/g, '-');
     const logDir = path.join(process.cwd(), 'logs');
-    
+
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir, { recursive: true });
     }
-    
+
     const logPath = path.join(logDir, `${prefix}-${timestamp}.json`);
     fs.writeFileSync(logPath, JSON.stringify(data, null, 2));
     console.log(`Лог записан в файл: ${logPath}`);
@@ -134,7 +156,6 @@ export async function POST(request) {
      if (event === 'payment.succeeded') {
   console.log(`Платеж ${paymentId} успешно завершен`);
 
-  // Логируем успешный платёж
   await logToFile({
     timestamp: new Date().toISOString(),
     event,
@@ -144,33 +165,93 @@ export async function POST(request) {
     metadata: fullPaymentInfo.metadata
   }, 'payment-succeeded');
 
-  // ✅ Отправка в Strapi: обновление isPaid у speaker
-  try {
-    const strapiResponse = await fetch('https://admin.pluginexpert.ru/api/speakers/' + fullPaymentInfo.metadata.speakerId, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        // Добавь токен, если в Strapi включена авторизация
-        // 'Authorization': `Bearer ${process.env.STRAPI_API_TOKEN}`
-      },
-      body: JSON.stringify({
-        data: {
-          isPaid: true
-        }
-      }),
-    });
+  // Обновление подписки спикера в Strapi (по documentId — Strapi 5 REST)
+  const speakerDocumentId = fullPaymentInfo.metadata?.speakerDocumentId;
+  const planId = fullPaymentInfo.metadata?.planId;
+  const amount = fullPaymentInfo.amount?.value;
 
-    const result = await strapiResponse.json();
-    console.log('Speaker обновлён в Strapi:', result);
-  } catch (error) {
-    console.error('Ошибка обновления speaker в Strapi:', error);
+  if (!speakerDocumentId) {
+    console.error('В metadata платежа отсутствует speakerDocumentId — не могу обновить Strapi');
     await logToFile({
       timestamp: new Date().toISOString(),
-      error: 'Ошибка при обновлении speaker',
-      message: error.message,
-      speakerId: fullPaymentInfo.metadata.speakerId,
-      speakerDocumentId: fullPaymentInfo.metadata.speakerDocumentId
+      error: 'speakerDocumentId missing in payment metadata',
+      paymentId,
+      metadata: fullPaymentInfo.metadata,
     }, 'strapi-update-error');
+  } else if (!STRAPI_API_TOKEN) {
+    console.error('STRAPI_API_TOKEN не задан — не могу авторизоваться в Strapi');
+    await logToFile({
+      timestamp: new Date().toISOString(),
+      error: 'STRAPI_API_TOKEN missing',
+      paymentId,
+    }, 'strapi-update-error');
+  } else {
+    try {
+      // Идемпотентность: если этот paymentId уже применён — пропускаем,
+      // чтобы повторные/ретрай-вебхуки не продлевали подписку.
+      const currentRes = await fetch(`${STRAPI_API_URL}/api/speakers/${speakerDocumentId}`, {
+        headers: { Authorization: `Bearer ${STRAPI_API_TOKEN}` },
+      });
+      if (currentRes.ok) {
+        const currentJson = await currentRes.json();
+        const currentLastPaymentId = currentJson?.data?.lastPaymentId;
+        if (currentLastPaymentId && currentLastPaymentId === paymentId) {
+          console.log(`Платёж ${paymentId} уже применён к speaker ${speakerDocumentId} — пропускаю`);
+          await logToFile({
+            timestamp: new Date().toISOString(),
+            event: 'idempotent-skip',
+            paymentId,
+            speakerDocumentId,
+          }, 'payment-succeeded');
+          return NextResponse.json({ success: true });
+        }
+      }
+
+      const now = new Date();
+      const expiresAt = new Date(now);
+      expiresAt.setDate(now.getDate() + getSubscriptionDays(planId));
+
+      const strapiResponse = await fetch(`${STRAPI_API_URL}/api/speakers/${speakerDocumentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`,
+        },
+        body: JSON.stringify({
+          data: {
+            isPaid: true,
+            subscriptionExpiresAt: expiresAt.toISOString(),
+            lastPaymentDate: now.toISOString(),
+            lastPaymentAmount: amount ? parseFloat(amount) : undefined,
+            lastPaymentId: paymentId,
+          },
+        }),
+      });
+
+      const result = await strapiResponse.json();
+      if (!strapiResponse.ok) {
+        console.error('Strapi вернул ошибку:', strapiResponse.status, result);
+        await logToFile({
+          timestamp: new Date().toISOString(),
+          error: 'Strapi update failed',
+          status: strapiResponse.status,
+          response: result,
+          speakerDocumentId,
+          paymentId,
+        }, 'strapi-update-error');
+      } else {
+        console.log('Speaker обновлён в Strapi:', result);
+      }
+    } catch (error) {
+      console.error('Ошибка обновления speaker в Strapi:', error);
+      await logToFile({
+        timestamp: new Date().toISOString(),
+        error: 'Ошибка при обновлении speaker',
+        message: error.message,
+        speakerDocumentId,
+        paymentId,
+      }, 'strapi-update-error');
+    }
   }
 }
  else if (event === 'payment.waiting_for_capture') {

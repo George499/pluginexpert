@@ -26,7 +26,7 @@ function Footer() {
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-[16px] lg:text-[20px] font-normal">
             <span className="hidden lg:inline">© {year}</span>
-            <span>ПРЯМАЯ РЕЧЬ SOLUTIONS</span>
+            <span>ПРЯМАЯ РЕЧЬ БАЗА СПИКЕРОВ</span>
           </p>
           <a
             href="mailto:hello@pluginexpert.ru"

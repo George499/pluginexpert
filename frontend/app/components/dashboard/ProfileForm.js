@@ -780,7 +780,7 @@ const ProfileForm = () => {
 
         // Обновляем связь аватара у спикера
         const updateAvatarRes = await fetch(
-          `${API_URL}/api/speakers/${profile.documentId || profile.id}`,
+          `${API_URL}/api/speakers/by-document/${profile.documentId || profile.id}`,
           {
             method: "PUT",
             headers: {
@@ -1101,8 +1101,8 @@ const ProfileForm = () => {
         }
 
         try {
-          // Используем documentId для обновления профиля в Strapi
-          const updateUrl = `${API_URL}/api/speakers/${documentId}`;
+          // Используем documentId для обновления профиля в Strapi через кастомную ручку
+          const updateUrl = `${API_URL}/api/speakers/by-document/${documentId}`;
           const requestBody = { data: speakerData };
 
           // Логируем данные для отладки
@@ -1184,15 +1184,14 @@ const ProfileForm = () => {
           setProfile({ ...profile, ...speakerData });
         }
       }
-      // СОЗДАНИЕ НОВОГО ПРОФИЛЯ через стандартный Strapi REST API
+      // СОЗДАНИЕ НОВОГО ПРОФИЛЯ через кастомный createAndLink (атомарно: создание + привязка к пользователю на сервере)
       else {
         try {
-          // Шаг 1: Создаём спикера (без связи с пользователем — чтобы не было "Invalid key")
-          const createUrl = `${API_URL}/api/speakers`;
+          const createUrl = `${API_URL}/api/speakers/create-and-link`;
           const ALLOWED_SPEAKER_KEYS = [
             "Name", "Profession", "Bio", "speech_topics", "education", "Price",
             "tel", "telegram", "email", "whatsapp", "facebook", "vk", "ok",
-            "instagram", "linkedin", "Slug", "isPaid", "categories",
+            "instagram", "linkedin", "Slug", "categories",
           ];
           const dataForCreate = ALLOWED_SPEAKER_KEYS.reduce((acc, key) => {
             if (Object.prototype.hasOwnProperty.call(speakerData, key)) {
@@ -1239,41 +1238,7 @@ const ProfileForm = () => {
             return;
           }
 
-          // Шаг 2: Привязываем спикера к пользователю через обновление спикера
-          try {
-            await fetch(
-              `${API_URL}/api/speakers/${newDocumentId}`,
-              {
-                method: "PUT",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  data: { users_permissions_user: userId },
-                }),
-              }
-            );
-          } catch (linkError) {
-            console.warn("Не удалось привязать спикера к пользователю через speaker:", linkError);
-          }
-
-          // Шаг 3 (резервный): Привязываем через обновление пользователя
-          try {
-            await fetch(
-              `${API_URL}/api/users/${userId}`,
-              {
-                method: "PUT",
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ speaker: newId }),
-              }
-            );
-          } catch (userLinkError) {
-            console.warn("Не удалось привязать спикера через user:", userLinkError);
-          }
+          // Привязка к пользователю выполнена в createAndLink на сервере — дополнительные PUT не нужны.
 
           const newProfile = {
             id: newId,

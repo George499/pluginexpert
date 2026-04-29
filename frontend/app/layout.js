@@ -89,7 +89,7 @@ export default function RootLayout({ children }) {
               "@type": "Organization",
               "@id": "https://pluginexpert.ru/#organization",
               name: "Plug-In Expert",
-              alternateName: "ПРЯМАЯ РЕЧЬ SOLUTIONS",
+              alternateName: "ПРЯМАЯ РЕЧЬ БАЗА СПИКЕРОВ",
               url: "https://pluginexpert.ru",
               logo: "https://pluginexpert.ru/images/plugin.jpg",
               description:

@@ -1,7 +1,5 @@
 "use client";
 
-import { FaTelegram } from "react-icons/fa";
-import { RiWhatsappFill } from "react-icons/ri";
 import { useState } from "react";
 
 const Contacts = () => {
@@ -52,16 +50,6 @@ const Contacts = () => {
                     <p className="lg:hidden">Звоните:</p>
                     <a className="block lg:hidden" href="tel:+7 (915) 385-75-91">
                       +7 (915) 385-75-91
-                    </a>
-                  </div>
-                  <div className="flex flex-raw items-center">
-                    <a href="https://wa.me/+79153857591">
-                      <RiWhatsappFill
-                        className={`w-[35px] h-[35px] cursor-pointer text-[#fffffe]`}
-                      />
-                    </a>
-                    <a href="https://t.me/+79153857591">
-                      <FaTelegram className="w-[30px] h-[30px] cursor-pointer ml-3 text-[#fffffe]" />
                     </a>
                   </div>
                 </div>

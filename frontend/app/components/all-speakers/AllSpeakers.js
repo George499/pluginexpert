@@ -33,7 +33,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
     const fetchSpeakers = async () => {
       try {
         let url =
-          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery";
+          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true";
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }

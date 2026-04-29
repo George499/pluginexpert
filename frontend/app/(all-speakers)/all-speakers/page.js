@@ -31,7 +31,7 @@ function Category() {
   useEffect(() => {
     const fetchSpeakers = async () => {
       try {
-        let url = `${STRAPI_API_URL}/speakers?populate[0]=categories&populate[1]=gallery`;
+        let url = `${STRAPI_API_URL}/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true`;
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }
