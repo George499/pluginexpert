@@ -1,68 +1,45 @@
-name: Deploy Frontend to Production
+name: Deploy to production
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
 
     steps:
-    # 1. Клонируем репозиторий
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -e
+            cd ~/pluginexpert
+            git fetch --all --prune
+            git checkout main
+            git reset --hard origin/main
 
-    # 2. Устанавливаем Node.js
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '22.12.0' # Указываем требуемую версию Node.js
+            echo "=== Backend (Strapi) ==="
+            cd ~/pluginexpert/backend_strapi
+            npm ci
+            npm run build
+            pm2 restart pluginexpert-backend --update-env
 
-    # 3. Установка зависимостей и сборка frontend
-    - name: Install frontend dependencies
-      run: npm install
-      working-directory: ./frontend
+            echo "=== Frontend (Next.js) ==="
+            cd ~/pluginexpert/frontend
+            npm ci
+            npm run build
+            pm2 restart pluginexpert-frontend --update-env
 
-    - name: Build frontend
-      run: npm run build
-      working-directory: ./frontend
-
-    # 4. Архивируем frontend для передачи на сервер
-    - name: Archive frontend build
-      run: tar -czf frontend-build.tar.gz -C ./frontend .
-
-    # 5. Передача файлов на сервер
-    - name: Upload frontend build
-      uses: appleboy/ssh-action@v0.0.7
-      with:
-        source: ./frontend-build.tar.gz
-        target: "${{ secrets.USERNAME }}@${{ secrets.HOST }}:~/frontend-build.tar.gz"
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    # 6. Деплой на сервер
-    - name: Deploy to server
-      uses: appleboy/ssh-action@v0.0.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
-        script: |
-          # Переходим в директорию проекта
-          cd ~/pluginexpert
-
-          # Распаковываем frontend
-          if [ -f ~/frontend-build.tar.gz ]; then
-            rm -rf frontend/build
-            tar -xzf ~/frontend-build.tar.gz -C ./frontend
-            rm ~/frontend-build.tar.gz
-          fi
-
-          # Перезапускаем frontend через PM2
-          pm2 restart 6
+            pm2 list
+            echo "=== Deploy complete ==="
