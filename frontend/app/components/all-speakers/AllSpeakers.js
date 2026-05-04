@@ -62,8 +62,6 @@ function AllSpeakers({ allSpeakers, allCategories }) {
     fetchSpeakers();
   }, [selectedCategory]);
 
-  console.log("Speakers in AllSpeakers:", speakers || allSpeakers);
-
   const handleClick = (slug) => {
     setSelectedCategory((prev) => (prev === slug ? "all-categories" : slug));
   };
@@ -75,9 +73,10 @@ function AllSpeakers({ allSpeakers, allCategories }) {
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center font-semibold mt-[120px]  relative">
         <div className="relative mb-[10px] w-full upfront">
           <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
-          <h1 className="heading-line text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
+          <h1 className="sr-only">Все спикеры базы Plug-In Speakers</h1>
+          <h2 className="heading-line text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white ">
             ПОДБОР СПИКЕРОВ
-          </h1>
+          </h2>
           <div className="w-3/4 max-[1000px]:w-2/3 h-[1px] ml-[5px] bg-white absolute -bottom-5"></div>
         </div>
 

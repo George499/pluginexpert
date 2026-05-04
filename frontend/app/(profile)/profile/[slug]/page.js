@@ -23,9 +23,9 @@ export async function generateMetadata({ params }) {
 
   const speakerName = speaker.Name || "Спикер";
   const speakerDescription =
-    speaker.Description || `Профиль спикера ${speakerName} на Plug-In Expert`;
+    speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName} на Plug-In Expert`;
   const speakerImage =
-    speaker.Photo?.url
+    speaker.avatar?.url
       ? `${STRAPI_URL}${speaker.Photo.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
@@ -69,9 +69,9 @@ export default async function SpeekerPage({ params }) {
 
   const speakerName = speaker.Name || "Спикер";
   const speakerDescription =
-    speaker.Description || `Профиль спикера ${speakerName}`;
+    speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName}`;
   const speakerImage =
-    speaker.Photo?.url
+    speaker.avatar?.url
       ? `${STRAPI_URL}${speaker.Photo.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
@@ -84,21 +84,13 @@ export default async function SpeekerPage({ params }) {
     description: speakerDescription,
     image: speakerImage,
     url: speakerUrl,
-    jobTitle: speaker.Position || "Спикер",
+    jobTitle: speaker.Profession || "Спикер",
     worksFor: {
       "@type": "Organization",
       name: "Plug-In Expert",
       url: "https://pluginexpert.ru",
     },
   };
-
-  if (speaker.Email) {
-    personSchema.email = speaker.Email;
-  }
-
-  if (speaker.Phone) {
-    personSchema.telephone = speaker.Phone;
-  }
 
   if (speaker.categories && speaker.categories.data) {
     personSchema.knowsAbout = speaker.categories.data.map(
@@ -128,15 +120,13 @@ export default async function SpeekerPage({ params }) {
 // ✅ Функция получения данных конкретного спикера (SSR)
 async function getSpeaker(slug) {
   try {
-    const url = `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&filters[isPaid][$eq]=true&populate[0]=categories&populate[1]=gallery`;
-    console.log("Fetching URL:", url);
+    const url = `${STRAPI_API_URL}?filters[Slug][$eq]=${slug}&filters[isPaid][$eq]=true&populate[0]=categories&populate[1]=gallery&populate[2]=avatar`;
 
     const res = await fetch(url, {
       next: { revalidate: 60 }, // ✅ Страница обновляется каждые 60 секунд
     });
 
     const data = await res.json();
-    console.log("API response data:", data);
 
     // Проверяем структуру ответа
     if (!data || !data.data) {
@@ -146,7 +136,6 @@ async function getSpeaker(slug) {
 
     // Проверяем, является ли data.data массивом и содержит ли элементы
     if (!Array.isArray(data.data) || data.data.length === 0) {
-      console.log("Спикер не найден с slug:", slug);
       return null;
     }
 

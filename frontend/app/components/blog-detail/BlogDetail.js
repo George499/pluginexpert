@@ -1,6 +1,7 @@
 "use client"; 
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 
@@ -76,10 +77,12 @@ export default function PostDetail() {
           <h1 className="text-4xl font-bold mb-6">{post.title}</h1>
 
           {post.main_image?.url && (
-            <img
+            <Image
               src={`${STRAPI_URL}${post.main_image.url}`}
               alt={post.title}
-              className="mb-8 rounded-lg"
+              width={800}
+              height={450}
+              className="mb-8 rounded-lg w-full"
             />
           )}
 

@@ -11,7 +11,6 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const { amount, description, speakerId, planId, email, speakerDocumentId } = body;
-        console.log('>> speakerDocumentId из body запроса:', speakerDocumentId);
     if (!amount || !speakerId || !planId) {
       return NextResponse.json(
         { error: 'Отсутствуют обязательные параметры' },

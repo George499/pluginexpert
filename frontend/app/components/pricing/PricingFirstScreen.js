@@ -16,9 +16,10 @@ function PricingFirstScreen() {
     {/* Заголовок */}
     <div className="text-white mb-6 text-[32px] lg:text-[57px] xl:text-[81px] uppercase">
   {/* для экранов до 500px — всё в одну строку */}
-  <h1 className="block min-[631px]:leading-[4.5rem] max-[630px]:leading-[1.8rem] max-[450px]:hidden">
+  <h1 className="sr-only">Стать спикером и разместить анкету</h1>
+  <h2 className="block min-[631px]:leading-[4.5rem] max-[630px]:leading-[1.8rem] max-[450px]:hidden">
     Преимущества размещения
-  </h1>
+  </h2>
 
   {/* для экранов от 501px — две строки */}
   <div className="hidden max-[450px]:text-[24px] max-[450px]:flex flex-col leading-[1.8rem]">

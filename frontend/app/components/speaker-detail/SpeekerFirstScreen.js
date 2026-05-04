@@ -14,11 +14,6 @@ function SpeekerFirstScreen({ speaker }) {
     : "/images/default.jpg";
 
 
-  useEffect(() => {
-  console.log("Speaker object:", speaker);
-  console.log("Speaker categories raw:", speaker.categories);
-}, [speaker]);
-
   // Определение падежа вручную (аналог russian-nouns-js)
 useEffect(() => {
   if (speaker.categories?.length > 0) {

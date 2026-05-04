@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 const ProfileEditForm = ({
   formData,
@@ -72,7 +73,7 @@ const ProfileEditForm = ({
           <div className="relative shrink-0">
             <div className="w-32 h-32 bg-gray-100 rounded-2xl flex items-center justify-center overflow-hidden ring-1 ring-gray-200">
               {avatarPreview ? (
-                <img src={avatarPreview} alt="Аватар" className="w-full h-full object-cover" />
+                <Image src={avatarPreview} alt="Аватар" width={128} height={128} className="w-full h-full object-cover" />
               ) : (
                 <span className="text-gray-400 text-sm">Нет фото</span>
               )}

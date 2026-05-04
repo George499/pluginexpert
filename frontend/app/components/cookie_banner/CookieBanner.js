@@ -19,11 +19,6 @@ export default function CookieBanner() {
     }`; // хранение 7 дней
     setShow(false);
 
-    if (value === "accepted") {
-      console.log("✅ Пользователь согласился на куки");
-    } else {
-      console.log("❌ Пользователь отказался от куки");
-    }
   };
 
   if (!show) return null;

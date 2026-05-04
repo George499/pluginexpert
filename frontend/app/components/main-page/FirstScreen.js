@@ -20,6 +20,7 @@ function FirstScreen() {
         max-[320px]:mb-[36px]
       "
     >
+      <h1 className="sr-only">Найти спикера, тренера или коуча — напрямую с контактами</h1>
       {/* Заголовки */}
       <div
         className="

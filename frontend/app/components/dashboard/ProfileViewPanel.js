@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { PaymentModal, createYookassaPayment } from "./PaymentModal";
 
@@ -8,7 +9,7 @@ const SocialCard = ({ iconSrc, label, link, username }) => {
   return (
     <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg mb-2 transition-all hover:bg-gray-100">
       <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0">
-        <img src={iconSrc} alt={label} width={24} height={24} />
+        <Image src={iconSrc} alt={label} width={24} height={24} />
       </div>
       <div className="min-w-0">
         <div className="text-xs text-gray-500 uppercase tracking-wider">{label}</div>

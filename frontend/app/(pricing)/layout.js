@@ -4,9 +4,9 @@ import Header from "@/components/main-page/Header";
 import Script from "next/script";
 
 export const metadata = {
-  title: "Как стать спикером — разместить анкету спикера | Plug-In Expert",
+  title: "Как стать спикером! Разместить анкету спикера!",
   description:
-    "Стать спикером легко! Разместите анкету спикера на сайте спикерского агентства Plug-In Speakers Acceleration и получайте заказы напрямую. Продвижение, контакты и возможности для экспертов.",
+    "Стать спикером легко! Разместить анкету спикера на сайте спикерского агентства Plug-In Speakers Acceleration",
   keywords: [
     "анкеты спикеров",
     "спикерское агентство",

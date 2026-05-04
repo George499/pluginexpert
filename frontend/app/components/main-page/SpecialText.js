@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 function SpecialText() {
   const [specialText, setSpecialText] = useState(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  console.log("BlocksRenderer импортирован из:", require.resolve("@strapi/blocks-react-renderer"));
-
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,10 +31,6 @@ function SpecialText() {
   if (!blocks) {
     return <div>No content available</div>;
   }
-
-  console.log(
-  Array.isArray(blocks) ? blocks.map(b => b.type + (b.type === "heading" ? ` h${b.level}` : "")) : typeof blocks
-);
 
 const customBlocks = {
   heading: ({ level, children }) => {

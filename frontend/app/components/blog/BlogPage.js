@@ -1,5 +1,6 @@
 // components/blog/BlogPage.js
 import Link from "next/link";
+import Image from "next/image";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 const STRAPI_API_URL = `${STRAPI_URL}/api`;
@@ -12,8 +13,6 @@ async function fetchPosts() {
     if (!res.ok) throw new Error("Ошибка загрузки постов");
     const data = await res.json();
 
-    console.log(data);
-  
   return data.data.map((post) => ({
     slug: post.slug, 
     title: post.title,
@@ -42,9 +41,11 @@ export default async function BlogPage() {
           href={`/blog/${firstPost.slug}`}
           className="block md:grid md:grid-cols-2 gap-20 "
         >
-          <img
+          <Image
             src={firstPost.image}
             alt={firstPost.title}
+            width={800}
+            height={800}
             className="w-full aspect-square object-cover rounded-lg shadow-l"
           />
           <div className="flex flex-col justify-center max-w-xl space-y-4">
@@ -68,9 +69,11 @@ export default async function BlogPage() {
             href={`/blog/${post.slug}`}
             className="block rounded-lg overflow-hidden bg-[#2f2e2e]/80 shadow hover:shadow-lg transition"
           >
-            <img
+            <Image
               src={post.image}
               alt={post.title}
+              width={600}
+              height={224}
               className="w-full h-56 object-cover"
             />
             <div className="p-4 min-h-[120px] flex flex-col justify-between">
