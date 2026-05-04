@@ -6,7 +6,7 @@ import SpeakersContacts from "@/components/all-speakers/SpeakersContacts";
 import AllSpeakersSpecialText from "@/components/all-speakers/AllSpeakersSpecialText";
 import Footer from "@/components/main-page/Footer";
 
-const STRAPI_API_URL = "https://admin.pluginexpert.ru/api";
+const STRAPI_API_URL = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api`;
 
 function Category() {
   const [allSpeakers, setAllSpeakers] = useState([]);

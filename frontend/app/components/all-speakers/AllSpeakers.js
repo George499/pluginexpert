@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import ProductCard from "@/components/all-speakers/ProductCard";
 
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
+
 function AllSpeakers({ allSpeakers, allCategories }) {
   const [categories, setCategories] = useState([]);
   const [isContactsVisible, setIsContactsVisible] = useState(false);
@@ -16,7 +18,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
       const fetchCategories = async () => {
         try {
           const res = await fetch(
-            "https://admin.pluginexpert.ru/api/categories?pagination[page]=1&pagination[pageSize]=100"
+            `${STRAPI_URL}/api/categories?pagination[page]=1&pagination[pageSize]=100`
           );
           if (!res.ok) throw new Error("Ошибка загрузки категорий");
           const data = await res.json();
@@ -33,7 +35,7 @@ function AllSpeakers({ allSpeakers, allCategories }) {
     const fetchSpeakers = async () => {
       try {
         let url =
-          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true";
+          `${STRAPI_URL}/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true`;
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }

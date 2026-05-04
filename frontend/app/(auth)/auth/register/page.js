@@ -46,7 +46,7 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://admin.pluginexpert.ru/api/auth/local/register",
+        `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api/auth/local/register`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

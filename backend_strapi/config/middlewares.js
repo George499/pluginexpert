@@ -16,6 +16,7 @@ module.exports = ({ env }) => [
   'strapi::poweredBy',
   'strapi::query',
   'strapi::body',
+  'global::upload-ownership',
   'strapi::session',
   'strapi::favicon',
   'strapi::public',

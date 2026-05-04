@@ -29,7 +29,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://admin.pluginexpert.ru/api/auth/local",
+        `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api/auth/local`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

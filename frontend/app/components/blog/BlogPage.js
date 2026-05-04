@@ -1,7 +1,8 @@
 // components/blog/BlogPage.js
 import Link from "next/link";
 
-const STRAPI_API_URL = "https://admin.pluginexpert.ru/api";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
+const STRAPI_API_URL = `${STRAPI_URL}/api`;
 
 async function fetchPosts() {
   const res = await fetch(
@@ -17,7 +18,7 @@ async function fetchPosts() {
     slug: post.slug, 
     title: post.title,
     image: post.main_image?.url 
-  ? `https://admin.pluginexpert.ru${post.main_image.url}`
+  ? `${STRAPI_URL}${post.main_image.url}`
   : "/images/placeholder.jpg",
     date: new Date(post.createdAt).toLocaleDateString("ru-RU"),
   }));

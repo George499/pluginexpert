@@ -5,7 +5,7 @@ import ProfileViewPanel from "./ProfileViewPanel";
 import ProfileEditForm from "./ProfileEditForm";
 import imageCompression from "browser-image-compression";
 
-const API_URL = "https://admin.pluginexpert.ru";
+const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
 const ProfileForm = () => {
   const [formData, setFormData] = useState({

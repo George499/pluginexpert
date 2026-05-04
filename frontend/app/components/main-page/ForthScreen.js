@@ -7,6 +7,8 @@ import { motion } from "framer-motion";
 // import CustomButton from "./CustomButton"; // Assuming CustomButton is a separate component
 import Product from "./Product";
 
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
+
 function ForthScreen() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
@@ -17,7 +19,7 @@ function ForthScreen() {
     const fetchCategories = async () => {
       try {
         const res = await fetch(
-          "https://admin.pluginexpert.ru/api/categories?pagination[page]=1&pagination[pageSize]=100"
+          `${STRAPI_URL}/api/categories?pagination[page]=1&pagination[pageSize]=100`
         );
         if (!res.ok) throw new Error("Ошибка загрузки категорий");
         const data = await res.json();
@@ -34,7 +36,7 @@ function ForthScreen() {
     const fetchSpeakers = async () => {
       try {
         let url =
-          "https://admin.pluginexpert.ru/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true";
+          `${STRAPI_URL}/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true`;
         if (selectedCategory !== "all-categories") {
           url += `&filters[categories][slug][$eq]=${selectedCategory}`;
         }

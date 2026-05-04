@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }) => {
       }
 
       try {
-        const res = await fetch("https://admin.pluginexpert.ru/api/users/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api/users/me`, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
 

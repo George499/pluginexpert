@@ -11,7 +11,7 @@ function Product({ speaker }) {
   const { Name, Slug, Profession } = speaker;
 
   const imageUrl = speaker.gallery?.[0]?.url
-    ? `https://admin.pluginexpert.ru${speaker.gallery[0].url}`
+    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}${speaker.gallery[0].url}`
     : "/images/default.jpg";
 
   return (

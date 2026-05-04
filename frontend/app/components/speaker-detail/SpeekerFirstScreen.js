@@ -10,7 +10,7 @@ function SpeekerFirstScreen({ speaker }) {
 
   // Получаем URL аватара из новой структуры данных Strapi 5
   const avatarUrl = speaker.gallery?.[0]?.url
-    ? `https://admin.pluginexpert.ru${speaker.gallery[0].url}`
+    ? `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}${speaker.gallery[0].url}`
     : "/images/default.jpg";
 
 

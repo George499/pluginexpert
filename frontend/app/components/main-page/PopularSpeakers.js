@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const API_BASE_URL = "https://admin.pluginexpert.ru";
+const API_BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
 function PopularSpeakers() {
   const [popularSpeakers, setPopularSpeakers] = useState([]);

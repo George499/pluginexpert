@@ -2,7 +2,7 @@
  * Вспомогательный файл с утилитами для работы с профилем спикера
  */
 
-const API_URL = "https://admin.pluginexpert.ru";
+const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
 /**
  * Извлекает обычный текст из Rich Text формата Strapi

@@ -10,7 +10,7 @@ function SpecialText() {
     async function fetchData() {
       try {
         const response = await fetch(
-        "https://admin.pluginexpert.ru/api/special-texts?filters[page][$eq]=all-speakers&populate=*",
+        `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api/special-texts?filters[page][$eq]=all-speakers&populate=*`,
         { cache: "no-store" }
         );
         const data = await response.json();

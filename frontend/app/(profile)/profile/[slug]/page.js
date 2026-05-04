@@ -6,7 +6,8 @@ import Footer from "@/components/main-page/Footer";
 import SpeakerPrice from "@/components/speaker-detail/SpeakerPrice";
 import Script from "next/script";
 
-const STRAPI_API_URL = "https://admin.pluginexpert.ru/api/speakers";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
+const STRAPI_API_URL = `${STRAPI_URL}/api/speakers`;
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }) {
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }) {
     speaker.Description || `Профиль спикера ${speakerName} на Plug-In Expert`;
   const speakerImage =
     speaker.Photo?.url
-      ? `https://admin.pluginexpert.ru${speaker.Photo.url}`
+      ? `${STRAPI_URL}${speaker.Photo.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
 
@@ -71,7 +72,7 @@ export default async function SpeekerPage({ params }) {
     speaker.Description || `Профиль спикера ${speakerName}`;
   const speakerImage =
     speaker.Photo?.url
-      ? `https://admin.pluginexpert.ru${speaker.Photo.url}`
+      ? `${STRAPI_URL}${speaker.Photo.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
 

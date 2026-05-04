@@ -7,12 +7,13 @@ import { BlocksRenderer } from "@strapi/blocks-react-renderer";
 export default function PostDetail() {
   const { slug } = useParams();  // 👈 достаём slug из URL
   const [post, setPost] = useState(null);
+  const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
   useEffect(() => {
     async function fetchPost() {
       try {
         const res = await fetch(
-          `https://admin.pluginexpert.ru/api/posts?filters[slug][$eq]=${slug}&populate=*`
+          `${STRAPI_URL}/api/posts?filters[slug][$eq]=${slug}&populate=*`
         );
         if (!res.ok) throw new Error("Ошибка загрузки поста");
         const data = await res.json();
@@ -76,7 +77,7 @@ export default function PostDetail() {
 
           {post.main_image?.url && (
             <img
-              src={`https://admin.pluginexpert.ru${post.main_image.url}`}
+              src={`${STRAPI_URL}${post.main_image.url}`}
               alt={post.title}
               className="mb-8 rounded-lg"
             />
