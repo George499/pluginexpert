@@ -105,8 +105,8 @@ function SpeakerContacts({ speaker }) {
       <div>
         <p className="mb-3">Социальные сети спикера:</p>
         <div className="flex flex-row items-center gap-4 flex-wrap">
-          {socials.map((social, index) => (
-            <a key={index} href={social.url} target="_blank" rel="noopener noreferrer" 
+          {socials.map((social) => (
+            <a key={social.url} href={social.url} target="_blank" rel="noopener noreferrer" 
                className="hover:opacity-80 transition-opacity duration-200">
               {social.icon}
             </a>

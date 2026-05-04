@@ -114,8 +114,8 @@ const ProfileEditForm = ({
           Галерея изображений
         </h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-4">
-          {galleryPreviews.map((preview, index) => (
-            <div key={index} className="relative group">
+          {galleryPreviews.map((preview) => (
+            <div key={preview} className="relative group">
               <div className="aspect-[4/3] bg-gray-100 rounded-xl overflow-hidden ring-1 ring-gray-200">
                 <img
                   src={preview}
