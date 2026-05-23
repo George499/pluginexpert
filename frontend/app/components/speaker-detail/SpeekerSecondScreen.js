@@ -68,8 +68,8 @@ function SpeakerSecondScreen({ speaker }) {
                 Для уточнения темы выступления спикера  <a href="#contacts" className="text-[#4e5ac3] hover:underline">
                                                           свяжитесь с нами по почте
                                                         </a>{" "}
-                <a 
-                  href="mailto:mailto:hello@pluginexpert.ru" 
+                <a
+                  href="mailto:hello@pluginexpert.ru"
                   className="text-blue-300 hover:underline transition-colors duration-200"
                 >
                   hello@pluginexpert.ru

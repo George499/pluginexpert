@@ -121,7 +121,7 @@ function SpeakerContacts({ speaker }) {
     <p className="mb-4 font-bold uppercase">КОНТАКТЫ АГЕНТСТВА</p>
     <div className="flex items-center gap-3 mb-4" id="contacts">
       <FaEnvelope className="text-white w-[25px] h-[25px]" />
-      <a href="mailto:mailto:hello@pluginexpert.ru" className="hover:text-blue-300 transition-colors duration-200">
+      <a href="mailto:hello@pluginexpert.ru" className="hover:text-blue-300 transition-colors duration-200">
         hello@pluginexpert.ru
       </a>
     </div>
