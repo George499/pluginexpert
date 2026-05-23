@@ -18,6 +18,17 @@ const nextConfig = {
         destination: "/blog",
         permanent: true, // 301 редирект
       },
+      // Дубли блога — канонические URL подтверждены клиентом
+      {
+        source: "/blog/aktualnaya-baza-spikerov-s-ih-pryamymi-kontaktami-2025g",
+        destination: "/blog/aktualnaya-baza-spikerov-s-ih-pryamymi-kontaktami-2025-godu",
+        permanent: true,
+      },
+      {
+        source: "/blog/kak-stat-spikerom",
+        destination: "/blog/kak-stat-spikerom-vash-put-k-sczene-i-uspehu",
+        permanent: true,
+      },
     ];
   },
 };
