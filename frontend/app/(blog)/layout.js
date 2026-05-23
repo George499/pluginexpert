@@ -11,9 +11,11 @@ const play = Play({ subsets: ["latin"], weight: ["400", "700"] });
 
 
 export const metadata = {
-   title: "Блог о спикерах, тренерах и мероприятиях | Plug-In Expert",
+  // template '%s | Plug-In Expert' из root layout добавит хвост — не дублируем здесь
+  title: "Блог о спикерах, тренерах и мероприятиях",
   description:
     "Читайте статьи о спикерах, тренерах, ивент-индустрии и корпоративных мероприятиях. Советы по подбору спикеров, продвижению и организации событий без посредников.",
+  alternates: { canonical: "https://pluginexpert.ru/blog" },
   keywords: [
     "блог о спикерах",
     "организация мероприятий",

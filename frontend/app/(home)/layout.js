@@ -7,6 +7,7 @@ export const metadata = {
   title: "База спикеров, тренеров и коучей с контактами",
   description:
     "Открытая база спикеров, тренеров и коучей с контактными данными. Найти спикера без посредников. Спикерское агентство Plug-In Speakers Acceleration",
+  alternates: { canonical: "https://pluginexpert.ru/" },
   keywords: [
     "база спикеров",
     "спикерское агентство",

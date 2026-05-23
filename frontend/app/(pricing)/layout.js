@@ -7,6 +7,7 @@ export const metadata = {
   title: "Как стать спикером! Разместить анкету спикера!",
   description:
     "Стать спикером легко! Разместить анкету спикера на сайте спикерского агентства Plug-In Speakers Acceleration",
+  alternates: { canonical: "https://pluginexpert.ru/pricing" },
   keywords: [
     "анкеты спикеров",
     "спикерское агентство",
