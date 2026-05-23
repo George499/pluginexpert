@@ -5,6 +5,7 @@ import SpeekerSecondScreen from "@/components/speaker-detail/SpeekerSecondScreen
 import Footer from "@/components/main-page/Footer";
 import SpeakerPrice from "@/components/speaker-detail/SpeakerPrice";
 import Script from "next/script";
+import { notFound } from "next/navigation";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 const STRAPI_API_URL = `${STRAPI_URL}/api/speakers`;
@@ -15,28 +16,33 @@ export async function generateMetadata({ params }) {
   const speaker = await getSpeaker(slug);
 
   if (!speaker) {
+    // Не индексируем несуществующих спикеров — пара /profile/test, /profile/preload уже попала в индекс Яндекса как soft-404 дубли
     return {
-      title: "Спикер не найден | Plug-In Expert",
+      title: "Спикер не найден",
       description: "Страница спикера не найдена",
+      robots: { index: false, follow: false },
     };
   }
 
   const speakerName = speaker.Name || "Спикер";
+  const speakerProfession = speaker.Profession || "Спикер";
   const speakerDescription =
     speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName} на Plug-In Expert`;
   const speakerImage =
     speaker.avatar?.url
-      ? `${STRAPI_URL}${speaker.Photo.url}`
+      ? `${STRAPI_URL}${speaker.avatar.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
+  const speakerTitle = `${speakerName} — ${speakerProfession}`;
 
   return {
-    title: `${speakerName} | Спикер | Plug-In Expert`,
+    title: speakerTitle,
     description: speakerDescription,
+    alternates: { canonical: speakerUrl },
     openGraph: {
       type: "profile",
       url: speakerUrl,
-      title: `${speakerName} | Спикер | Plug-In Expert`,
+      title: `${speakerTitle} | Plug-In Expert`,
       description: speakerDescription,
       siteName: "Plug-In Expert",
       images: [
@@ -50,7 +56,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${speakerName} | Спикер | Plug-In Expert`,
+      title: `${speakerTitle} | Plug-In Expert`,
       description: speakerDescription,
       images: [speakerImage],
     },
@@ -64,7 +70,7 @@ export default async function SpeekerPage({ params }) {
   const speaker = await getSpeaker(slug);
 
   if (!speaker) {
-    return <h1>Спикер не найден</h1>;
+    notFound(); // real HTTP 404, не soft-404 c пустым H1
   }
 
   const speakerName = speaker.Name || "Спикер";
@@ -72,7 +78,7 @@ export default async function SpeekerPage({ params }) {
     speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName}`;
   const speakerImage =
     speaker.avatar?.url
-      ? `${STRAPI_URL}${speaker.Photo.url}`
+      ? `${STRAPI_URL}${speaker.avatar.url}`
       : "https://pluginexpert.ru/images/plugin.jpg";
   const speakerUrl = `https://pluginexpert.ru/profile/${slug}`;
 
@@ -92,10 +98,11 @@ export default async function SpeekerPage({ params }) {
     },
   };
 
-  if (speaker.categories && speaker.categories.data) {
-    personSchema.knowsAbout = speaker.categories.data.map(
-      (cat) => cat.attributes?.Name || cat.Name
-    );
+  // Strapi 5: relations приходят как массив объектов без .data/.attributes
+  if (Array.isArray(speaker.categories) && speaker.categories.length > 0) {
+    personSchema.knowsAbout = speaker.categories
+      .map((cat) => cat.Name)
+      .filter(Boolean);
   }
 
   return (
