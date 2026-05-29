@@ -70,7 +70,7 @@ export const metadata = {
     },
   },
   verification: {
-    google: "hQF2Nn8kR3vXmP7wYsL9tBcD4eG6jK1aZ0uI5oN2xQ",
+    google: "5wW98_Ioh6rAjVE5X_rHjnjklNbQRSAE2p52Xm8P4Cw",
     // yandex добавим, когда зарегистрируем счётчик
   },
 };
@@ -191,9 +191,9 @@ export default function RootLayout({ children }) {
           </div>
         </noscript>
 
-        {/* Google Analytics 4 — G-K3M8WP2RT5 */}
+        {/* Google Analytics 4 — G-P6HJRZY999 */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-K3M8WP2RT5"
+          src="https://www.googletagmanager.com/gtag/js?id=G-P6HJRZY999"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -201,7 +201,7 @@ export default function RootLayout({ children }) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-K3M8WP2RT5');
+            gtag('config', 'G-P6HJRZY999');
           `}
         </Script>
       </body>
