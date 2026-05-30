@@ -1,74 +1,37 @@
-"use client";
+import PopularSpeakersList from "./PopularSpeakersList";
 
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
+const STRAPI_API_URL = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}/api`;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
-
-function PopularSpeakers() {
-  const [popularSpeakers, setPopularSpeakers] = useState([]);
-
-  useEffect(() => {
-    const fetchPopularSpeakers = async () => {
-      try {
-        const res = await fetch(
-          `${API_BASE_URL}/api/popular-speakers?populate=image`
-        );
-        if (!res.ok) throw new Error("Ошибка загрузки популярных спикеров");
-        const data = await res.json();
-        setPopularSpeakers(data.data);
-      } catch (error) {
-        console.error("Ошибка:", error);
-      }
-    };
-
-    fetchPopularSpeakers();
-  }, []);
-
-  return (
-    <div className="bg-[#42484d]">
-      <motion.div
-        initial={{ x: "-100vw" }}
-        animate={{ x: 0 }}
-        transition={{ type: "spring", stiffness: 50 }}
-        className="grid grid-cols-2 lg:grid-cols-3 gap-0"
-      >
-        {popularSpeakers?.map((speaker) => {
-          const imageUrl = speaker.image?.[0]?.url;
-          if (!imageUrl) return null;
-          return (
-          <div className="group relative" key={speaker.id}>
-             <div className="relative w-full aspect-[4/5]">
-                <Image
-                  src={`${API_BASE_URL}${imageUrl}`}
-                  alt={speaker.name ? `Фото: ${speaker.name}` : "Спикер"}
-                  fill
-                  sizes="(max-width: 1024px) 50vw, 33vw"
-                  className="object-cover rounded"
-                  priority={false}
-                />
-            </div>
-
-
-            <div className="hidden absolute w-full h-full top-0 left-0 lg:flex">
-              {/* Прозрачный фон */}
-              <div className="absolute w-full h-full bg-[#4e5ac3] lg:opacity-0 lg:group-hover:opacity-50 opacity-60 transition-opacity-60 duration-700"></div>
-
-              {/* Контент (name и description) */}
-              <div className="cursor-pointer relative z-10 w-full h-full flex flex-col items-center justify-center text-center lg:opacity-0 lg:group-hover:opacity-100 transition-opacity-60 duration-700">
-                <h3 className="text-[30px] text-[#000000]">{speaker.name}</h3>
-                <p className="hidden lg:block lg:text-[15px] text-[#fffffe]">
-                  {speaker.description}
-                </p>
-              </div>
-            </div>
-          </div>
-          );
-        })}
-      </motion.div>
-    </div>
-  );
+async function getPopularSpeakers() {
+  try {
+    const res = await fetch(
+      `${STRAPI_API_URL}/speakers?filters[isPaid][$eq]=true&populate[0]=gallery&pagination[pageSize]=6`,
+      { next: { revalidate: 60 } }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.data || [];
+  } catch (error) {
+    console.error("Ошибка загрузки популярных спикеров:", error);
+    return [];
+  }
 }
 
-export default PopularSpeakers;
+// Серверный компонент: фетчит спикеров на сервере → попадают в SSR-HTML (видны поисковику).
+export default async function PopularSpeakers() {
+  const popularSpeakers = await getPopularSpeakers();
+
+  // Если нет спикеров — не отображаем блок
+  if (popularSpeakers.length === 0) return null;
+
+  return (
+    <section className="bg-[url('/images/bkground_1.png')] bg-fixed bg-cover py-20">
+      <div className="container w-4/5 lg:w-2/3 mx-auto">
+        <h2 className="text-white text-[40px] lg:text-[57px] font-bold mb-12 text-center">
+          ПОПУЛЯРНЫЕ СПИКЕРЫ
+        </h2>
+        <PopularSpeakersList speakers={popularSpeakers} />
+      </div>
+    </section>
+  );
+}
