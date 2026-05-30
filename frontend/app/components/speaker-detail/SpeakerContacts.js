@@ -64,9 +64,9 @@ function SpeakerContacts({ speaker }) {
     >
       <div className="container flex flex-col w-4/5 lg:w-2/3 h-full items-start justify-center my-10 lg:my-[81px]">
         <div className="w-[51px] h-[12px] mb-[21px] bg-white"></div>
-        <h1 className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white font-bold mb-[57px]">
+        <h2 className="text-[40px] lg:text-[57px] xl:text-[81px] leading-[2.5rem] lg:leading-[4.5rem] text-white font-bold mb-[57px]">
           КОНТАКТЫ СПИКЕРА
-        </h1>
+        </h2>
         <div className="text-white text-[16px] lg:text-[20px] tracking-normal font-normal">
           <p className="mb-[46px]">
             Вас заинтересовал спикер {speaker.Name}? <br />

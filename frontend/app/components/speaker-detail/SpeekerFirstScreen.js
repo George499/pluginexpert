@@ -64,10 +64,10 @@ useEffect(() => {
       ">
         {/* Левая часть */}
         <div className=" flex flex-col max-[1000px]:self-start self-center mr-12">
-          <p className="text-white">{nameParts[1]?.toUpperCase()}</p>
-          <p className="text-white tracking-tighter max-[1000px]:mb-5 ">
-            {nameParts[0]?.toUpperCase()}
-          </p>
+          <h1 className="text-white tracking-tighter">
+            <span className="block">{nameParts[1]?.toUpperCase()}</span>
+            <span className="block max-[1000px]:mb-5">{nameParts[0]?.toUpperCase()}</span>
+          </h1>
 
           <div className="text-white tracking-tighter relative">
             <div className="w-full h-[1px] ml-[5px] bg-white absolute max-[500px]:w-1/2"></div>
