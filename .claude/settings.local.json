@@ -15,7 +15,8 @@
       "PowerShell([Console]::OutputEncoding = [System.Text.UTF8Encoding]::new\\(\\); $p = \"C:\\\\Users\\\\gi32m\\\\OneDrive\\\\Документы\\\\Github\\\\pluginexpert\\\\backend_strapi\"; $items = Get-ChildItem -LiteralPath $p -Force; Write-Output \"Count: $\\($items.Count\\)\"; $items | Select-Object -First 30 | ForEach-Object { Write-Output \\(\"{0,-12} {1}\" -f $_.Mode, $_.Name\\) })",
       "PowerShell([Console]::OutputEncoding = [System.Text.UTF8Encoding]::new\\(\\); $p = \"C:\\\\Users\\\\gi32m\\\\OneDrive\\\\Документы\\\\Github\\\\pluginexpert\\\\backend_strapi\"; \\(Get-Item -LiteralPath $p\\).Attributes; Get-ChildItem -LiteralPath $p -Force -Hidden:$false | Format-Table -AutoSize)",
       "Bash(git -C \"C:/Users/gi32m/OneDrive/Документы/Github/pluginexpert\" status -s)",
-      "Bash(awk '{print $1}')"
+      "Bash(awk '{print $1}')",
+      "WebFetch(domain:pluginexpert.ru)"
     ]
   }
 }

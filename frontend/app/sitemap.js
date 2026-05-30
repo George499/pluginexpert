@@ -9,20 +9,45 @@ export default async function sitemap() {
     { url: `${BASE_URL}/blog`, lastModified: new Date(), priority: 0.7, changeFrequency: 'weekly' },
   ];
 
+  // Платные спикеры
+  let speakerPages = [];
   try {
     const res = await fetch(
       `${STRAPI_URL}/api/speakers?filters[isPaid][$eq]=true&fields[0]=Slug&fields[1]=updatedAt&pagination[pageSize]=1000`,
       { next: { revalidate: 3600 } }
     );
     const data = await res.json();
-    const speakerPages = (data.data || []).map((speaker) => ({
-      url: `${BASE_URL}/profile/${speaker.Slug}`,
-      lastModified: speaker.updatedAt ? new Date(speaker.updatedAt) : new Date(),
-      priority: 0.6,
-      changeFrequency: 'monthly',
-    }));
-    return [...staticPages, ...speakerPages];
+    speakerPages = (data.data || [])
+      .filter((s) => s.Slug)
+      .map((speaker) => ({
+        url: `${BASE_URL}/profile/${speaker.Slug}`,
+        lastModified: speaker.updatedAt ? new Date(speaker.updatedAt) : new Date(),
+        priority: 0.6,
+        changeFrequency: 'monthly',
+      }));
   } catch {
-    return staticPages;
+    // спикеры недоступны — пропускаем, остальное всё равно отдаём
   }
+
+  // Статьи блога
+  let postPages = [];
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/api/posts?fields[0]=slug&fields[1]=updatedAt&pagination[pageSize]=1000`,
+      { next: { revalidate: 3600 } }
+    );
+    const data = await res.json();
+    postPages = (data.data || [])
+      .filter((p) => p.slug)
+      .map((post) => ({
+        url: `${BASE_URL}/blog/${post.slug}`,
+        lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
+        priority: 0.7,
+        changeFrequency: 'monthly',
+      }));
+  } catch {
+    // посты недоступны — пропускаем
+  }
+
+  return [...staticPages, ...postPages, ...speakerPages];
 }
