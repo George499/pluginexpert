@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import { FaTelegram } from "react-icons/fa";
 import { RiWhatsappFill } from "react-icons/ri";
 import Link from "next/link";
@@ -7,31 +9,20 @@ import ProductCard from "@/components/all-speakers/ProductCard";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
-function AllSpeakers({ allSpeakers, allCategories }) {
-  const [categories, setCategories] = useState([]);
+function AllSpeakers({ initialSpeakers = [], initialCategories = [] }) {
+  const [categories] = useState(initialCategories);
   const [isContactsVisible, setIsContactsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
   const [visibleCount, setVisibleCount] = useState(15);
-  const [speakers, setSpeakers] = useState([]);
+  const [speakers, setSpeakers] = useState(initialSpeakers);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-      const fetchCategories = async () => {
-        try {
-          const res = await fetch(
-            `${STRAPI_URL}/api/categories?pagination[page]=1&pagination[pageSize]=100`
-          );
-          if (!res.ok) throw new Error("Ошибка загрузки категорий");
-          const data = await res.json();
-          setCategories(data.data);
-        } catch (error) {
-          console.error("Ошибка:", error);
-        }
-      };
-  
-      fetchCategories();
-    }, []);
-
-  useEffect(() => {
+    // Первый рендер пропускаем — спикеры уже пришли с сервера (SSR, в HTML)
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const fetchSpeakers = async () => {
       try {
         let url =
