@@ -3,7 +3,7 @@ export default function robots() {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/dashboard/', '/auth/', '/payment-complete'],
+      disallow: ['/api/', '/dashboard/', '/auth/', '/payment-complete', '/docs/'],
     },
     sitemap: 'https://pluginexpert.ru/sitemap.xml',
   };
