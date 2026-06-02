@@ -10,8 +10,8 @@ const play = Play({ subsets: ["latin"], weight: ["400", "700"], variable: "--fon
 export const metadata = {
   metadataBase: new URL("https://pluginexpert.ru"),
   title: {
-    default: "Plug-In Expert — база спикеров, тренеров и коучей",
-    template: "%s | Plug-In Expert",
+    default: "Прямая Речь — база спикеров, тренеров и коучей",
+    template: "%s | Прямая Речь",
   },
   description:
     "Агентство по подбору спикеров, тренеров и коучей. Открытая база спикеров с контактными данными. Найдите спикера без посредников для корпоративных и маркетинговых мероприятий.",
@@ -26,9 +26,9 @@ export const metadata = {
     "найти тренера",
     "подбор спикеров",
   ],
-  authors: [{ name: "Plug-In Expert" }],
-  creator: "Plug-In Expert",
-  publisher: "Plug-In Expert",
+  authors: [{ name: "Прямая Речь" }],
+  creator: "Прямая Речь",
+  publisher: "Прямая Речь",
   formatDetection: {
     email: false,
     address: false,
@@ -38,8 +38,8 @@ export const metadata = {
     type: "website",
     locale: "ru_RU",
     url: "https://pluginexpert.ru",
-    siteName: "Plug-In Expert",
-    title: "Plug-In Expert — база спикеров, тренеров и коучей",
+    siteName: "Прямая Речь",
+    title: "Прямая Речь — база спикеров, тренеров и коучей",
     description:
       "Агентство по подбору спикеров, тренеров и коучей. Открытая база спикеров с контактными данными. Найдите спикера без посредников.",
     images: [
@@ -47,13 +47,13 @@ export const metadata = {
         url: "https://pluginexpert.ru/images/plugin.jpg",
         width: 1200,
         height: 630,
-        alt: "Plug-In Expert — база спикеров без посредников",
+        alt: "Прямая Речь — база спикеров без посредников",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Plug-In Expert — база спикеров, тренеров и коучей",
+    title: "Прямая Речь — база спикеров, тренеров и коучей",
     description:
       "Агентство по подбору спикеров, тренеров и коучей. Открытая база спикеров с контактными данными.",
     images: ["https://pluginexpert.ru/images/plugin.jpg"],
@@ -87,8 +87,8 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "Organization",
               "@id": "https://pluginexpert.ru/#organization",
-              name: "Plug-In Expert",
-              alternateName: "ПРЯМАЯ РЕЧЬ БАЗА СПИКЕРОВ",
+              name: "Прямая Речь",
+              alternateName: "Прямая Речь — база спикеров",
               url: "https://pluginexpert.ru",
               logo: "https://pluginexpert.ru/images/plugin.jpg",
               description:
@@ -118,7 +118,7 @@ export default function RootLayout({ children }) {
               "@type": "WebSite",
               "@id": "https://pluginexpert.ru/#website",
               url: "https://pluginexpert.ru",
-              name: "Plug-In Expert",
+              name: "Прямая Речь",
               description:
                 "Агентство по подбору спикеров, тренеров и коучей. Открытая база спикеров с контактными данными.",
               publisher: {
@@ -144,7 +144,7 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
               "@id": "https://pluginexpert.ru/#localbusiness",
-              name: "Plug-In Expert",
+              name: "Прямая Речь",
               image: "https://pluginexpert.ru/images/plugin.jpg",
               url: "https://pluginexpert.ru",
               telephone: "+7-915-385-75-91",

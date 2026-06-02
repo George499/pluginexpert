@@ -52,7 +52,7 @@ export async function generateMetadata({ params }) {
   const url = `${SITE_URL}/blog/${slug}`;
   const description =
     extractDescription(post.content) ||
-    "Статья блога Plug-In Expert о спикерах, тренерах и корпоративных мероприятиях.";
+    "Статья блога Прямая Речь о спикерах, тренерах и корпоративных мероприятиях.";
   const imageUrl = post.main_image?.url
     ? `${STRAPI_URL}${post.main_image.url}`
     : `${SITE_URL}/images/plugin.jpg`;
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }) {
       url,
       title: post.title,
       description,
-      siteName: "Plug-In Expert",
+      siteName: "Прямая Речь",
       images: [{ url: imageUrl, width: 1200, height: 630, alt: post.title }],
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
@@ -95,7 +95,7 @@ export default async function PostPage({ params }) {
     : `${SITE_URL}/images/plugin.jpg`;
   const description =
     extractDescription(post.content) ||
-    "Статья блога Plug-In Expert о спикерах, тренерах и корпоративных мероприятиях.";
+    "Статья блога Прямая Речь о спикерах, тренерах и корпоративных мероприятиях.";
 
   // BlogPosting schema — для rich-results в Яндекс/Google
   const articleSchema = {
@@ -109,12 +109,12 @@ export default async function PostPage({ params }) {
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     author: {
       "@type": "Organization",
-      name: "Plug-In Expert",
+      name: "Прямая Речь",
       url: SITE_URL,
     },
     publisher: {
       "@type": "Organization",
-      name: "Plug-In Expert",
+      name: "Прямая Речь",
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/images/plugin.jpg`,

@@ -3,9 +3,9 @@ import { AnimatePresence } from "framer-motion";
 import Header from "@/components/auth/Header";
 
 export const metadata = {
-  title: "Вход или регистрация | Plug-In Expert",
+  title: "Вход или регистрация | Прямая Речь",
   description:
-    "Авторизация и регистрация на сайте Plug-In Expert. Войдите в личный кабинет или создайте новую учетную запись.",
+    "Авторизация и регистрация на сайте Прямая Речь. Войдите в личный кабинет или создайте новую учетную запись.",
 };
 
 export default function AuthLayout({ children }) {

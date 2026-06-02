@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
   const speakerName = speaker.Name || "Спикер";
   const speakerProfession = speaker.Profession || "Спикер";
   const speakerDescription =
-    speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName} на Plug-In Expert`;
+    speaker.Profession ? `${speaker.Profession} — профиль на Прямая Речь` : `Профиль спикера ${speakerName} на Прямая Речь`;
   const speakerImage =
     speaker.avatar?.url
       ? `${STRAPI_URL}${speaker.avatar.url}`
@@ -42,21 +42,21 @@ export async function generateMetadata({ params }) {
     openGraph: {
       type: "profile",
       url: speakerUrl,
-      title: `${speakerTitle} | Plug-In Expert`,
+      title: `${speakerTitle} | Прямая Речь`,
       description: speakerDescription,
-      siteName: "Plug-In Expert",
+      siteName: "Прямая Речь",
       images: [
         {
           url: speakerImage,
           width: 1200,
           height: 630,
-          alt: `${speakerName} — спикер на Plug-In Expert`,
+          alt: `${speakerName} — спикер на Прямая Речь`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${speakerTitle} | Plug-In Expert`,
+      title: `${speakerTitle} | Прямая Речь`,
       description: speakerDescription,
       images: [speakerImage],
     },
@@ -75,7 +75,7 @@ export default async function SpeekerPage({ params }) {
 
   const speakerName = speaker.Name || "Спикер";
   const speakerDescription =
-    speaker.Profession ? `${speaker.Profession} — профиль на Plug-In Expert` : `Профиль спикера ${speakerName}`;
+    speaker.Profession ? `${speaker.Profession} — профиль на Прямая Речь` : `Профиль спикера ${speakerName}`;
   const speakerImage =
     speaker.avatar?.url
       ? `${STRAPI_URL}${speaker.avatar.url}`
@@ -93,7 +93,7 @@ export default async function SpeekerPage({ params }) {
     jobTitle: speaker.Profession || "Спикер",
     worksFor: {
       "@type": "Organization",
-      name: "Plug-In Expert",
+      name: "Прямая Речь",
       url: "https://pluginexpert.ru",
     },
   };

@@ -6,7 +6,7 @@ import Script from "next/script";
 export const metadata = {
   title: "Как стать спикером! Разместить анкету спикера!",
   description:
-    "Стать спикером легко! Разместить анкету спикера на сайте спикерского агентства Plug-In Speakers Acceleration",
+    "Стать спикером легко! Разместить анкету спикера на сайте спикерского агентства Прямая Речь",
   alternates: { canonical: "https://pluginexpert.ru/pricing" },
   keywords: [
     "анкеты спикеров",
@@ -15,31 +15,31 @@ export const metadata = {
     "работа для спикеров",
     "стать спикером",
     "сайт со спикерами",
-    "Plug-In Speakers Acceleration",
+    "Прямая Речь",
   ],
 
   openGraph: {
     type: "website",
     url: "https://pluginexpert.ru/pricing",
-    title: "Как стать спикером — разместить анкету спикера | Plug-In Expert",
+    title: "Как стать спикером — разместить анкету спикера | Прямая Речь",
     description:
-      "Разместите анкету спикера на сайте Plug-In Expert и начните получать заказы напрямую. Мы поможем вам заявить о себе на рынке выступлений.",
-    siteName: "Plug-In Expert",
+      "Разместите анкету спикера на сайте Прямая Речь и начните получать заказы напрямую. Мы поможем вам заявить о себе на рынке выступлений.",
+    siteName: "Прямая Речь",
     images: [
       {
         url: "https://pluginexpert.ru/images/plugin.jpg",
         width: 1200,
         height: 630,
-        alt: "Plug-In Expert — разместить анкету спикера",
+        alt: "Прямая Речь — разместить анкету спикера",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Как стать спикером — разместить анкету спикера | Plug-In Expert",
+    title: "Как стать спикером — разместить анкету спикера | Прямая Речь",
     description:
-      "Разместите анкету спикера на сайте Plug-In Expert и начните получать заказы напрямую. Мы поможем вам заявить о себе на рынке выступлений.",
+      "Разместите анкету спикера на сайте Прямая Речь и начните получать заказы напрямую. Мы поможем вам заявить о себе на рынке выступлений.",
     images: ["https://pluginexpert.ru/images/plugin.jpg"],
   },
 };
@@ -55,10 +55,10 @@ export default function PricingLayout({ children }) {
             "@context": "https://schema.org",
             "@type": "Organization",
             "url": "https://pluginexpert.ru/pricing",
-            "name": "Plug-In Expert",
+            "name": "Прямая Речь",
             "logo": "https://pluginexpert.ru/images/plugin.jpg",
             "description":
-              "Разместите анкету спикера на сайте Plug-In Expert и начните получать заказы напрямую. Агентство по подбору и продвижению спикеров, тренеров и коучей.",
+              "Разместите анкету спикера на сайте Прямая Речь и начните получать заказы напрямую. Агентство по подбору и продвижению спикеров, тренеров и коучей.",
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+7 (915) 385-75-91",

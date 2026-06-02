@@ -6,7 +6,7 @@ import Script from "next/script";
 export const metadata = {
   title: "База спикеров, тренеров и коучей с контактами",
   description:
-    "Открытая база спикеров, тренеров и коучей с контактными данными. Найти спикера без посредников. Спикерское агентство Plug-In Speakers Acceleration",
+    "Открытая база спикеров, тренеров и коучей с контактными данными. Найти спикера без посредников. Спикерское агентство Прямая Речь",
   alternates: { canonical: "https://pluginexpert.ru/" },
   keywords: [
     "база спикеров",
@@ -22,23 +22,23 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://pluginexpert.ru/",
-    title: "Plug-In Expert — база спикеров, тренеров и коучей",
+    title: "Прямая Речь — база спикеров, тренеров и коучей",
     description:
       "Открытая база спикеров и тренеров с прямыми контактами. Подбор без посредников для корпоративных и маркетинговых мероприятий.",
-    siteName: "Plug-In Expert",
+    siteName: "Прямая Речь",
     images: [
       {
         url: "https://pluginexpert.ru/images/plugin.jpg",
         width: 1200,
         height: 630,
-        alt: "Plug-In Expert — база спикеров без посредников",
+        alt: "Прямая Речь — база спикеров без посредников",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Plug-In Expert — база спикеров, тренеров и коучей",
+    title: "Прямая Речь — база спикеров, тренеров и коучей",
     description:
       "База спикеров, тренеров и коучей с прямыми контактами. Найдите подходящего эксперта без посредников.",
     images: ["https://pluginexpert.ru/images/plugin.jpg"],
@@ -57,10 +57,10 @@ export default function HomeLayout({ children }) {
             "@context": "https://schema.org",
             "@type": "Organization",
             "url": "https://pluginexpert.ru/",
-            "name": "Plug-In Expert",
+            "name": "Прямая Речь",
             "logo": "https://pluginexpert.ru/images/plugin.jpg",
             "description":
-              "Plug-In Expert — агентство по подбору и продвижению спикеров. База спикеров, тренеров и коучей с контактными данными.",
+              "Прямая Речь — агентство по подбору и продвижению спикеров. База спикеров, тренеров и коучей с контактными данными.",
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+7 (915) 385-75-91",

@@ -21,23 +21,23 @@ export const metadata = {
   openGraph: {
     type: "website",
     url: "https://pluginexpert.ru/all-speakers",
-    title: "Найти спикера, тренера или коуча с контактами | Plugin Expert",
+    title: "Найти спикера, тренера или коуча с контактами | Прямая Речь",
     description:
       "Открытая база спикеров, тренеров и коучей без посредников. Поиск спикеров по тематикам и регионам.",
-    siteName: "Plugin Expert",
+    siteName: "Прямая Речь",
     images: [
       {
         url: "https://pluginexpert.ru/images/plugin.jpg",
         width: 1200,
         height: 630,
-        alt: "Plugin Expert — спикеры без посредников",
+        alt: "Прямая Речь — спикеры без посредников",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Найти спикера, тренера или коуча с контактами | Plugin Expert",
+    title: "Найти спикера, тренера или коуча с контактами | Прямая Речь",
     description:
       "Открытая база спикеров, тренеров и коучей без посредников. Поиск спикеров по тематикам и регионам.",
     images: ["https://pluginexpert.ru/images/plugin.jpg"],
@@ -56,10 +56,10 @@ export default function AllSpeakersLayout({ children }) {
             "@context": "https://schema.org",
             "@type": "Organization",
             "url": "https://pluginexpert.ru/all-speakers",
-            "name": "Plug-In Expert",
+            "name": "Прямая Речь",
             "logo": "https://pluginexpert.ru/images/plugin.jpg",
             "description":
-              "Plug-In Expert — открытая база спикеров, тренеров и коучей с прямыми контактами. Агентство по подбору и продвижению спикеров.",
+              "Прямая Речь — открытая база спикеров, тренеров и коучей с прямыми контактами. Агентство по подбору и продвижению спикеров.",
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+7 (915) 385-75-91",
