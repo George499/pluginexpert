@@ -13,6 +13,15 @@ const nextConfig = {
 
    async redirects() {
     return [
+      // www -> без-www (301). Обе версии обслуживались одним Next.js-процессом без
+      // редиректа, из-за чего Google считал главную дублем www-версии и выбирал
+      // www каноническим, игнорируя <link canonical>. Хост-условие ловит www.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.pluginexpert.ru" }],
+        destination: "https://pluginexpert.ru/:path*",
+        permanent: true,
+      },
       {
         source: "/speakers/blog",
         destination: "/blog",
