@@ -69,10 +69,6 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "5wW98_Ioh6rAjVE5X_rHjnjklNbQRSAE2p52Xm8P4Cw",
-    // yandex добавим, когда зарегистрируем счётчик
-  },
 };
 
 export default function RootLayout({ children }) {
@@ -190,20 +186,6 @@ export default function RootLayout({ children }) {
             <img src="https://mc.yandex.ru/watch/109386263" style={{ position: "absolute", left: "-9999px" }} alt="" />
           </div>
         </noscript>
-
-        {/* Google Analytics 4 — G-P6HJRZY999 */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-P6HJRZY999"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-P6HJRZY999');
-          `}
-        </Script>
       </body>
     </html>
   );
