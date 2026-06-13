@@ -7,7 +7,7 @@ const STRAPI_API_URL = `${STRAPI_URL}/api`;
 
 async function fetchPosts() {
   const res = await fetch(
-  `${STRAPI_API_URL}/posts?populate=main_image`,
+  `${STRAPI_API_URL}/posts?populate=main_image&sort=createdAt:desc&pagination[pageSize]=100`,
   { cache: "no-store" }
 );
     if (!res.ok) throw new Error("Ошибка загрузки постов");
