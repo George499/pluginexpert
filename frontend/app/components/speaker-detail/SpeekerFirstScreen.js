@@ -64,8 +64,8 @@ useEffect(() => {
       ">
         {/* Левая часть */}
         <div className=" flex flex-col max-[1000px]:self-start self-center mr-12">
-          <h1 className="text-white tracking-tighter">
-            <span className="block">{nameParts[1]?.toUpperCase()}</span>
+          <h1 className="text-white tracking-tighter" aria-label={speaker.Name}>
+            <span className="block">{nameParts[1]?.toUpperCase()}</span>{" "}
             <span className="block max-[1000px]:mb-5">{nameParts[0]?.toUpperCase()}</span>
           </h1>
 
