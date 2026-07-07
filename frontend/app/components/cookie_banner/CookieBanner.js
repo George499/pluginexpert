@@ -24,8 +24,8 @@ export default function CookieBanner() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-black text-white p-4 flex justify-between items-center z-50">
-      <p className="mr-4">
+    <div className="fixed bottom-0 left-0 w-full bg-black text-white p-4 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center z-50">
+      <p className="text-sm sm:text-base sm:mr-4">
         Мы используем cookies, чтобы улучшить работу сайта. Продолжая
         пользоваться сайтом, вы соглашаетесь с нашей{" "}
         <a href="/privacy" className="underline">
@@ -33,7 +33,7 @@ export default function CookieBanner() {
         </a>
         .
       </p>
-      <div className="flex gap-2">
+      <div className="flex gap-2 shrink-0">
         <button
           onClick={() => setCookie("accepted")}
           className="bg-green-600 px-4 py-2 rounded"

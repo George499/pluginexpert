@@ -3,37 +3,15 @@
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 import { Link as ScrollLink } from "react-scroll";
 import Image from "next/image";
-import { useState, useEffect } from "react";
 
 function SpeekerFirstScreen({ speaker }) {
-  const [declinedCategory, setDeclinedCategory] = useState("");
-
   // Получаем URL аватара из новой структуры данных Strapi 5
   const avatarUrl = speaker.gallery?.[0]?.url
     ? `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru'}${speaker.gallery[0].url}`
     : "/images/default.jpg";
 
-
-  // Определение падежа вручную (аналог russian-nouns-js)
-useEffect(() => {
-  if (speaker.categories?.length > 0) {
-    const category = speaker.categories[0]?.title || "";
-    const gender = speaker.categories[0]?.gender || "male";
-
-    let declined = category;
-    if (gender === "female") {
-      declined = category.endsWith("а")
-        ? category.slice(0, -1) + "е"
-        : category;
-    } else {
-      declined = category.endsWith("й")
-        ? category.slice(0, -1) + "е"
-        : category + "е";
-    }
-
-    setDeclinedCategory(declined);
-  }
-}, [speaker]);
+  // Направление спикера — в именительном падеже, без склонения
+  const categoryTitle = speaker.categories?.[0]?.title || "";
 
 
 
@@ -63,7 +41,7 @@ useEffect(() => {
       max-[500px]:text-[28px] max-[500px]:leading-[2rem]
       ">
         {/* Левая часть */}
-        <div className=" flex flex-col max-[1000px]:self-start self-center mr-12">
+        <div className=" flex flex-col self-start mr-12">
           <h1 className="text-white tracking-tighter" aria-label={speaker.Name}>
             <span className="block">{nameParts[1]?.toUpperCase()}</span>{" "}
             <span className="block max-[1000px]:mb-5">{nameParts[0]?.toUpperCase()}</span>
@@ -71,9 +49,9 @@ useEffect(() => {
 
           <div className="text-white tracking-tighter relative">
             <div className="w-full h-[1px] ml-[5px] bg-white absolute max-[500px]:w-1/2"></div>
-            <p className="text-black max-[1000px]:mt-5">ПОМОЩЬ</p>
+            <p className="text-black max-[1000px]:mt-5">НАПРАВЛЕНИЕ:</p>
             <p className="text-white tracking-tighter">
-              В {declinedCategory.toUpperCase()}
+              {categoryTitle.toUpperCase()}
             </p>
           </div>
 
