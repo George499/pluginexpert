@@ -29,9 +29,16 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+            # [diag, разово] история ошибок Strapi до деплоя — чтобы увидеть причину прошлого краша
+            echo "=== [diag] последние ошибки Strapi (история) ==="
+            pm2 logs pluginexpert-backend --err --lines 200 --nostream || true
+            echo "=== [diag] конец истории ==="
+
             cd ~/pluginexpert
             git fetch --all --prune
             git checkout main
+            PREV=$(git rev-parse HEAD)   # рабочий коммит ДО обновления (для авто-отката)
+            echo "Rollback-коммит: $PREV"
             git reset --hard origin/main
 
             echo "=== Backend (Strapi) ==="
@@ -39,6 +46,36 @@ jobs:
             npm ci
             npm run build
             pm2 restart pluginexpert-backend --update-env
+
+            # --- Health-check бэкенда + авто-откат ---
+            # Strapi может собраться (npm run build ок), но упасть на старте из-за схемы/миграции.
+            # pm2 restart возвращает успех сразу, поэтому проверяем, что API реально отвечает.
+            echo "=== Health-check бэкенда ==="
+            BPORT=$(grep -E '^PORT=' ~/pluginexpert/backend_strapi/.env 2>/dev/null | head -1 | sed -E 's/^PORT=//; s/[^0-9]//g')
+            BPORT=${BPORT:-3010}
+            echo "Strapi порт: $BPORT"
+            HEALTH_URL="http://127.0.0.1:${BPORT}/api/categories?pagination%5BpageSize%5D=1"
+            ok=0
+            for i in $(seq 1 20); do
+              sleep 3
+              code=$(curl -s --globoff -o /dev/null -w "%{http_code}" "$HEALTH_URL" || echo 000)
+              echo "health-check попытка $i -> $code"
+              if [ "$code" = "200" ]; then ok=1; break; fi
+            done
+            if [ "$ok" != "1" ]; then
+              echo "!!! БЭКЕНД НЕ ПОДНЯЛСЯ. Логи ошибок Strapi:"
+              pm2 logs pluginexpert-backend --err --lines 150 --nostream || true
+              echo "!!! Откат бэкенда на $PREV"
+              cd ~/pluginexpert
+              git reset --hard "$PREV"
+              cd ~/pluginexpert/backend_strapi
+              npm ci
+              npm run build
+              pm2 restart pluginexpert-backend --update-env
+              echo "!!! Откат завершён. Деплой провален (фронтенд не трогали)."
+              exit 1
+            fi
+            echo "Бэкенд отвечает 200 — ок."
 
             echo "=== Frontend (Next.js) ==="
             cd ~/pluginexpert/frontend
