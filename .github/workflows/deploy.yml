@@ -31,13 +31,6 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            # [diag, разово] реальная причина краша schema-деплоя из OUT-лога Strapi
-            echo "=== [diag] OUT-лог: ошибки/миграции ==="
-            grep -iE "error|migrat|permission|denied|owner|alter|column|knex|postgres|cannot|failed|exception|unhandled|relation|constraint|syntax" ~/.pm2/logs/pluginexpert-backend-out.log 2>/dev/null | grep -viE "DeprecationWarning|trace-deprecation" | tail -80 || true
-            echo "=== [diag] ERR-лог: не-strapi-not-found ==="
-            grep -iviE "strapi: not found|Please run the build command|undefined directory not found|start.js:18:11|DeprecationWarning|trace-deprecation" ~/.pm2/logs/pluginexpert-backend-error.log 2>/dev/null | tail -60 || true
-            echo "=== [diag] end ==="
-
             cd ~/pluginexpert
             git fetch --all --prune
             git checkout main
