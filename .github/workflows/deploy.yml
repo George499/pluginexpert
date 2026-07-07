@@ -32,6 +32,13 @@ jobs:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
+            # [diag, разово] как запущен backend + реальные ошибки без strapi-not-found шума
+            echo "=== [diag] pm2 describe ==="
+            pm2 describe pluginexpert-backend 2>&1 | grep -iE "script path|script args|exec cwd|exec mode|interpreter|node|status|restart|error log|out log|pm2 env" || true
+            echo "=== [diag] реальные ошибки (фильтр шума) ==="
+            pm2 logs pluginexpert-backend --err --lines 5000 --nostream 2>/dev/null | grep -viE "strapi: not found|Please run the build command|undefined directory not found|DeprecationWarning|trace-deprecation" | tail -100 || true
+            echo "=== [diag] end ==="
+
             cd ~/pluginexpert
             git fetch --all --prune
             git checkout main
