@@ -67,8 +67,10 @@ jobs:
               cd ~/pluginexpert
               git reset --hard "$PREV"
               cd ~/pluginexpert/backend_strapi
-              # npm ci не повторяем: зависимости между соседними коммитами те же,
-              # node_modules уже установлен выше. Только пересобрать и перезапустить.
+              # Полный цикл при откате: краш-луп может оставить node_modules в
+              # битом состоянии (strapi: not found), поэтому npm ci обязателен.
+              pm2 stop pluginexpert-backend || true
+              npm ci
               npm run build
               pm2 restart pluginexpert-backend --update-env
               echo "!!! Откат завершён. Деплой провален (фронтенд не трогали)."
