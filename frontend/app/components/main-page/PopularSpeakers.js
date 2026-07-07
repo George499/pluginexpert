@@ -5,13 +5,12 @@ const STRAPI_API_URL = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.p
 async function getPopularSpeakers() {
   try {
     const res = await fetch(
-      `${STRAPI_API_URL}/popular-speakers?populate[speaker][populate][0]=gallery&sort[0]=order:asc&pagination[pageSize]=100`,
+      `${STRAPI_API_URL}/speakers?filters[isPaid][$eq]=true&populate[0]=gallery&pagination[pageSize]=6`,
       { next: { revalidate: 60 } }
     );
     if (!res.ok) return [];
     const data = await res.json();
-    // Каждая запись «Популярный спикер» ссылается на профиль спикера; порядок задаёт поле order
-    return (data.data || []).map((item) => item.speaker).filter(Boolean);
+    return data.data || [];
   } catch (error) {
     console.error("Ошибка загрузки популярных спикеров:", error);
     return [];

@@ -11,13 +11,18 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "speaker": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::speaker.speaker"
+    "name": {
+      "type": "string"
     },
-    "order": {
-      "type": "integer"
+    "image": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
     }
   }
 }
