@@ -22,22 +22,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script_stop: true
-          # npm ci на бэкенде бывает медленным (до ~9 мин); + health-check + фронт билд.
-          # 10 мин по умолчанию не хватало и обрубало фронтенд. Ставим запас.
-          command_timeout: 25m
+          # npm ci бэкенда бывает медленным (~9 мин) + сборки + возможный откат.
+          command_timeout: 30m
           script: |
             set -e
 
             # Загружаем nvm для non-interactive SSH (иначе npm/node не в PATH).
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-            # [diag, разово] как запущен backend + реальные ошибки без strapi-not-found шума
-            echo "=== [diag] pm2 describe ==="
-            pm2 describe pluginexpert-backend 2>&1 | grep -iE "script path|script args|exec cwd|exec mode|interpreter|node|status|restart|error log|out log|pm2 env" || true
-            echo "=== [diag] реальные ошибки (фильтр шума) ==="
-            pm2 logs pluginexpert-backend --err --lines 5000 --nostream 2>/dev/null | grep -viE "strapi: not found|Please run the build command|undefined directory not found|DeprecationWarning|trace-deprecation" | tail -100 || true
-            echo "=== [diag] end ==="
 
             cd ~/pluginexpert
             git fetch --all --prune
@@ -46,15 +38,40 @@ jobs:
             echo "Rollback-коммит: $PREV"
             git reset --hard origin/main
 
+            # Полный откат бэкенда на прошлый рабочий коммит.
+            rollback_backend() {
+              echo "!!! Откат бэкенда на $PREV"
+              cd ~/pluginexpert
+              git reset --hard "$PREV"
+              cd ~/pluginexpert/backend_strapi
+              pm2 stop pluginexpert-backend || true
+              npm ci
+              npm run build
+              pm2 restart pluginexpert-backend --update-env
+              echo "!!! Откат завершён. Деплой провален (фронтенд не трогали)."
+            }
+
             echo "=== Backend (Strapi) ==="
             cd ~/pluginexpert/backend_strapi
             npm ci
+
+            # Останавливаем бэкенд ПЕРЕД сборкой: strapi build пересоздаёт build/,
+            # и pm2-автрестарт, поймав полуготовый build/, уходит в краш-луп
+            # (ENOENT build/index.html → strapi: not found). Стоп рвёт эту гонку.
+            pm2 stop pluginexpert-backend || true
             npm run build
+
+            # Без собранной админки strapi start падает в краш-луп — не стартуем битым.
+            if [ ! -f build/index.html ]; then
+              echo "!!! build/index.html не собрался."
+              rollback_backend
+              exit 1
+            fi
+
             pm2 restart pluginexpert-backend --update-env
 
             # --- Health-check бэкенда + авто-откат ---
-            # Strapi может собраться (npm run build ок), но упасть на старте из-за схемы/миграции.
-            # pm2 restart возвращает успех сразу, поэтому проверяем, что API реально отвечает.
+            # pm2 restart возвращает успех сразу; проверяем, что API реально отвечает 200.
             echo "=== Health-check бэкенда ==="
             BPORT=$(grep -E '^PORT=' ~/pluginexpert/backend_strapi/.env 2>/dev/null | head -1 | sed -E 's/^PORT=//; s/[^0-9]//g')
             BPORT=${BPORT:-3010}
@@ -70,17 +87,7 @@ jobs:
             if [ "$ok" != "1" ]; then
               echo "!!! БЭКЕНД НЕ ПОДНЯЛСЯ. Логи ошибок Strapi:"
               pm2 logs pluginexpert-backend --err --lines 150 --nostream || true
-              echo "!!! Откат бэкенда на $PREV"
-              cd ~/pluginexpert
-              git reset --hard "$PREV"
-              cd ~/pluginexpert/backend_strapi
-              # Полный цикл при откате: краш-луп может оставить node_modules в
-              # битом состоянии (strapi: not found), поэтому npm ci обязателен.
-              pm2 stop pluginexpert-backend || true
-              npm ci
-              npm run build
-              pm2 restart pluginexpert-backend --update-env
-              echo "!!! Откат завершён. Деплой провален (фронтенд не трогали)."
+              rollback_backend
               exit 1
             fi
             echo "Бэкенд отвечает 200 — ок."
