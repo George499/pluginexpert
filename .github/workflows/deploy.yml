@@ -22,17 +22,15 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script_stop: true
+          # npm ci на бэкенде бывает медленным (до ~9 мин); + health-check + фронт билд.
+          # 10 мин по умолчанию не хватало и обрубало фронтенд. Ставим запас.
+          command_timeout: 25m
           script: |
             set -e
 
             # Загружаем nvm для non-interactive SSH (иначе npm/node не в PATH).
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-            # [diag, разово] история ошибок Strapi до деплоя — чтобы увидеть причину прошлого краша
-            echo "=== [diag] последние ошибки Strapi (история) ==="
-            pm2 logs pluginexpert-backend --err --lines 200 --nostream || true
-            echo "=== [diag] конец истории ==="
 
             cd ~/pluginexpert
             git fetch --all --prune
@@ -58,7 +56,7 @@ jobs:
             ok=0
             for i in $(seq 1 20); do
               sleep 3
-              code=$(curl -s --globoff -o /dev/null -w "%{http_code}" "$HEALTH_URL" || echo 000)
+              code=$(curl -s --globoff -o /dev/null -w "%{http_code}" "$HEALTH_URL" || true)
               echo "health-check попытка $i -> $code"
               if [ "$code" = "200" ]; then ok=1; break; fi
             done
@@ -69,7 +67,8 @@ jobs:
               cd ~/pluginexpert
               git reset --hard "$PREV"
               cd ~/pluginexpert/backend_strapi
-              npm ci
+              # npm ci не повторяем: зависимости между соседними коммитами те же,
+              # node_modules уже установлен выше. Только пересобрать и перезапустить.
               npm run build
               pm2 restart pluginexpert-backend --update-env
               echo "!!! Откат завершён. Деплой провален (фронтенд не трогали)."
