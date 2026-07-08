@@ -74,6 +74,13 @@
       "type": "boolean",
       "default": false
     },
+    "isPopular": {
+      "type": "boolean",
+      "default": false
+    },
+    "popularRank": {
+      "type": "integer"
+    },
     "subscriptionExpiresAt": {
       "type": "datetime"
     },
