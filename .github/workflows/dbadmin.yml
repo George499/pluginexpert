@@ -1,0 +1,29 @@
+name: DB admin (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dbadmin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DB probe (read-only)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          command_timeout: 3m
+          script: |
+            echo "=== whoami ==="
+            whoami
+            echo "=== могу ли стать postgres-суперюзером (passwordless sudo)? ==="
+            sudo -n -u postgres psql -tAc "select current_user, current_setting('server_version')" 2>&1 | head -3 || echo "NO: sudo -u postgres недоступен"
+            echo "=== DB name/user из .env (пароль не печатаем) ==="
+            grep -E "^DATABASE_(CLIENT|HOST|PORT|NAME|USERNAME)=" ~/pluginexpert/backend_strapi/.env 2>/dev/null || echo "нет DATABASE_* в .env"
+            echo "=== текущий владелец таблицы speakers (через postgres, если есть sudo) ==="
+            DBNAME=$(grep -E "^DATABASE_NAME=" ~/pluginexpert/backend_strapi/.env 2>/dev/null | sed -E 's/^DATABASE_NAME=//; s/["'\'' ]//g')
+            echo "DBNAME=$DBNAME"
+            sudo -n -u postgres psql -d "$DBNAME" -tAc "select tableowner from pg_tables where schemaname='public' and tablename='speakers'" 2>&1 | head -3 || echo "NO: не удалось прочитать владельца через sudo postgres"
+            echo "=== end ==="

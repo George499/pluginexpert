@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/dbadmin.yml'
   workflow_dispatch:
 
 jobs:
