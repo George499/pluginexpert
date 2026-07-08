@@ -1,5 +1,9 @@
 name: DB admin (manual)
 
+# Ручной read-only чек состояния БД/прода. Запуск: gh workflow run dbadmin.yml
+# (или Actions → DB admin (manual) → Run workflow). В paths-ignore у deploy.yml,
+# полный деплой не триггерит.
+
 on:
   workflow_dispatch:
 
@@ -7,38 +11,20 @@ jobs:
   dbadmin:
     runs-on: ubuntu-latest
     steps:
-      - name: Backup + transfer table ownership to gen_user
+      - name: DB / prod health check (read-only)
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          command_timeout: 5m
+          command_timeout: 3m
           script: |
-            set -e
-
-            echo "=== 1. Бэкап базы pluginexpert_db (pg_dump) ==="
-            mkdir -p ~/db_backups
-            BACKUP=~/db_backups/pluginexpert_db_$(date +%Y%m%d_%H%M%S).sql.gz
-            sudo -n -u postgres pg_dump pluginexpert_db | gzip > "$BACKUP"
-            ls -lh "$BACKUP"
-
-            echo "=== 2. Смена владельца таблиц public -> gen_user ==="
-            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER TABLE public.%I OWNER TO gen_user;', tablename) from pg_tables where schemaname='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
-
-            echo "=== 3. Смена владельца последовательностей public -> gen_user ==="
-            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER SEQUENCE public.%I OWNER TO gen_user;', sequence_name) from information_schema.sequences where sequence_schema='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
-
-            echo "=== 4. Смена владельца view (если есть) -> gen_user ==="
-            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER VIEW public.%I OWNER TO gen_user;', table_name) from information_schema.views where table_schema='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
-
-            echo "=== 5. GRANT CREATE ON SCHEMA public (для новых таблиц/связей) ==="
-            sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -c "GRANT CREATE ON SCHEMA public TO gen_user;"
-
-            echo "=== 6. Проверка ==="
-            echo -n "владелец speakers: "
-            sudo -n -u postgres psql -d pluginexpert_db -tAc "select tableowner from pg_tables where schemaname='public' and tablename='speakers'"
-            echo -n "таблиц НЕ у gen_user осталось: "
-            sudo -n -u postgres psql -d pluginexpert_db -tAc "select count(*) from pg_tables where schemaname='public' and tableowner <> 'gen_user'"
-            echo "=== done ==="
+            echo "=== владелец таблицы speakers (должен быть gen_user) ==="
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select tableowner from pg_tables where schemaname='public' and tablename='speakers'" 2>&1 | head -2 || echo "нет доступа к postgres"
+            echo "=== таблиц НЕ у gen_user ==="
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select count(*) from pg_tables where schemaname='public' and tableowner <> 'gen_user'" 2>&1 | head -2 || true
+            echo "=== API health ==="
+            curl -s -o /dev/null -w "api/categories -> %{http_code}\n" "http://127.0.0.1:3010/api/categories?pagination%5BpageSize%5D=1" || true
+            echo "=== бэкапы БД ==="
+            ls -lh ~/db_backups/ 2>/dev/null | tail -5 || echo "нет бэкапов"
