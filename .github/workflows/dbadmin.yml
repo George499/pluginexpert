@@ -7,23 +7,38 @@ jobs:
   dbadmin:
     runs-on: ubuntu-latest
     steps:
-      - name: DB probe (read-only)
+      - name: Backup + transfer table ownership to gen_user
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          command_timeout: 3m
+          command_timeout: 5m
           script: |
-            echo "=== whoami ==="
-            whoami
-            echo "=== могу ли стать postgres-суперюзером (passwordless sudo)? ==="
-            sudo -n -u postgres psql -tAc "select current_user, current_setting('server_version')" 2>&1 | head -3 || echo "NO: sudo -u postgres недоступен"
-            echo "=== DB name/user из .env (пароль не печатаем) ==="
-            grep -E "^DATABASE_(CLIENT|HOST|PORT|NAME|USERNAME)=" ~/pluginexpert/backend_strapi/.env 2>/dev/null || echo "нет DATABASE_* в .env"
-            echo "=== текущий владелец таблицы speakers (через postgres, если есть sudo) ==="
-            DBNAME=$(grep -E "^DATABASE_NAME=" ~/pluginexpert/backend_strapi/.env 2>/dev/null | sed -E 's/^DATABASE_NAME=//; s/["'\'' ]//g')
-            echo "DBNAME=$DBNAME"
-            sudo -n -u postgres psql -d "$DBNAME" -tAc "select tableowner from pg_tables where schemaname='public' and tablename='speakers'" 2>&1 | head -3 || echo "NO: не удалось прочитать владельца через sudo postgres"
-            echo "=== end ==="
+            set -e
+
+            echo "=== 1. Бэкап базы pluginexpert_db (pg_dump) ==="
+            mkdir -p ~/db_backups
+            BACKUP=~/db_backups/pluginexpert_db_$(date +%Y%m%d_%H%M%S).sql.gz
+            sudo -n -u postgres pg_dump pluginexpert_db | gzip > "$BACKUP"
+            ls -lh "$BACKUP"
+
+            echo "=== 2. Смена владельца таблиц public -> gen_user ==="
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER TABLE public.%I OWNER TO gen_user;', tablename) from pg_tables where schemaname='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
+
+            echo "=== 3. Смена владельца последовательностей public -> gen_user ==="
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER SEQUENCE public.%I OWNER TO gen_user;', sequence_name) from information_schema.sequences where sequence_schema='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
+
+            echo "=== 4. Смена владельца view (если есть) -> gen_user ==="
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select format('ALTER VIEW public.%I OWNER TO gen_user;', table_name) from information_schema.views where table_schema='public'" | sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -q
+
+            echo "=== 5. GRANT CREATE ON SCHEMA public (для новых таблиц/связей) ==="
+            sudo -n -u postgres psql -d pluginexpert_db -v ON_ERROR_STOP=1 -c "GRANT CREATE ON SCHEMA public TO gen_user;"
+
+            echo "=== 6. Проверка ==="
+            echo -n "владелец speakers: "
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select tableowner from pg_tables where schemaname='public' and tablename='speakers'"
+            echo -n "таблиц НЕ у gen_user осталось: "
+            sudo -n -u postgres psql -d pluginexpert_db -tAc "select count(*) from pg_tables where schemaname='public' and tableowner <> 'gen_user'"
+            echo "=== done ==="
