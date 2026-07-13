@@ -12,6 +12,9 @@ import Link from "next/link";
 
 function Footer() {
   const year = new Date().getFullYear();
+  // Временно скрыто (вернуть через неделю): телефон, документы, реквизиты ИП.
+  // Поставить true — всё вернётся.
+  const showFull = false;
 
   return (
     <footer className="w-full bg-[#2f2e2e] text-white pt-4 pb-4">
@@ -34,12 +37,14 @@ function Footer() {
           >
             hello@pluginexpert.ru
           </a>
-          <a
-            href="tel:+79153857591"
-            className="block mt-2 text-[14px] text-blue-300 hover:underline"
-          >
-            Звоните: +7 (915) 385-75-91
-          </a>
+          {showFull && (
+            <a
+              href="tel:+79153857591"
+              className="block mt-2 text-[14px] text-blue-300 hover:underline"
+            >
+              Звоните: +7 (915) 385-75-91
+            </a>
+          )}
         </div>
 
         {/* Блок 2 — навигация */}
@@ -62,6 +67,7 @@ function Footer() {
           </Link>
 
           {/* Ссылки на документы */}
+        {showFull && (
         <div className="flex flex-col gap-2 text-[14px]">
           <div className="flex items-center gap-2">
             <a
@@ -158,11 +164,13 @@ function Footer() {
             </a>
           </div>
         </div>
+        )}
 
 
         </nav>
 
         {/* Блок 3 — реквизиты */}
+        {showFull && (
         <div
           className="
             text-[14px] lg:text-[16px] leading-6
@@ -177,6 +185,7 @@ function Footer() {
           <p>БИК: 044525225</p>
           <p>Кор. счёт: 30101810400000000225</p>
         </div>
+        )}
       </div>
     </footer>
   );
