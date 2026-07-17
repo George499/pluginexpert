@@ -25,15 +25,23 @@ async function getPost(slug) {
 }
 
 // --- Извлечение текста для description из blocks-контента ---
+// Собираем текст из нескольких абзацев, а не только из первого: у разных статей
+// вступление может совпадать дословно (Я.Вебмастер ругался на дубли description),
+// а дальше текст расходится — так description получается уникальным.
 function extractDescription(content, maxLen = 155) {
   if (!Array.isArray(content)) return "";
-  const firstPara = content.find((b) => b.type === "paragraph");
-  if (!firstPara) return "";
-  const text = (firstPara.children || [])
-    .map((c) => c.text || "")
+  const text = content
+    .filter((b) => b.type === "paragraph")
+    .slice(0, 4)
+    .map((p) =>
+      (p.children || [])
+        .map((c) => c.text || "")
+        .join(" ")
+    )
     .join(" ")
     .replace(/\s+/g, " ")
     .trim();
+  if (!text) return "";
   return text.length > maxLen ? text.slice(0, maxLen - 1).trim() + "…" : text;
 }
 
