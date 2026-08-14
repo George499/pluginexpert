@@ -35,6 +35,15 @@
       "relation": "manyToMany",
       "target": "api::speaker.speaker",
       "mappedBy": "categories"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "text"
+    },
+    "seoText": {
+      "type": "blocks"
     }
   }
 }

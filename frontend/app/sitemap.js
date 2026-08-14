@@ -9,6 +9,35 @@ export default async function sitemap() {
     { url: `${BASE_URL}/blog`, lastModified: new Date(), priority: 0.7, changeFrequency: 'weekly' },
   ];
 
+  // Категорийные страницы — только «зрелые» (порог совпадает с MIN_SPEAKERS
+  // в app/(all-speakers)/all-speakers/[category]/page.js). Пустые категории
+  // страниц не имеют и в карту не попадают.
+  const MIN_SPEAKERS = 2;
+  let categoryPages = [];
+  try {
+    const res = await fetch(
+      `${STRAPI_URL}/api/speakers?filters[isPaid][$eq]=true&populate[0]=categories&pagination[pageSize]=100`,
+      { next: { revalidate: 3600 } }
+    );
+    const data = await res.json();
+    const counts = {};
+    for (const sp of data.data || []) {
+      for (const cat of sp.categories || []) {
+        if (cat?.slug) counts[cat.slug] = (counts[cat.slug] || 0) + 1;
+      }
+    }
+    categoryPages = Object.entries(counts)
+      .filter(([, n]) => n >= MIN_SPEAKERS)
+      .map(([slug]) => ({
+        url: `${BASE_URL}/all-speakers/${slug}`,
+        lastModified: new Date(),
+        priority: 0.8,
+        changeFrequency: 'weekly',
+      }));
+  } catch {
+    // категории недоступны — пропускаем
+  }
+
   // Платные спикеры
   let speakerPages = [];
   try {
@@ -49,5 +78,5 @@ export default async function sitemap() {
     // посты недоступны — пропускаем
   }
 
-  return [...staticPages, ...postPages, ...speakerPages];
+  return [...staticPages, ...categoryPages, ...postPages, ...speakerPages];
 }
