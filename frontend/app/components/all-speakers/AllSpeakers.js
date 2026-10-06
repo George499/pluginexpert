@@ -9,7 +9,9 @@ import ProductCard from "@/components/all-speakers/ProductCard";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
-function AllSpeakers({ initialSpeakers = [], initialCategories = [] }) {
+// categoryPageSlugs — категории, у которых есть своя страница /all-speakers/[slug].
+// Их вкладки — ссылки (уникальный URL), остальные фильтруют каталог на месте.
+function AllSpeakers({ initialSpeakers = [], initialCategories = [], categoryPageSlugs = [] }) {
   const [categories] = useState(initialCategories);
   const [isContactsVisible, setIsContactsVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all-categories");
@@ -114,7 +116,16 @@ function AllSpeakers({ initialSpeakers = [], initialCategories = [] }) {
                 categories
                   .sort((a, b) => a.index - b.index)
                   .slice(0, visibleCount)  
-                  .map((category, index) => (
+                  .map((category, index) =>
+                    categoryPageSlugs.includes(category.slug) ? (
+                    <Link
+                      href={`/all-speakers/${category.slug}`}
+                      key={category._id || index}
+                      className="inline-block p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal text-[#42484D] hover:text-[#4e5ac3]"
+                    >
+                      {category.title}
+                    </Link>
+                    ) : (
                     <button
                       onClick={() => handleClick(category.slug)}
                       key={category._id || index}
@@ -126,7 +137,8 @@ function AllSpeakers({ initialSpeakers = [], initialCategories = [] }) {
                     >
                       {category.title}
                     </button>
-                  ))
+                    )
+                  )
               )}
             </div>
             {visibleCount < categories.length && (

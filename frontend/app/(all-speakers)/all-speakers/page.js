@@ -65,6 +65,7 @@ export default async function AllSpeakersPage() {
       <AllSpeakers
         initialSpeakers={initialSpeakers}
         initialCategories={initialCategories}
+        categoryPageSlugs={openCategories.map(([slug]) => slug)}
       />
 
       {openCategories.length > 0 && (
