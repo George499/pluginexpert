@@ -101,7 +101,7 @@ export default async function SpeekerPage({ params }) {
   // Strapi 5: relations приходят как массив объектов без .data/.attributes
   if (Array.isArray(speaker.categories) && speaker.categories.length > 0) {
     personSchema.knowsAbout = speaker.categories
-      .map((cat) => cat.Name)
+      .map((cat) => cat.title)
       .filter(Boolean);
   }
 
