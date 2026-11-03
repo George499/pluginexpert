@@ -12,10 +12,9 @@ import Link from "next/link";
 
 function Footer() {
   const year = new Date().getFullYear();
-  // Документы и реквизиты ИП показаны. Телефон временно скрыт —
-  // поставить showPhone = true, и он вернётся.
+  // Флаги для временного скрытия блоков подвала (false — блок скрыт).
   const showFull = true;
-  const showPhone = false;
+  const showPhone = true;
 
   return (
     <footer className="w-full bg-[#2f2e2e] text-white pt-4 pb-4">
