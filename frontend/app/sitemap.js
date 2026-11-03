@@ -9,9 +9,9 @@ export default async function sitemap() {
     { url: `${BASE_URL}/blog`, lastModified: new Date(), priority: 0.7, changeFrequency: 'weekly' },
   ];
 
-  // Категорийные страницы — только «зрелые» (порог совпадает с MIN_SPEAKERS
-  // в app/(all-speakers)/all-speakers/[category]/page.js). Пустые категории
-  // страниц не имеют и в карту не попадают.
+  // Категорийные страницы — только индексируемые (порог совпадает с INDEX_MIN_SPEAKERS
+  // в app/(all-speakers)/all-speakers/[category]/page.js). Категории с 1 спикером
+  // закрыты noindex и в карту не попадают.
   const MIN_SPEAKERS = 2;
   let categoryPages = [];
   try {

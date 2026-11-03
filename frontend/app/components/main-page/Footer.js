@@ -12,9 +12,10 @@ import Link from "next/link";
 
 function Footer() {
   const year = new Date().getFullYear();
-  // Временно скрыто (вернуть через неделю): телефон, документы, реквизиты ИП.
-  // Поставить true — всё вернётся.
-  const showFull = false;
+  // Документы и реквизиты ИП показаны. Телефон временно скрыт —
+  // поставить showPhone = true, и он вернётся.
+  const showFull = true;
+  const showPhone = false;
 
   return (
     <footer className="w-full bg-[#2f2e2e] text-white pt-4 pb-4">
@@ -37,7 +38,7 @@ function Footer() {
           >
             hello@pluginexpert.ru
           </a>
-          {showFull && (
+          {showPhone && (
             <a
               href="tel:+79153857591"
               className="block mt-2 text-[14px] text-blue-300 hover:underline"

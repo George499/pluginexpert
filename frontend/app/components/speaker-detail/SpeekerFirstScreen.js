@@ -3,6 +3,7 @@
 import { HiOutlineArrowCircleDown } from "react-icons/hi";
 import { Link as ScrollLink } from "react-scroll";
 import Image from "next/image";
+import Link from "next/link";
 
 function SpeekerFirstScreen({ speaker }) {
   // Получаем URL аватара из новой структуры данных Strapi 5
@@ -12,6 +13,7 @@ function SpeekerFirstScreen({ speaker }) {
 
   // Направление спикера — в именительном падеже, без склонения
   const categoryTitle = speaker.categories?.[0]?.title || "";
+  const categorySlug = speaker.categories?.[0]?.slug;
 
 
 
@@ -35,6 +37,27 @@ function SpeekerFirstScreen({ speaker }) {
         mb-10 xl:mb-0
       "
     >
+      {/* Хлебные крошки (разметка BreadcrumbList — в page.js) */}
+      <nav aria-label="Хлебные крошки" className="text-white text-[14px] font-normal mb-6">
+        <Link href="/" className="hover:underline opacity-80">
+          Главная
+        </Link>
+        <span className="mx-2 opacity-60">/</span>
+        <Link href="/all-speakers" className="hover:underline opacity-80">
+          Все спикеры
+        </Link>
+        {categorySlug && (
+          <>
+            <span className="mx-2 opacity-60">/</span>
+            <Link href={`/all-speakers/${categorySlug}`} className="hover:underline opacity-80">
+              {categoryTitle}
+            </Link>
+          </>
+        )}
+        <span className="mx-2 opacity-60">/</span>
+        <span>{[nameParts[1], nameParts[0]].filter(Boolean).join(" ")}</span>
+      </nav>
+
       <div className="flex flex-col lg:flex-row justify-between
       text-[40px] lg:text-[57px] xl:text-[60px]
       leading-[2.5rem] lg:leading-[4.5rem]

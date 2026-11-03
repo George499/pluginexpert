@@ -1,63 +1,16 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { FaTelegram } from "react-icons/fa";
 import { RiWhatsappFill } from "react-icons/ri";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import ProductCard from "@/components/all-speakers/ProductCard";
+import CategoryPills from "@/components/all-speakers/CategoryPills";
+import CategorySpeakerCard from "@/components/all-speakers/CategorySpeakerCard";
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
-
-// categoryPageSlugs — категории, у которых есть своя страница /all-speakers/[slug].
-// Их вкладки — ссылки (уникальный URL), остальные фильтруют каталог на месте.
-function AllSpeakers({ initialSpeakers = [], initialCategories = [], categoryPageSlugs = [] }) {
-  const [categories] = useState(initialCategories);
+function AllSpeakers({ initialSpeakers = [] }) {
   const [isContactsVisible, setIsContactsVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all-categories");
-  const [visibleCount, setVisibleCount] = useState(15);
-  const [speakers, setSpeakers] = useState(initialSpeakers);
-  const isFirstRender = useRef(true);
-
-  useEffect(() => {
-    // Первый рендер пропускаем — спикеры уже пришли с сервера (SSR, в HTML)
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    const fetchSpeakers = async () => {
-      try {
-        let url =
-          `${STRAPI_URL}/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true`;
-        if (selectedCategory !== "all-categories") {
-          url += `&filters[categories][slug][$eq]=${selectedCategory}`;
-        }
-        const res = await fetch(url);
-        if (!res.ok) {
-          const text = await res.text();
-          console.warn(
-            "Ошибка загрузки спикеров:",
-            res.status,
-            res.statusText,
-            text.slice(0, 200)
-          );
-          setSpeakers([]);
-          return;
-        }
-        const data = await res.json();
-        setSpeakers(data.data ?? []);
-      } catch (error) {
-        console.warn("Ошибка загрузки спикеров:", error?.message ?? error);
-        setSpeakers([]);
-      }
-    };
-
-    fetchSpeakers();
-  }, [selectedCategory]);
-
-  const handleClick = (slug) => {
-    setSelectedCategory((prev) => (prev === slug ? "all-categories" : slug));
-  };
+  const speakers = initialSpeakers;
 
   const handleButtonClick = () => setIsContactsVisible(!isContactsVisible);
 
@@ -109,48 +62,9 @@ function AllSpeakers({ initialSpeakers = [], initialCategories = [], categoryPag
             <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px]">
               <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
             </div>
-            <div className="columns-auto gap-6 pt-2 mb-[10px]" role="group">
-              {categories.length === 0 ? (
-                <p>Загрузка...</p>
-              ) : (
-                categories
-                  .sort((a, b) => a.index - b.index)
-                  .slice(0, visibleCount)  
-                  .map((category, index) =>
-                    categoryPageSlugs.includes(category.slug) ? (
-                    <Link
-                      href={`/all-speakers/${category.slug}`}
-                      key={category._id || index}
-                      className="inline-block p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal text-[#42484D] hover:text-[#4e5ac3]"
-                    >
-                      {category.title}
-                    </Link>
-                    ) : (
-                    <button
-                      onClick={() => handleClick(category.slug)}
-                      key={category._id || index}
-                      className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
-                        selectedCategory === category.slug
-                          ? "text-[#4e5ac3]"
-                          : "text-[#42484D]"
-                      } hover:text-[#4e5ac3]`}
-                    >
-                      {category.title}
-                    </button>
-                    )
-                  )
-              )}
+            <div className="pt-2 mb-[34px] p-[10px]">
+              <CategoryPills speakers={speakers} />
             </div>
-            {visibleCount < categories.length && (
-              <div className="w-full flex justify-start mt-2 mb-[34px]">
-                <button
-                  onClick={() => setVisibleCount(prev => prev + 15)}
-                  className="bg-[#42484D] hover:bg-[#3742a3] text-white px-6 py-2 rounded duration-300 uppercase tracking-tight"
-                >
-                  Ещё категории
-                </button>
-              </div>
-            )}
           </div>
         </div>
 
@@ -161,19 +75,17 @@ function AllSpeakers({ initialSpeakers = [], initialCategories = [], categoryPag
             </div>
           ) : (
             <div className="flex flex-col justify-center">
-              <div className="w-full">
+              <div className="w-4/5 lg:w-2/3 mx-auto">
                 <motion.div
                   initial={{ x: "0vw" }}
                   animate={{ x: 0 }}
                   transition={{ type: "spring", stiffness: 50 }}
                 >
-                  {speakers.map((speaker) => (
-                    <ProductCard
-                      key={speaker.id}
-                      speaker={speaker}
-                      setSelectedCategory={setSelectedCategory}
-                    />
-                  ))}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {speakers.map((speaker) => (
+                      <CategorySpeakerCard key={speaker.id} speaker={speaker} />
+                    ))}
+                  </div>
                 </motion.div>
               </div>
             </div>

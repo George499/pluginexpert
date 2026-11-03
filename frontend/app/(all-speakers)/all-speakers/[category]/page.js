@@ -10,10 +10,11 @@ const STRAPI_URL =
 const STRAPI_API_URL = `${STRAPI_URL}/api`;
 const SITE_URL = "https://pluginexpert.ru";
 
-// Порог открытия категории. Категории с меньшим числом платных спикеров
-// НЕ получают отдельную страницу (иначе thin content — Яндекс метит
-// «малоценная страница»). Фильтр в общем каталоге для них продолжает работать.
-const MIN_SPEAKERS = 2;
+// Страница есть у каждой категории, где хотя бы один платный спикер.
+// В индекс (и sitemap) идут только категории от INDEX_MIN_SPEAKERS — иначе
+// thin content, Яндекс метит «малоценная страница».
+const MIN_SPEAKERS = 1;
+const INDEX_MIN_SPEAKERS = 2;
 
 async function getCategory(slug) {
   try {
@@ -88,6 +89,9 @@ export async function generateMetadata({ params }) {
     title,
     description,
     alternates: { canonical: url },
+    ...(speakers.length < INDEX_MIN_SPEAKERS && {
+      robots: { index: false, follow: true },
+    }),
     openGraph: {
       type: "website",
       url,
@@ -212,7 +216,7 @@ export default async function CategoryPage({ params }) {
 
             {/* SEO-текст категории (из Strapi) */}
             {category.seoText && (
-              <section className="mt-16 max-w-3xl text-[#1B1B1E]">
+              <section className="mt-16 text-[#1B1B1E]">
                 <CategorySeoText content={category.seoText} />
               </section>
             )}

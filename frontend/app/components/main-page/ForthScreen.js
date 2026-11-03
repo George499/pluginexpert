@@ -5,41 +5,19 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 // import CustomButton from "./CustomButton"; // Assuming CustomButton is a separate component
-import Product from "./Product";
+import CategoryPills from "@/components/all-speakers/CategoryPills";
+import CategorySpeakerCard from "@/components/all-speakers/CategorySpeakerCard";
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.pluginexpert.ru';
 
 function ForthScreen() {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("all-categories");
   const [speakers, setSpeakers] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(15);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(
-          `${STRAPI_URL}/api/categories?pagination[page]=1&pagination[pageSize]=100`
-        );
-        if (!res.ok) throw new Error("Ошибка загрузки категорий");
-        const data = await res.json();
-        setCategories(data.data);
-      } catch (error) {
-        console.error("Ошибка:", error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   useEffect(() => {
     const fetchSpeakers = async () => {
       try {
-        let url =
-          `${STRAPI_URL}/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true`;
-        if (selectedCategory !== "all-categories") {
-          url += `&filters[categories][slug][$eq]=${selectedCategory}`;
-        }
+        const url =
+          `${STRAPI_URL}/api/speakers?populate[0]=categories&populate[1]=gallery&filters[isPaid][$eq]=true&pagination[pageSize]=100`;
         const res = await fetch(url);
         if (!res.ok) {
           const text = await res.text();
@@ -61,16 +39,7 @@ function ForthScreen() {
     };
 
     fetchSpeakers();
-  }, [selectedCategory]);
-
-  const handleClick = (slug) => {
-    if (selectedCategory === slug) {
-      setSelectedCategory("all-categories");
-      setSpeakers([]);
-    } else {
-      setSelectedCategory(slug);
-    }
-  };
+  }, []);
 
   return (
     <div className="bg-hero-image bg-fixed flex content-center justify-center items-center flex-col h-full w-full">
@@ -100,38 +69,13 @@ function ForthScreen() {
             <div className="text-[16px] lg:text-[20px] tracking-normal mb-4 pt-7 p-[10px]">
               <p>КАТЕГОРИИ И НАПРАВЛЕНИЯ ВЫСТУПЛЕНИЯ СПИКЕРОВ:</p>
             </div>
-            <div className="columns-auto gap-6 pt-2 mb-[10px]" role="group">
-              {categories.length === 0 ? (
+            <div className="pt-2 mb-[34px] p-[10px]">
+              {speakers.length === 0 ? (
                 <p>Загрузка...</p>
               ) : (
-                categories
-                  .sort((a, b) => a.index - b.index)
-                  .slice(0, visibleCount)  
-                  .map((category, index) => (
-                    <button
-                      onClick={() => handleClick(category.slug)}
-                      key={category._id || index}
-                      className={`p-[10px] lg:m-1 text-[16px] lg:text-[18px] uppercase bg-white tracking-normal ${
-                        selectedCategory === category.slug
-                          ? "text-[#4e5ac3]"
-                          : "text-[#42484D]"
-                      } hover:text-[#4e5ac3]`}
-                    >
-                      {category.title}
-                    </button>
-                  ))
+                <CategoryPills speakers={speakers} />
               )}
             </div>
-            {visibleCount < categories.length && (
-              <div className="w-full flex justify-start mt-2 mb-[34px]">
-                <button
-                  onClick={() => setVisibleCount(prev => prev + 15)}
-                  className="bg-[#42484D] hover:bg-[#3742a3] text-white px-6 py-2 rounded duration-300 uppercase tracking-tight"
-                >
-                  Ещё категории
-                </button>
-              </div>
-            )}
           </div>
         </div>
         <div className="w-full h-full items-center justify-center mb-[57px]">
@@ -149,7 +93,7 @@ function ForthScreen() {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {speakers.map((speaker) => (
-                      <Product key={speaker.id} speaker={speaker} />
+                      <CategorySpeakerCard key={speaker.id} speaker={speaker} />
                     ))}
                   </div>
                 </motion.div>

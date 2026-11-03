@@ -105,8 +105,33 @@ export default async function SpeekerPage({ params }) {
       .filter(Boolean);
   }
 
+  const category = speaker.categories?.[0];
+  const breadcrumbItems = [
+    { name: "Главная", item: "https://pluginexpert.ru" },
+    { name: "Все спикеры", item: "https://pluginexpert.ru/all-speakers" },
+    ...(category?.slug
+      ? [{ name: category.title, item: `https://pluginexpert.ru/all-speakers/${category.slug}` }]
+      : []),
+    { name: speakerName, item: speakerUrl },
+  ];
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbItems.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: b.name,
+      item: b.item,
+    })),
+  };
+
   return (
     <>
+      <Script
+        id={`schema-breadcrumb-${slug}`}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Script
         id={`schema-org-person-${slug}`}
         type="application/ld+json"

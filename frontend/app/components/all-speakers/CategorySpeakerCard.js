@@ -4,8 +4,8 @@ import Link from "next/link";
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "https://admin.pluginexpert.ru";
 
-// Серверная карточка спикера для категорийных страниц.
-// Отличие от ProductCard: категории — ссылки (перелинковка + без onClick,
+// Серверная карточка спикера: главная, каталог и категорийные страницы.
+// Категории — ссылки (перелинковка + без onClick,
 // который ломает пререндер серверного компонента).
 export default function CategorySpeakerCard({ speaker, currentCategorySlug }) {
   if (!speaker) return null;
