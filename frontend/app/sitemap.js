@@ -66,8 +66,13 @@ export default async function sitemap() {
       { next: { revalidate: 3600 } }
     );
     const data = await res.json();
+    // Дубли статей: в Strapi остались, но редиректятся в next.config.mjs
+    const redirectedSlugs = [
+      'aktualnaya-baza-spikerov-s-ih-pryamymi-kontaktami-2025g',
+      'kak-stat-spikerom',
+    ];
     postPages = (data.data || [])
-      .filter((p) => p.slug)
+      .filter((p) => p.slug && !redirectedSlugs.includes(p.slug))
       .map((post) => ({
         url: `${BASE_URL}/blog/${post.slug}`,
         lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
